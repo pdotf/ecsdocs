@@ -1,0 +1,457 @@
+﻿@page "/customer"
+@page "/customer/{CustomerID}"
+@using EcsDataManager.Contracts
+@using EcsDataManager.Entities
+@inject ICustomersManager CustomerManager
+@inject IDeviceManager DeviceManager
+@inject NavigationManager NavigationManager
+
+
+
+<link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+<link href="~/_content/Blazored.Modal/blazored-modal.css" rel="stylesheet" />
+
+
+<style>
+    .sort-th {
+        cursor: pointer;
+    }
+
+    .fa {
+        float: right;
+    }
+
+    .btn-custom {
+        color: black;
+        float: left;
+        padding: 8px 16px;
+        text-decoration: none;
+        transition: background-color .3s;
+        border: 2px solid #000;
+        margin: 0px 5px 0px 5px;
+    }
+</style>
+
+@if (_customerEntity == null)
+{
+    <p><em>Loading...</em></p>
+    <p style="white-space: pre-line"> </p>
+}
+else
+{
+    <div class="container-fluid">
+        <div>
+
+            <button @onclick="async() => ShowEditCustomer(_customerEntity.id).ConfigureAwait(true)" class="btn btn-primary">Edit</button>
+            <button @onclick="async() => ShowAddDevice(_customerEntity.id)" class="btn btn-success">Add Device</button>
+            <button @onclick="async() => Deletecustomer(_customerEntity.id)" class="btn btn-danger">Delete Customer</button>
+
+
+        </div>
+
+        <MatList SingleSelection="true" TwoLine="true" @bind-value="@_customerFullDataModel.id">
+            <div class="row">
+                <div class="col-md-6">
+                    <Field>
+                        <FieldLabel>
+                            @nameof(_customerFullDataModel.CustomerName)
+
+                        </FieldLabel>
+                        <Field><span style="color:green">@_customerFullDataModel.CustomerName</span></Field>
+                    </Field>
+
+                    <Field>
+                        <FieldLabel>
+                            Tell
+
+                        </FieldLabel>
+                        <Field><span style="color:green">@_customerFullDataModel.Tel</span></Field>
+                    </Field>
+                </div>
+                <div class="col-md-6">
+                    <Field>
+                        <FieldLabel>
+                            @nameof(_customerFullDataModel.Mobile)
+
+                        </FieldLabel>
+                        <Field><span style="color:green">@_customerFullDataModel.Mobile</span></Field>
+                    </Field>
+
+                    <Field>
+                        <FieldLabel>
+                            @nameof(_customerFullDataModel.OwnerTeam)
+                        </FieldLabel>
+                        <Field><span style="color:green">@_customerFullDataModel.OwnerTeam</span></Field>
+
+                    </Field>
+                </div>
+            </div>
+            <Divider Type="DividerType.Dotted" />
+            <div class="row">
+                <div class="col-md-3">
+                    <Field>
+                        <FieldLabel>
+                            @nameof(_customerFullDataModel.ServiceType)
+                        </FieldLabel>
+                        <Field><span style="color:green">@_customerFullDataModel.ServiceType</span></Field>
+
+                    </Field>
+
+                    <Field>
+                        <FieldLabel>
+                            @nameof(_customerFullDataModel.ServiceTopology)
+                        </FieldLabel>
+                        <Field><span style="color:green">@_customerFullDataModel.ServiceTopology</span></Field>
+
+                    </Field>
+                </div>
+                <div class="col-md-3">
+                    <Field>
+                        <FieldLabel>
+                            @nameof(_customerFullDataModel.AccountManager)
+
+                        </FieldLabel>
+                        <Field><span style="color:green">@_customerFullDataModel.AccountManager</span></Field>
+                    </Field>
+                    <Field>
+                        <FieldLabel>
+                            @nameof(_customerFullDataModel.IpHQ)
+
+                        </FieldLabel>
+                        <Field><span style="color:green">@_customerFullDataModel.IpHQ</span></Field>
+                    </Field>
+                </div>
+                <div class="col-md-3">
+                    <Field>
+                        <FieldLabel>
+                            @nameof(_customerFullDataModel.AAAGroup)
+                        </FieldLabel>
+                        <Field><span style="color:green">@_customerFullDataModel.AAAGroup</span></Field>
+
+                    </Field>
+                    <Field>
+                        <FieldLabel>
+                            @nameof(_customerFullDataModel.IpTunnel)
+                        </FieldLabel>
+                        <Field><span style="color:green">@_customerFullDataModel.IpTunnel</span></Field>
+
+                    </Field>
+                </div>
+                <div class="col-md-3">
+                    <Field>
+                        <FieldLabel>
+                            @nameof(_customerFullDataModel.WanIpRange)
+                        </FieldLabel>
+                        <Field><span style="color:green">@_customerFullDataModel.WanIpRange</span></Field>
+
+                    </Field>
+                    <Field>
+                        <FieldLabel>
+                            @nameof(_customerFullDataModel.LanIpRange)
+                        </FieldLabel>
+                        <Field><span style="color:green">@_customerFullDataModel.LanIpRange</span></Field>
+
+                    </Field>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-3">
+                    <Field>
+                        <FieldLabel>
+                            @nameof(_customerFullDataModel.VRF)
+                        </FieldLabel>
+                        <Field><span style="color:green">@_customerFullDataModel.VRF</span></Field>
+
+                    </Field>
+                    <Field>
+                        <FieldLabel>
+                            @nameof(_customerFullDataModel.VpnToolsName)
+                        </FieldLabel>
+                        <Field><span style="color:green">@_customerFullDataModel.VpnToolsName</span></Field>
+
+                    </Field>
+                </div>
+                <div class="col-md-3">
+                    <Field>
+                        <FieldLabel>
+                            @nameof(_customerFullDataModel.APN)
+                        </FieldLabel>
+                        <Field><span style="color:green">@_customerFullDataModel.APN</span></Field>
+
+                    </Field>
+                </div>
+            </div>
+        </MatList>
+        <Divider Type="DividerType.Dotted" />
+        <Field>
+            <FieldLabel>
+                @nameof(_customerFullDataModel.Comment)
+            </FieldLabel>
+            <Field><span style="color:green" class="float-right">@_customerFullDataModel.Comment</span></Field>
+
+        </Field>
+
+        @if (_dev == null)
+        {
+            <p>No Devices Found for customer</p>
+        }
+        else
+        {
+            <br />
+            <br />
+            <Divider Type="DividerType.Dotted" />
+            <h4>Main Radio :</h4>
+            <div class="row">
+                <div class="col-md-3">
+
+                    <Field>
+                        <FieldLabel>
+                            @nameof(_dev.RadioName)
+                        </FieldLabel>
+                        <Field><span style="color:green">@_dev.RadioName</span></Field>
+
+                    </Field>
+                    <Field>
+                        <FieldLabel>
+                            @nameof(_dev.RadioIp)
+                        </FieldLabel>
+                        <Field><span style="color:green">@_dev.RadioIp</span></Field>
+
+                    </Field>
+                </div>
+                <div class="col-md-3">
+                    <Field>
+                        <FieldLabel>
+                            @nameof(_dev.RadioModel)
+                        </FieldLabel>
+                        <Field><span style="color:green">@_dev.RadioModel</span></Field>
+
+                    </Field>
+                    <Field>
+                        <FieldLabel>
+                            @nameof(_dev.RadioMetroSite)
+                        </FieldLabel>
+                        <Field><span style="color:green">@_dev.RadioMetroSite</span></Field>
+
+                    </Field>
+                </div>
+            </div>
+
+
+
+            <input type="hidden" @bind-value="@_customerEntity.id" />
+            <h4>Backup Radio :</h4>
+            @if (_devices == null)
+            {
+                <p>
+                    No Extra Devices Found for customer
+                </p>
+            }
+            else
+            {
+
+                <div class="mat-layout-grid mat-layout-grid-align-left">
+                    <div class="mat-layout-grid-inner">
+                        <div class="mat-layout-grid-cell mat-layout-grid-cell-span-12">
+
+                            <DataGrid TItem="DeviceList"
+                                      Data="@_devices"
+                                      ReadData="@OnInitializedAsync"
+                                      TotalItems="@total" Editable="true" Sortable="true" Striped="true">
+                                @*<DataGridColumn TItem="Customers" Field="@nameof(Customers.RowNumber)" Caption="#" />*@
+
+                                <DataGridColumn TItem="DeviceList" Field="@nameof(DeviceList.RadioName)" Caption="Backup Name" />
+                                <DataGridColumn TItem="DeviceList" Field="@nameof(DeviceList.RadioIp)" Caption="Backup Ip" />
+                                <DataGridColumn TItem="DeviceList" Field="@nameof(DeviceList.RadioModel)" Caption="Backup Model" />
+                                <DataGridColumn TItem="DeviceList" Field="@nameof(DeviceList.RadioMetroSite)" Caption="Backup Metro Site" />
+                                <DataGridColumn TItem="DeviceList" Field="@nameof(DeviceList.IsAuto)" Caption="Backup Activation" />
+                                <DataGridColumn TItem="DeviceList" Field="@nameof(DeviceList.Id)" Caption="Action">
+                                    <DisplayTemplate>
+                                        <Button Color="Color.Success" Clicked="async() => ShowEditDevice(context.Id)">Edit</Button>
+                                        <Button Color="Color.Danger" Clicked="async() => DeleteDevice(context.Id)">Delete</Button>
+                                    </DisplayTemplate>
+                                </DataGridColumn>
+
+                            </DataGrid>
+                        </div>
+
+                    </div>
+                </div>
+            }
+
+
+        }
+
+
+    </div>
+}
+
+
+@code {
+    [CascadingParameter] public IModalService Modal { get; set; }
+    //[CascadingParameter] BlazoredModalInstance BlazoredModal { get; set; }
+
+    [Parameter] public string ID { get; set; }
+    [Parameter] public string CustomerID { get; set; }
+    Customers _customerModel;
+    Customers _customerEntity = new Customers();
+
+    Customers _customerFullDataModel = new Customers();
+    List<DeviceList> _devices = new List<DeviceList>();
+    DeviceList _dev = new DeviceList();
+    //DeviceList device = new DeviceList();
+
+
+    #region Pagination
+
+    int _totalRecords;
+    int _curPage;
+
+    string _sortColumnName = "ID";
+    string _sortDir = "DESC";
+
+    #endregion
+
+    int? total;
+    protected override async Task OnInitializedAsync()
+    {
+
+
+        try
+        {
+            _customerEntity = await CustomerManager.GetById(Convert.ToInt32(CustomerID));
+            _customerFullDataModel = await CustomerManager.GetById(Convert.ToInt32(CustomerID));
+            _devices = await DeviceManager?.GetDeviceByCustomerId(Convert.ToInt32(CustomerID));
+            _dev = await DeviceManager?.GetMainDeviceById(Convert.ToInt32(CustomerID));
+
+            total = _devices?.Count();
+
+        }
+        catch (Exception ex)
+        {
+
+            NavigationManager.NavigateTo(@"\Error", true);
+        }
+    }
+
+    protected async Task ShowEditCustomer(int id)
+    {
+
+        var parameters = new ModalParameters();
+        parameters.Add(nameof(EditCustomer.CustomerID), id);
+        parameters.Add(nameof(EditCustomer.CustomerID), CustomerID);
+        //Modal.Show<EditCustomer>("Edit Customer", parameters);
+        NavigationManager.NavigateTo("/EditCustomer" + "/" + CustomerID, true);
+    }
+
+    protected async Task ShowEditDevice(int id)
+    {
+        try
+        {
+            var parameters = new ModalParameters();
+            parameters.Add(nameof(DeviceEdit.ID), id);
+            //DeviceManager.GetDeviceById();
+            Modal.Show<DeviceEdit>("Edit Device", parameters);
+
+        }
+        catch (System.Exception)
+        {
+
+            throw;
+        }
+
+    }
+    protected async Task ShowAddDevice(int id)
+    {
+        var parameters = new ModalParameters();
+        parameters.Add(nameof(DeviceAdd.ID), id);
+
+        Modal.Show<DeviceAdd>("Add Device", parameters);
+    }
+    protected async Task UpdateCustomers(int id)
+    {
+        var parameters = new ModalParameters();
+        parameters.Add(nameof(EditCustomer.CustomerID), id);
+        await CustomerManager.Update(_customerEntity);
+        //await BlazoredModal.Close(ModalResult.Ok<Customers>(_customerEntity));
+        //RefreshRecords(currentPage);
+        NavigationManager.NavigateTo($"/customer/{CustomerID}", true);
+    }
+    protected async Task Deletecustomer(int id)
+    {
+        var parameters = new ModalParameters();
+        parameters.Add(nameof(EditCustomer.CustomerID), id);
+        await CustomerManager.Delete(id);
+        _customerModel = await CustomerManager.GetById(Convert.ToInt32(ID));
+        NavigationManager.NavigateTo("/customerlist", true);
+    }
+    protected async Task DeleteDevice(int id)
+    {
+        var parameters = new ModalParameters();
+        parameters.Add(nameof(EditCustomer.CustomerID), id);
+        await DeviceManager.Delete(id);
+        _customerModel = await CustomerManager.GetById(Convert.ToInt32(ID));
+        NavigationManager.NavigateTo($"/customer/{ID}", true);
+    }
+
+    async Task Cancel()
+    {
+        //await BlazoredModal.Cancel();
+        NavigationManager.NavigateTo($"/customer/{ID}", true);
+    }
+    private bool _isSortedAscending;
+    private string _activeSortColumn;
+
+
+    private async Task SortTable(string columnName)
+    {
+        if (columnName != _activeSortColumn)
+        {
+            //_customerModel = await SortRecords(columnName, "ASC");
+            //_isSortedAscending = true;
+            //_activeSortColumn = columnName;
+        }
+        else
+        {
+            if (_isSortedAscending)
+            {
+                //_customerModel = await SortRecords(columnName, "DESC");
+            }
+            else
+            {
+                //_customerModel = await SortRecords(columnName, "ASC");
+            }
+
+            _isSortedAscending = !_isSortedAscending;
+        }
+        _sortColumnName = columnName;
+        _sortDir = _isSortedAscending ? "ASC" : "DESC";
+    }
+
+    private string SetSortIcon(string columnName)
+    {
+        if (_activeSortColumn != columnName)
+        {
+            return string.Empty;
+        }
+        if (_isSortedAscending)
+        {
+            return "fa-sort-up";
+        }
+        else
+        {
+            return "fa-sort-down";
+        }
+    }
+
+    public async Task RefreshRecords(int currentPage)
+    {
+        _customerModel = await CustomerManager.GetById(Convert.ToInt32(ID));
+        _curPage = currentPage;
+        this.StateHasChanged();
+    }
+
+
+
+
+}

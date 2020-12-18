@@ -1,0 +1,106 @@
+﻿@page "/addDevice/{ID}"
+@using EcsDataManager.Contracts
+@using EcsDataManager.Entities
+@inject IDeviceManager deviceManager
+@inject Microsoft.AspNetCore.Components.NavigationManager navigationManager
+
+<div class="container-fluid">
+
+
+
+
+    <div class="row">
+        <div class="col-md-6">
+            <label>@nameof(_device.RadioName)</label>
+        </div>
+        <div class="col-md-6">
+            <input @bind-value="@_device.RadioName" />
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <label>@nameof(_device.RadioIp)</label>
+        </div>
+        <div class="col-md-6">
+            <input @bind-value="@_device.RadioIp" />
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <label>@nameof(_device.RadioModel)</label>
+        </div>
+        <div class="col-md-6">
+            <input @bind-value="@_device.RadioModel" />
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <label>@nameof(_device.RadioMetroSite)</label>
+        </div>
+        <div class="col-md-6">
+            <input @bind-value="@_device.RadioMetroSite" />
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <label>@nameof(_device.IsAuto)</label>
+        </div>
+        <div class="dropdown  col-md-6">
+            @*<input @bind-value="@_device.BackupActivationIsAuto"/>*@
+            <select class="form-control" @bind="@_device.IsAuto">
+                <option value="" selected></option>
+                <option value="Manual">                    Manual                 </option>
+                <option value="Auto">                     Auto                 </option>
+            </select>
+        </div>
+    </div>
+    <div class="row">
+
+        <div class="col-md-6">
+            <label>@nameof(_device.IsMain)</label>
+        </div>
+        <div class="dropdown  col-md-6">
+            <select class="form-control" @bind="@_device.IsMain">
+                <option value="" selected></option>
+                <option value="Manual">                    1                 </option>
+                <option value="Auto">                     0                 </option>
+            </select>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <button type="button" class="btn btn-primary" @onclick="() => CreateDevice(Convert.ToInt32(ID))">Save</button>
+        </div>
+        <div class="col-md-6">
+            <button type="button" class="btn btn-danger" @onclick="() => Cancel()">Cancel</button>
+
+        </div>
+    </div>
+    <input type="hidden" @bind-value="@_customers.id" />
+</div>
+
+@code {
+    Dropdown dropdown;
+    [CascadingParameter] public IModalService Modal { get; set; }
+    List<DeviceList> _devices = new List<DeviceList>();
+    DeviceList _device = new DeviceList();
+    Customers _customers = new Customers();
+    [Parameter] public int ID { get; set; }
+
+    protected async Task CreateDevice(int id)
+    {
+        _device.CustomerId = id;
+        var state = await deviceManager.AddDevice(_device,null);
+        var parameters = new ModalParameters();
+        parameters.Add(nameof(FetchCustomerById.ID), id);
+        //_customers = await customerManager.GetById(id);
+        navigationManager.NavigateTo(uri: state != 0 ? "/Error" : "/customer" + "/" + ID.ToString(), true);
+
+    }
+
+    void Cancel()
+    {
+        navigationManager.NavigateTo("/customer" + "/" + ID.ToString());
+    }
+}

@@ -1,0 +1,122 @@
+﻿@page "/EditCustomer/{customerID}"
+@using EcsDataManager.Contracts
+@using EcsDataManager.Entities
+@inject ICustomersManager CustomersManager
+@inject IDeviceManager  DeviceManager
+@inject NavigationManager NavigationManager
+
+@using System.ComponentModel.DataAnnotations
+@using System.IO
+@using System.Net.Http.Headers
+
+
+<style type="text/css">
+    .simple-form {
+    }
+</style>
+<!--<div>-->
+
+<div class="simple-form">
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-6">
+                <label for="CustomerName">Customer Name</label>
+                <input class="form-control" @bind-value="@_customerEntity.CustomerName" id="CustomerName" />
+                <label for="Tel">Tell</label>
+                <input class="form-control" @bind-value="@_customerEntity.Tel" id="Tel" />
+            </div>
+            <div class="col-md-6">
+                <label for="Mobile">Mobile</label>
+                <input class="form-control" @bind-value="@_customerEntity.Mobile" id="Mobile" />
+                <label for="Mobile">@nameof(_customerEntity.OwnerTeam)</label>
+                <input class="form-control" @bind-value="@_customerEntity.OwnerTeam" id="Mobile" />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <label for="CustomerName">Service Type</label>
+                <input class="form-control" @bind-value="@_customerEntity.ServiceType" id="CustomerName" />
+                <label for="Tel">Service Topology</label>
+                <input class="form-control" @bind-value="@_customerEntity.ServiceTopology" id="Tel" />
+            </div>
+            <div class="col-md-6">
+                <label for="Mobile">Account Manager</label>
+                <input class="form-control" @bind-value="@_customerEntity.AccountManager" id="Mobile" />
+                <label for="Mobile">@nameof(_customerEntity.IpHQ)</label>
+                <input class="form-control" @bind-value="@_customerEntity.IpHQ" id="Mobile" />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <label for="CustomerName">AAA Group</label>
+                <input class="form-control" @bind-value="@_customerEntity.AAAGroup" id="CustomerName" />
+                <label for="Tel">Ip Tunnel</label>
+                <input class="form-control" @bind-value="@_customerEntity.IpTunnel" id="Tel" />
+            </div>
+            <div class="col-md-6">
+                <label for="Mobile">Wan Ip Range</label>
+                <input class="form-control" @bind-value="@_customerEntity.WanIpRange" id="Mobile" />
+                <label for="Mobile">Lan Ip Range</label>
+                <input class="form-control" @bind-value="@_customerEntity.LanIpRange" id="Mobile" />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <label for="CustomerName">VRF</label>
+                <input class="form-control" @bind-value="@_customerEntity.VRF" id="CustomerName" />
+                <label for="Tel">Vpn Tools Name</label>
+                <input class="form-control" @bind-value="@_customerEntity.VpnToolsName" id="Tel" />
+            </div>
+            <div class="col-md-6">
+                <label for="Mobile">APN</label>
+                <input class="form-control" @bind-value="@_customerEntity.APN" id="Mobile" />
+                <label for="Mobile">Comment</label>
+                <input class="form-control" @bind-value="@_customerEntity.Comment" id="Mobile" />
+            </div>
+        </div>
+        <input type="hidden" @bind-value="@_customerEntity.id" />
+    </div>
+    <div class="form-group">
+        <button type="button" class="btn btn-primary" @onclick="@(async () => await UpdateCustomers(Convert.ToInt32(CustomerID)))">Save</button>
+
+        <button type="button" class="btn btn-danger" @onclick="Cancel">Cancel</button>
+    </div>
+
+</div>
+
+@code  {
+
+    [Parameter] public string CustomerID { get; set; }
+
+    Customers _customerModel;
+    Customers _customerEntity = new Customers();
+    DeviceList
+         _deviceListEntity = new
+         DeviceList();
+    protected override async Task OnInitializedAsync()
+    {
+        _customerEntity = await CustomersManager.GetById(Convert.ToInt32(CustomerID));
+        _deviceListEntity = await
+            DeviceManager.GetMainDeviceById(Convert.ToInt32(CustomerID));
+    }
+
+
+    protected async Task UpdateCustomers(int id)
+    {
+        await CustomersManager.Update(_customerEntity);
+        await
+            DeviceManager.Update(_deviceListEntity);
+        NavigationManager.NavigateTo("/customer" + "/" + CustomerID, true);
+    }
+
+    async Task Cancel()
+    {
+        NavigationManager.NavigateTo("/customer" + "/" + CustomerID);
+    }
+
+    void Reset()
+    {
+
+    }
+}
