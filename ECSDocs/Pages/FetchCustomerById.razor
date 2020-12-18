@@ -34,261 +34,256 @@
 
 @if (_customerEntity == null)
 {
-    <p><em>Loading...</em></p>
-    <p style="white-space: pre-line"> </p>
-}
-else
-{
-    <div class="container-fluid">
-        <div>
-
-            <button @onclick="async() => ShowEditCustomer(_customerEntity.id).ConfigureAwait(true)" class="btn btn-primary">Edit</button>
-            <button @onclick="async() => ShowAddDevice(_customerEntity.id)" class="btn btn-success">Add Device</button>
-            <button @onclick="async() => Deletecustomer(_customerEntity.id)" class="btn btn-danger">Delete Customer</button>
-
-
-        </div>
-
-        <MatList SingleSelection="true" TwoLine="true" @bind-value="@_customerFullDataModel.id">
-            <div class="row">
-                <div class="col-md-6">
-                    <Field>
-                        <FieldLabel>
-                            @nameof(_customerFullDataModel.CustomerName)
-
-                        </FieldLabel>
-                        <Field><span style="color:green">@_customerFullDataModel.CustomerName</span></Field>
-                    </Field>
-
-                    <Field>
-                        <FieldLabel>
-                            Tell
-
-                        </FieldLabel>
-                        <Field><span style="color:green">@_customerFullDataModel.Tel</span></Field>
-                    </Field>
-                </div>
-                <div class="col-md-6">
-                    <Field>
-                        <FieldLabel>
-                            @nameof(_customerFullDataModel.Mobile)
-
-                        </FieldLabel>
-                        <Field><span style="color:green">@_customerFullDataModel.Mobile</span></Field>
-                    </Field>
-
-                    <Field>
-                        <FieldLabel>
-                            @nameof(_customerFullDataModel.OwnerTeam)
-                        </FieldLabel>
-                        <Field><span style="color:green">@_customerFullDataModel.OwnerTeam</span></Field>
-
-                    </Field>
-                </div>
-            </div>
-            <Divider Type="DividerType.Dotted" />
-            <div class="row">
-                <div class="col-md-3">
-                    <Field>
-                        <FieldLabel>
-                            @nameof(_customerFullDataModel.ServiceType)
-                        </FieldLabel>
-                        <Field><span style="color:green">@_customerFullDataModel.ServiceType</span></Field>
-
-                    </Field>
-
-                    <Field>
-                        <FieldLabel>
-                            @nameof(_customerFullDataModel.ServiceTopology)
-                        </FieldLabel>
-                        <Field><span style="color:green">@_customerFullDataModel.ServiceTopology</span></Field>
-
-                    </Field>
-                </div>
-                <div class="col-md-3">
-                    <Field>
-                        <FieldLabel>
-                            @nameof(_customerFullDataModel.AccountManager)
-
-                        </FieldLabel>
-                        <Field><span style="color:green">@_customerFullDataModel.AccountManager</span></Field>
-                    </Field>
-                    <Field>
-                        <FieldLabel>
-                            @nameof(_customerFullDataModel.IpHQ)
-
-                        </FieldLabel>
-                        <Field><span style="color:green">@_customerFullDataModel.IpHQ</span></Field>
-                    </Field>
-                </div>
-                <div class="col-md-3">
-                    <Field>
-                        <FieldLabel>
-                            @nameof(_customerFullDataModel.AAAGroup)
-                        </FieldLabel>
-                        <Field><span style="color:green">@_customerFullDataModel.AAAGroup</span></Field>
-
-                    </Field>
-                    <Field>
-                        <FieldLabel>
-                            @nameof(_customerFullDataModel.IpTunnel)
-                        </FieldLabel>
-                        <Field><span style="color:green">@_customerFullDataModel.IpTunnel</span></Field>
-
-                    </Field>
-                </div>
-                <div class="col-md-3">
-                    <Field>
-                        <FieldLabel>
-                            @nameof(_customerFullDataModel.WanIpRange)
-                        </FieldLabel>
-                        <Field><span style="color:green">@_customerFullDataModel.WanIpRange</span></Field>
-
-                    </Field>
-                    <Field>
-                        <FieldLabel>
-                            @nameof(_customerFullDataModel.LanIpRange)
-                        </FieldLabel>
-                        <Field><span style="color:green">@_customerFullDataModel.LanIpRange</span></Field>
-
-                    </Field>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-3">
-                    <Field>
-                        <FieldLabel>
-                            @nameof(_customerFullDataModel.VRF)
-                        </FieldLabel>
-                        <Field><span style="color:green">@_customerFullDataModel.VRF</span></Field>
-
-                    </Field>
-                    <Field>
-                        <FieldLabel>
-                            @nameof(_customerFullDataModel.VpnToolsName)
-                        </FieldLabel>
-                        <Field><span style="color:green">@_customerFullDataModel.VpnToolsName</span></Field>
-
-                    </Field>
-                </div>
-                <div class="col-md-3">
-                    <Field>
-                        <FieldLabel>
-                            @nameof(_customerFullDataModel.APN)
-                        </FieldLabel>
-                        <Field><span style="color:green">@_customerFullDataModel.APN</span></Field>
-
-                    </Field>
-                </div>
-            </div>
-        </MatList>
-        <Divider Type="DividerType.Dotted" />
-        <Field>
-            <FieldLabel>
-                @nameof(_customerFullDataModel.Comment)
-            </FieldLabel>
-            <Field><span style="color:green" class="float-right">@_customerFullDataModel.Comment</span></Field>
-
-        </Field>
-
-        @if (_dev == null)
-        {
-            <p>No Devices Found for customer</p>
-        }
-        else
-        {
-            <br />
-            <br />
-            <Divider Type="DividerType.Dotted" />
-            <h4>Main Radio :</h4>
-            <div class="row">
-                <div class="col-md-3">
-
-                    <Field>
-                        <FieldLabel>
-                            @nameof(_dev.RadioName)
-                        </FieldLabel>
-                        <Field><span style="color:green">@_dev.RadioName</span></Field>
-
-                    </Field>
-                    <Field>
-                        <FieldLabel>
-                            @nameof(_dev.RadioIp)
-                        </FieldLabel>
-                        <Field><span style="color:green">@_dev.RadioIp</span></Field>
-
-                    </Field>
-                </div>
-                <div class="col-md-3">
-                    <Field>
-                        <FieldLabel>
-                            @nameof(_dev.RadioModel)
-                        </FieldLabel>
-                        <Field><span style="color:green">@_dev.RadioModel</span></Field>
-
-                    </Field>
-                    <Field>
-                        <FieldLabel>
-                            @nameof(_dev.RadioMetroSite)
-                        </FieldLabel>
-                        <Field><span style="color:green">@_dev.RadioMetroSite</span></Field>
-
-                    </Field>
-                </div>
-            </div>
-
-
-
-            <input type="hidden" @bind-value="@_customerEntity.id" />
-            <h4>Backup Radio :</h4>
-            @if (_devices == null)
-            {
-                <p>
-                    No Extra Devices Found for customer
-                </p>
-            }
+<p><em>Loading...</em></p>
+                <p style="white-space: pre-line"> </p> }
             else
             {
+<div class="container-fluid" dir="rtl">
+    <div>
 
-                <div class="mat-layout-grid mat-layout-grid-align-left">
-                    <div class="mat-layout-grid-inner">
-                        <div class="mat-layout-grid-cell mat-layout-grid-cell-span-12">
-
-                            <DataGrid TItem="DeviceList"
-                                      Data="@_devices"
-                                      ReadData="@OnInitializedAsync"
-                                      TotalItems="@total" Editable="true" Sortable="true" Striped="true">
-                                @*<DataGridColumn TItem="Customers" Field="@nameof(Customers.RowNumber)" Caption="#" />*@
-
-                                <DataGridColumn TItem="DeviceList" Field="@nameof(DeviceList.RadioName)" Caption="Backup Name" />
-                                <DataGridColumn TItem="DeviceList" Field="@nameof(DeviceList.RadioIp)" Caption="Backup Ip" />
-                                <DataGridColumn TItem="DeviceList" Field="@nameof(DeviceList.RadioModel)" Caption="Backup Model" />
-                                <DataGridColumn TItem="DeviceList" Field="@nameof(DeviceList.RadioMetroSite)" Caption="Backup Metro Site" />
-                                <DataGridColumn TItem="DeviceList" Field="@nameof(DeviceList.IsAuto)" Caption="Backup Activation" />
-                                <DataGridColumn TItem="DeviceList" Field="@nameof(DeviceList.Id)" Caption="Action">
-                                    <DisplayTemplate>
-                                        <Button Color="Color.Success" Clicked="async() => ShowEditDevice(context.Id)">Edit</Button>
-                                        <Button Color="Color.Danger" Clicked="async() => DeleteDevice(context.Id)">Delete</Button>
-                                    </DisplayTemplate>
-                                </DataGridColumn>
-
-                            </DataGrid>
-                        </div>
-
-                    </div>
-                </div>
-            }
-
-
-        }
+        <button @onclick="async() => ShowEditCustomer(_customerEntity.id).ConfigureAwait(true)" class="btn btn-primary">Edit</button>
+        <button @onclick="async() => ShowAddDevice(_customerEntity.id)" class="btn btn-success">Add Device</button>
+        <button @onclick="async() => Deletecustomer(_customerEntity.id)" class="btn btn-danger">Delete Customer</button>
 
 
     </div>
-}
+
+    <MatList SingleSelection="true" TwoLine="true" @bind-value="@_customerFullDataModel.id">
+        <div class="row" dir="rtl">
+            <div class="col-md-6">
+                <Field>
+                    <FieldLabel>
+                        @nameof(_customerFullDataModel.CustomerName)
+
+                    </FieldLabel>
+                    <Field><span style="color:green">@_customerFullDataModel.CustomerName</span></Field>
+                </Field>
+
+                <Field>
+                    <FieldLabel>
+                        Tell
+
+                    </FieldLabel>
+                    <Field><span style="color:green">@_customerFullDataModel.Tel</span></Field>
+                </Field>
+            </div>
+            <div class="col-md-6">
+                <Field>
+                    <FieldLabel>
+                        @nameof(_customerFullDataModel.Mobile)
+
+                    </FieldLabel>
+                    <Field><span style="color:green">@_customerFullDataModel.Mobile</span></Field>
+                </Field>
+
+                <Field>
+
+                    <FieldLabel>
+                        @nameof(_customerFullDataModel.OwnerTeam)
+                    </FieldLabel>
+                    <Field><span style="color:green">@_customerFullDataModel.OwnerTeam</span></Field>
+
+                </Field>
+            </div>
+        </div>
+        <Divider Type="DividerType.Dotted" />
+        <div class="row" dir="rtl">
+            <div class="col-md-3">
+                <Field>
+                    <FieldLabel>
+                        @nameof(_customerFullDataModel.ServiceType)
+                    </FieldLabel>
+                    <Field><span style="color:green">@_customerFullDataModel.ServiceType</span></Field>
+
+                </Field>
+
+                <Field>
+                    <FieldLabel>
+                        @nameof(_customerFullDataModel.ServiceTopology)
+                    </FieldLabel>
+                    <Field><span style="color:green">@_customerFullDataModel.ServiceTopology</span></Field>
+
+                </Field>
+            </div>
+            <div class="col-md-3">
+                <Field>
+                    <FieldLabel>
+                        @nameof(_customerFullDataModel.AccountManager)
+
+                    </FieldLabel>
+                    <Field><span style="color:green">@_customerFullDataModel.AccountManager</span></Field>
+                </Field>
+                <Field>
+                    <FieldLabel>
+                        @nameof(_customerFullDataModel.IpHQ)
+
+                    </FieldLabel>
+                    <Field><span style="color:green">@_customerFullDataModel.IpHQ</span></Field>
+                </Field>
+            </div>
+            <div class="col-md-3" dir="rtl">
+                <Field>
+                    <FieldLabel>
+                        @nameof(_customerFullDataModel.AAAGroup)
+                    </FieldLabel>
+                    <Field><span style="color:green">@_customerFullDataModel.AAAGroup</span></Field>
+
+                </Field>
+                <Field>
+                    <FieldLabel>
+                        @nameof(_customerFullDataModel.IpTunnel)
+                    </FieldLabel>
+                    <Field><span style="color:green">@_customerFullDataModel.IpTunnel</span></Field>
+
+                </Field>
+            </div>
+            <div class="col-md-3">
+                <Field>
+                    <FieldLabel>
+                        @nameof(_customerFullDataModel.WanIpRange)
+                    </FieldLabel>
+                    <Field><span style="color:green">@_customerFullDataModel.WanIpRange</span></Field>
+
+                </Field>
+                <Field>
+                    <FieldLabel>
+                        @nameof(_customerFullDataModel.LanIpRange)
+                    </FieldLabel>
+                    <Field><span style="color:green">@_customerFullDataModel.LanIpRange</span></Field>
+
+                </Field>
+            </div>
+        </div>
+        <div class="row" dir="rtl">
+            <div class="col-md-3">
+                <Field>
+                    <FieldLabel>
+                        @nameof(_customerFullDataModel.VRF)
+                    </FieldLabel>
+                    <Field><span style="color:green">@_customerFullDataModel.VRF</span></Field>
+
+                </Field>
+                <Field>
+                    <FieldLabel>
+                        @nameof(_customerFullDataModel.VpnToolsName)
+                    </FieldLabel>
+                    <Field><span style="color:green">@_customerFullDataModel.VpnToolsName</span></Field>
+
+                </Field>
+            </div>
+            <div class="col-md-3">
+                <Field>
+                    <FieldLabel>
+                        @nameof(_customerFullDataModel.APN)
+                    </FieldLabel>
+                    <Field><span style="color:green">@_customerFullDataModel.APN</span></Field>
+
+                </Field>
+            </div>
+        </div>
+    </MatList>
+    <Divider Type="DividerType.Dotted" />
+    <Field>
+        <FieldLabel>
+            @nameof(_customerFullDataModel.Comment)
+        </FieldLabel>
+        <Field><span style="color:green" class="float-right">@_customerFullDataModel.Comment</span></Field>
+
+    </Field>
+</div>
+<div class="container-fluid">
+    @if (_dev == null)
+    {
+<p>No Devices Found for customer</p> }
+else
+{
+<br />
+                    <br />
+                                        <Divider Type="DividerType.Dotted" />
+
+                                                            <br />
+                                                                                <h4>Main Radio :</h4>
+                                                                                                    <div class="row">
+
+                                                                                                        <div class="col-md-3">
+
+                                                                                                            <Field>
+                                                                                                                <FieldLabel>
+                                                                                                                    @nameof(_dev.RadioName)
+                                                                                                                </FieldLabel>
+                                                                                                                <Field><span style="color:green">@_dev.RadioName</span></Field>
+
+                                                                                                            </Field>
+                                                                                                            <Field>
+                                                                                                                <FieldLabel>
+                                                                                                                    @nameof(_dev.RadioIp)
+                                                                                                                </FieldLabel>
+                                                                                                                <Field><span style="color:green">@_dev.RadioIp</span></Field>
+
+                                                                                                            </Field>
+                                                                                                        </div>
+                                                                                                        <div class="col-md-3">
+                                                                                                            <Field>
+                                                                                                                <FieldLabel>
+                                                                                                                    @nameof(_dev.RadioModel)
+                                                                                                                </FieldLabel>
+                                                                                                                <Field><span style="color:green">@_dev.RadioModel</span></Field>
+
+                                                                                                            </Field>
+                                                                                                            <Field>
+                                                                                                                <FieldLabel>
+                                                                                                                    @nameof(_dev.RadioMetroSite)
+                                                                                                                </FieldLabel>
+                                                                                                                <Field><span style="color:green">@_dev.RadioMetroSite</span></Field>
+
+                                                                                                            </Field>
+                                                                                                        </div>
+                                                                                                    </div>
 
 
-@code {
-    [CascadingParameter] public IModalService Modal { get; set; }
+
+                                                                                                                        <input type="hidden" @bind-value="@_customerEntity.id" />}
+
+
+</div>
+                                @if (_devices == null)
+                                {
+                <p>
+                    No Extra Devices Found for customer
+                </p> }
+            else
+            {
+<h4>Backup Radio :</h4>
+                    <div class="mat-layout-grid mat-layout-grid-align-left">
+                        <div class="mat-layout-grid-inner">
+                            <div class="mat-layout-grid-cell mat-layout-grid-cell-span-12">
+
+                                <DataGrid TItem="DeviceList"
+                                          Data="@_devices"
+                                          ReadData="@OnInitializedAsync"
+                                          TotalItems="@total" Editable="true" Sortable="true" Striped="true">
+                                    @*<DataGridColumn TItem="Customers" Field="@nameof(Customers.RowNumber)" Caption="#" />*@
+
+                                    <DataGridColumn TItem="DeviceList" Field="@nameof(DeviceList.RadioName)" Caption="Backup Name" />
+                                    <DataGridColumn TItem="DeviceList" Field="@nameof(DeviceList.RadioIp)" Caption="Backup Ip" />
+                                    <DataGridColumn TItem="DeviceList" Field="@nameof(DeviceList.RadioModel)" Caption="Backup Model" />
+                                    <DataGridColumn TItem="DeviceList" Field="@nameof(DeviceList.RadioMetroSite)" Caption="Backup Metro Site" />
+                                    <DataGridColumn TItem="DeviceList" Field="@nameof(DeviceList.IsAuto)" Caption="Backup Activation" />
+                                    <DataGridColumn TItem="DeviceList" Field="@nameof(DeviceList.Id)" Caption="Action">
+                                        <DisplayTemplate>
+                                            <Button Color="Color.Success" Clicked="async() => ShowEditDevice(context.Id)">Edit</Button>
+                                            <Button Color="Color.Danger" Clicked="async() => DeleteDevice(context.Id)">Delete</Button>
+                                        </DisplayTemplate>
+                                    </DataGridColumn>
+
+                                </DataGrid>
+                            </div>
+
+                        </div>
+                    </div>}}
+
+
+@code { [CascadingParameter] public IModalService Modal { get; set; }
     //[CascadingParameter] BlazoredModalInstance BlazoredModal { get; set; }
 
     [Parameter] public string ID { get; set; }
@@ -391,13 +386,13 @@ else
         parameters.Add(nameof(EditCustomer.CustomerID), id);
         await DeviceManager.Delete(id);
         _customerModel = await CustomerManager.GetById(Convert.ToInt32(ID));
-        NavigationManager.NavigateTo($"/customer/{ID}", true);
+        NavigationManager.NavigateTo($"/customer/{CustomerID}", true);
     }
 
     async Task Cancel()
     {
         //await BlazoredModal.Cancel();
-        NavigationManager.NavigateTo($"/customer/{ID}", true);
+        NavigationManager.NavigateTo($"/customer/{CustomerID}");
     }
     private bool _isSortedAscending;
     private string _activeSortColumn;
@@ -449,9 +444,4 @@ else
         _customerModel = await CustomerManager.GetById(Convert.ToInt32(ID));
         _curPage = currentPage;
         this.StateHasChanged();
-    }
-
-
-
-
-}
+    } }

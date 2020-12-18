@@ -68,7 +68,7 @@ namespace EcsDataManager.Concrete
             }
             else
             {
-            dbPara.Add("IsMain", ismain, DbType.String);
+            dbPara.Add("IsMain", ismain, DbType.Int16);
 
             }
 
