@@ -1,0 +1,64 @@
+﻿@using Microsoft.AspNetCore.Components
+
+@*<div class="top-row pl-4 navbar navbar-dark">@*  *@
+
+@*<img style="height: 100%; width: 100%; object-fit: contain" src="/css/brand.png" />
+    <button class="navbar-toggler bg-secondary" @onclick="ToggleNavMenu">
+        <span class="navbar-toggler-icon"></span>
+    </button>*@
+<div style="width:auto;height:25px">
+
+</div>
+<div class="container" style="
+        text-align: center;
+        align-items: center;
+        justify-content: center;
+        display:  flex;
+        width: 160px;
+        height: 100px;">
+    <Figure Size="FigureSize.Is96x96" class="text-center">
+        <FigureImage Source="/css/brand.png" AlternateText="128x128" Style="text-align:center" />
+    </Figure>
+    
+
+</div>
+
+
+<MatNavMenu>
+    <MatNavItem Href="/">
+        <MatIcon Icon="home"></MatIcon> Home
+    </MatNavItem>
+
+    <MatNavSubMenu @bind-Expanded="@navSubMenuOpenState">
+        <MatNavSubMenuHeader>
+            <MatNavItem AllowSelection="false"><MatIcon Icon="router"></MatIcon> Customers</MatNavItem>
+        </MatNavSubMenuHeader>
+        <MatNavSubMenuList>
+            <MatNavItem Href="/customerlist"><MatIcon Icon="list"></MatIcon> Customer list</MatNavItem>
+            <MatNavItem Href="/addCustomer"><MatIcon Icon="person_add"></MatIcon> Add Customer</MatNavItem>
+        </MatNavSubMenuList>
+    </MatNavSubMenu>
+</MatNavMenu>
+
+
+@code {
+    private bool collapseNavMenu = true;
+    private bool expandSubNav;
+    [Inject] IJSRuntime JS { get; set; }
+
+    bool navSubMenuOpenState;
+
+    private string NavMenuCssClass => collapseNavMenu ? "collapse" : null;
+
+    private void ToggleNavMenu()
+    {
+        collapseNavMenu = !collapseNavMenu;
+    }
+
+    async Task ClickMe()
+    {
+        Console.WriteLine("test");
+        await JS.InvokeAsync<object>("alert", "Successful OnClick!");
+    }
+
+}
