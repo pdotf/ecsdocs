@@ -77,6 +77,9 @@
         </div>
         <input type="hidden" @bind-value="@_customerEntity.id" />
     </div>
+     <div>
+          
+     </div>
     <div class="form-group">
         <button type="button" class="btn btn-primary" @onclick="@(async () => await UpdateCustomers(Convert.ToInt32(CustomerID)))">Save</button>
 
