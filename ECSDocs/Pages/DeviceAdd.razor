@@ -46,37 +46,15 @@
             <label>@nameof(_device.IsAuto)</label>
         </div>
         <div class="dropdown  col-md-6">
-            @*<input @bind-value="@_device.BackupActivationIsAuto"/>*@
-            <select class="form-control" @bind="@_device.IsAuto">
-                <option value="" selected></option>
-                <option value="Manual">                    Manual                 </option>
-                <option value="Auto">                     Auto                 </option>
+            <select class="form-control" @bind="@_device.IsAuto" id="isAutoSelect">
+                <option value="" />
+                <option value="0">                    Manual                 </option>
+                <option value="1">                     Auto                 </option>
             </select>
         </div>
     </div>
-    <div class="row">
+   
 
-        <div class="col-md-6">
-            <label>@nameof(_device.IsMain)</label>
-        </div>
-        <div class="dropdown  col-md-6">
-            <select class="form-control" @bind="@_device.IsMain">
-                <option value="" selected></option>
-                <option value="Manual">                    1                 </option>
-                <option value="Auto">                     0                 </option>
-            </select>
-        </div>
-    </div>
-
-    @*<div class="row">
-        <div class="col-md-6">
-            <button type="button" class="btn btn-primary" @onclick="() => CreateDevice(Convert.ToInt32(ID))">Save</button>
-        </div>
-        <div class="col-md-6">
-            <button type="button" class="btn btn-danger" @onclick="() => Cancel()">Cancel</button>
-
-        </div>
-    </div>*@
     <input type="hidden" @bind-value="@_customers.id" />
 </div>
 
@@ -88,7 +66,7 @@
     Customers _customers = new Customers();
     [Parameter] public int ID { get; set; }
 
-    
+
 
     void Cancel()
     {

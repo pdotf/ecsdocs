@@ -280,7 +280,7 @@ else
         <DeviceAdd ID="@_customerEntity.id" />
     </Body>    
     <Footer>
-        <button type="button" class="btn btn-primary" @onclick="() => CreateDevice(_dev.CustomerId)">Save changes</button>
+        <button type="button" class="btn btn-primary" @onclick="() => CreateDevice(_customerEntity.id)">Save changes</button>
         <button type="button" class="btn btn-secondary" data-dismiss="modal" @onclick="() => modal.Close()">Close</button>
     </Footer>
 </ModalComponent>
@@ -332,6 +332,7 @@ else
             _customerEntity = await CustomerManager.GetById(Convert.ToInt32(CustomerID));
             _customerFullDataModel = await CustomerManager.GetById(Convert.ToInt32(CustomerID));
             _devices = await DeviceManager?.GetDeviceByCustomerId(Convert.ToInt32(CustomerID));
+            //_devlist=await DeviceManager?.Get
             _dev = await DeviceManager?.GetMainDeviceById(Convert.ToInt32(CustomerID));
 
             total = _devices?.Count();
@@ -346,12 +347,10 @@ else
     }
     protected async Task CreateDevice(int id)
     {
-        _devlist.CustomerId = id;
-        var state = await DeviceManager.AddDevice(_devlist, null);
-        //var parameters = new ModalParameters();
-        //parameters.Add(nameof(FetchCustomerById.ID), id);
-        ////_customers = await customerManager.GetById(id);
-        NavigationManager.NavigateTo(uri: state != 0 ? "/Error" : "/customer" + "/" + ID.ToString(), true);
+        _dev.CustomerId = id;
+        var state = await DeviceManager.AddDevice(_dev, null);
+        
+        NavigationManager.NavigateTo(uri: state != 0 ? "/Error" : "/customer" + "/" + id.ToString(), true);
 
     }
     protected async Task ShowEditCustomer(int id)
