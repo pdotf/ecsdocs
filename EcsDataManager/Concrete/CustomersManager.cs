@@ -80,7 +80,18 @@ namespace EcsDataManager.Concrete
                ($"SELECT * FROM [Customers] WHERE CustomerName like '%{search}%' ORDER BY {orderBy} {direction} OFFSET {skip} ROWS FETCH NEXT {take} ROWS ONLY; ", null, commandType: CommandType.Text));
             return articles;
         }
+        public Task<int> UpdateComment(Customers customers)
+        {
+            var dbPara = new DynamicParameters();
+            dbPara.Add("Id", customers.id, DbType.String);
+            dbPara.Add("Comment", customers.Comment, DbType.String);
 
+              var updateArticle = Task.FromResult(_dapperManager.Update<int>("Sp_UpdateCustomersComment",
+                dbPara,
+                commandType: CommandType.StoredProcedure));
+            return updateArticle;
+             
+        }
         public Task<int> Update(Customers customers)
         {
             var dbPara = new DynamicParameters();
@@ -100,7 +111,7 @@ namespace EcsDataManager.Concrete
             dbPara.Add("VRF", customers.VRF, DbType.String);
             dbPara.Add("VpnToolsName", customers.VpnToolsName, DbType.String);
             dbPara.Add("APN", customers.APN, DbType.String);
-            dbPara.Add("Comment", customers.Comment, DbType.String);
+            
 
 
 
@@ -131,5 +142,7 @@ namespace EcsDataManager.Concrete
                ($"SELECT *,ROW_NUMBER() OVER(ORDER BY ID) AS RowNumber FROM [Customers] WHERE CustomerName like '%{search}%' ORDER BY {orderBy} {direction};", null, commandType: CommandType.Text));
             return articles;
         }
+
+
     }
 }
