@@ -11,6 +11,7 @@ namespace EcsDataManager.Contracts
     {
 
         Customers GetCustomerById(int Id);
+        Task<int> UpdateComment(Customers customers);
 
     }
 }
