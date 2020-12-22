@@ -3,6 +3,7 @@
 @using EcsDataManager.Contracts
 @using EcsDataManager.Entities
 @inject ICustomersManager CustomerManager
+
 @inject IDeviceManager DeviceManager
 @inject NavigationManager NavigationManager
 
@@ -12,39 +13,27 @@
 <link href="~/_content/Blazored.Modal/blazored-modal.css" rel="stylesheet" />
 
 
-<style>
-    .sort-th {
-        cursor: pointer;
-    }
 
-    .fa {
-        float: right;
-    }
-
-    .btn-custom {
-        color: black;
-        float: left;
-        padding: 8px 16px;
-        text-decoration: none;
-        transition: background-color .3s;
-        border: 2px solid #000;
-        margin: 0px 5px 0px 5px;
-    }
-</style>
-
-@if (_customerEntity == null)
+@if (string.IsNullOrWhiteSpace(errorString) == false)
 {
-    <p><em>Loading...</em></p>
+    <div class="h4">
+        @errorString
+    </div>
+}
+else if (_customerEntity is null)
+{
+    <div class="h4"><em>Loading...</em></div>
     <p style="white-space: pre-line"> </p>
 }
 else
 {
     <div class="container-fluid">
         <div>
-
+            @*ShowAddDevice(_customerEntity.id)*@
             <button @onclick="async() => ShowEditCustomer(_customerEntity.id).ConfigureAwait(true)" class="btn btn-primary">Edit</button>
-            <button @onclick="async() => ShowAddDevice(_customerEntity.id)" class="btn btn-success">Add Device</button>
+            <button @onclick="async() =>  modal.Open()" class="btn btn-success">Add Device</button>
             <button @onclick="async() => Deletecustomer(_customerEntity.id)" class="btn btn-danger">Delete Customer</button>
+            <button @onclick="async() => ShowUpdateCommentPage(_customerEntity.id)" class="btn btn-warning">Update Comment</button>
 
 
         </div>
@@ -183,13 +172,11 @@ else
             </div>
         </MatList>
         <Divider Type="DividerType.Dotted" />
-        <Field>
-            <FieldLabel>
-                @nameof(_customerFullDataModel.Comment)
-            </FieldLabel>
-            <Field><span style="color:green" class="float-right">@_customerFullDataModel.Comment</span></Field>
+        <h4>
+            @nameof(_customerFullDataModel.Comment)
+        </h4>
 
-        </Field>
+        <p class="block-with-text" dir="rtl" style="color: green;">@_customerFullDataModel.Comment</p>
 
         @if (_dev == null)
         {
@@ -286,8 +273,25 @@ else
     </div>
 }
 
+<ModalComponent @ref="modal">
+    <Title><dfn>Add Device</dfn></Title>
+    <Body>
+        
+        <DeviceAdd ID="@_customerEntity.id" />
+    </Body>    
+    <Footer>
+        <button type="button" class="btn btn-primary" @onclick="() => CreateDevice(_dev.CustomerId)">Save changes</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal" @onclick="() => modal.Close()">Close</button>
+    </Footer>
+</ModalComponent>
+
+ 
+   
+
 
 @code {
+    private ModalComponent modal { get; set; }
+
     [CascadingParameter] public IModalService Modal { get; set; }
     //[CascadingParameter] BlazoredModalInstance BlazoredModal { get; set; }
 
@@ -299,12 +303,13 @@ else
     Customers _customerFullDataModel = new Customers();
     List<DeviceList> _devices = new List<DeviceList>();
     DeviceList _dev = new DeviceList();
-    //DeviceList device = new DeviceList();
+    DeviceList _devlist = new DeviceList();
 
+    //DeviceList device = new DeviceList();
+    string errorString;
 
     #region Pagination
 
-    int _totalRecords;
     int _curPage;
 
     string _sortColumnName = "ID";
@@ -313,6 +318,11 @@ else
     #endregion
 
     int? total;
+
+    protected string ReplaceNewLines()
+    {
+        return _customerFullDataModel.Comment.Replace("\r\n", "<br />");
+    }
     protected override async Task OnInitializedAsync()
     {
 
@@ -325,21 +335,31 @@ else
             _dev = await DeviceManager?.GetMainDeviceById(Convert.ToInt32(CustomerID));
 
             total = _devices?.Count();
+            errorString = null;
 
         }
         catch (Exception ex)
         {
-
-            NavigationManager.NavigateTo(@"\Error", true);
+            errorString = $"Cannot Initialize the the page, {ex.Message}";
+            //NavigationManager.NavigateTo(@"\Error", true);
         }
     }
+    protected async Task CreateDevice(int id)
+    {
+        _devlist.CustomerId = id;
+        var state = await DeviceManager.AddDevice(_devlist, null);
+        //var parameters = new ModalParameters();
+        //parameters.Add(nameof(FetchCustomerById.ID), id);
+        ////_customers = await customerManager.GetById(id);
+        NavigationManager.NavigateTo(uri: state != 0 ? "/Error" : "/customer" + "/" + ID.ToString(), true);
 
+    }
     protected async Task ShowEditCustomer(int id)
     {
 
-        var parameters = new ModalParameters();
-        parameters.Add(nameof(EditCustomer.CustomerID), id);
-        parameters.Add(nameof(EditCustomer.CustomerID), CustomerID);
+        //var parameters = new ModalParameters();
+        //parameters.Add(nameof(EditCustomer.CustomerID), id);
+        //parameters.Add(nameof(EditCustomer.CustomerID), CustomerID);
         //Modal.Show<EditCustomer>("Edit Customer", parameters);
         NavigationManager.NavigateTo("/EditCustomer" + "/" + CustomerID, true);
     }
@@ -352,12 +372,13 @@ else
             parameters.Add(nameof(DeviceEdit.ID), id);
             //DeviceManager.GetDeviceById();
             Modal.Show<DeviceEdit>("Edit Device", parameters);
+            errorString = null;
 
         }
-        catch (System.Exception)
+        catch (System.Exception ex)
         {
 
-            throw;
+            errorString = ex.Message;
         }
 
     }
@@ -379,25 +400,36 @@ else
     }
     protected async Task Deletecustomer(int id)
     {
-        var parameters = new ModalParameters();
-        parameters.Add(nameof(EditCustomer.CustomerID), id);
+        /* var parameters = new ModalParameters();
+        parameters.Add(nameof(EditCustomer.CustomerID), id); */
         await CustomerManager.Delete(id);
         _customerModel = await CustomerManager.GetById(Convert.ToInt32(ID));
         NavigationManager.NavigateTo("/customerlist", true);
     }
+    protected async Task ShowUpdateCommentPage(int id)
+    {
+        try
+        {
+            NavigationManager.NavigateTo("/customer" + "/" + id + "/" + "CostumerCommentEdit", true);
+            errorString = null;
+
+        }
+        catch (Exception ex)
+        {
+
+            errorString = ex.Message;
+        }
+    }
     protected async Task DeleteDevice(int id)
     {
-        var parameters = new ModalParameters();
-        parameters.Add(nameof(EditCustomer.CustomerID), id);
         await DeviceManager.Delete(id);
-        _customerModel = await CustomerManager.GetById(Convert.ToInt32(ID));
-        NavigationManager.NavigateTo($"/customer/{ID}", true);
+        NavigationManager.NavigateTo($"/customer/{CustomerID}", true);
     }
 
     async Task Cancel()
     {
         //await BlazoredModal.Cancel();
-        NavigationManager.NavigateTo($"/customer/{ID}", true);
+        NavigationManager.NavigateTo($"/customer/{CustomerID}", true);
     }
     private bool _isSortedAscending;
     private string _activeSortColumn;

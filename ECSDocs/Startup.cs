@@ -68,6 +68,7 @@ namespace ECSDocs
             services.AddSingleton<WeatherForecastService>();
             services.AddScoped<ICustomersManager, CustomersManager>();
             services.AddScoped<IDeviceManager, DeviceManager>();
+            services.AddScoped<ICustomer, CustomersManager>();
             //Register dapper in scope  
             services.AddScoped<IDapperManager, DapperManager>();
 

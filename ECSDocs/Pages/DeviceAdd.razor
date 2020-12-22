@@ -68,7 +68,7 @@
         </div>
     </div>
 
-    <div class="row">
+    @*<div class="row">
         <div class="col-md-6">
             <button type="button" class="btn btn-primary" @onclick="() => CreateDevice(Convert.ToInt32(ID))">Save</button>
         </div>
@@ -76,7 +76,7 @@
             <button type="button" class="btn btn-danger" @onclick="() => Cancel()">Cancel</button>
 
         </div>
-    </div>
+    </div>*@
     <input type="hidden" @bind-value="@_customers.id" />
 </div>
 
@@ -88,16 +88,7 @@
     Customers _customers = new Customers();
     [Parameter] public int ID { get; set; }
 
-    protected async Task CreateDevice(int id)
-    {
-        _device.CustomerId = id;
-        var state = await deviceManager.AddDevice(_device,null);
-        var parameters = new ModalParameters();
-        parameters.Add(nameof(FetchCustomerById.ID), id);
-        //_customers = await customerManager.GetById(id);
-        navigationManager.NavigateTo(uri: state != 0 ? "/Error" : "/customer" + "/" + ID.ToString(), true);
-
-    }
+    
 
     void Cancel()
     {
