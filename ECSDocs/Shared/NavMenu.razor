@@ -38,10 +38,17 @@
             <MatNavItem Href="/addCustomer"><MatIcon Icon="person_add"></MatIcon> Add Customer</MatNavItem>
         </MatNavSubMenuList>
     </MatNavSubMenu>
+
+    <MatNavItem Href="/administration">
+        <MatIcon Icon="settings"></MatIcon> Administration
+    </MatNavItem>
 </MatNavMenu>
 
 
 @code {
+
+
+
     private bool collapseNavMenu = true;
     private bool expandSubNav;
     [Inject] IJSRuntime JS { get; set; }
