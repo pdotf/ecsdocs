@@ -31,8 +31,16 @@ else
         <div>
             @*ShowAddDevice(_customerEntity.id) OpenAddDevice()*@
             <button @onclick="async() => ShowEditCustomer(_customerEntity.id).ConfigureAwait(true)" class="btn btn-primary">Edit</button>
-            <button @onclick="async() =>  ShowAddDevice(_customerEntity.id)" class="btn btn-success">Add Device</button>
-            <button @onclick="async() => Deletecustomer(_customerEntity.id)" class="btn btn-danger">Delete Customer</button>
+            
+            <AuthorizeView>
+                <Authorized>
+                    @if (@context.User.IsInRole(ADMINISTRATION_ROLE))
+                    {
+                        <button @onclick="async() =>  ShowAddDevice(_customerEntity.id)" class="btn btn-success">Add Device</button>
+                        <button @onclick="async() => Deletecustomer(_customerEntity.id)" class="btn btn-danger">Delete Customer</button>
+                    }
+                </Authorized>
+            </AuthorizeView>
             <button @onclick="async() => ShowUpdateCommentPage(_customerEntity.id)" class="btn btn-warning">Update Comment</button>
 
 
@@ -40,7 +48,7 @@ else
         @if (ShowPopup)
         {
             @**@
-            <div class="modal fade show d-block"    tabindex="-1" style="display:block" role="dialog">
+            <div class="modal fade show d-block" tabindex="-1" style="display:block" role="dialog">
 
                 <div class="modal-dialog">
 
@@ -362,7 +370,7 @@ else
 
     //DeviceList device = new DeviceList();
     string errorString;
-
+    string ADMINISTRATION_ROLE = "Administrators";
     #region Pagination
 
     int _curPage;
