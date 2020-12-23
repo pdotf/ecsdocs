@@ -16,52 +16,63 @@
 </style>
 
 
-<div class="simple-form">
+@if (string.IsNullOrWhiteSpace(errorStr)==false)
+{
+    <div class="h4"><dfn>@errorStr</dfn></div>
+}
+else if (_deviceEntity is null)
+{
+    <div class="h4"><dfn>Loading. . .</dfn></div>
+}
+else
+{
+    <div class="simple-form">
 
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-md-6">
-                <label for="CustomerName"> Radio Name</label>
-                <input class="form-control" @bind-value="@_deviceEntity.RadioName" id="CustomerName" />
-                <label for="Tel"> Radio IP</label>
-                <input class="form-control" @bind-value="@_deviceEntity.RadioIp" id="Tel" />
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-6">
+                    <label for="CustomerName"> Radio Name</label>
+                    <input class="form-control" @bind-value="@_deviceEntity.RadioName" id="CustomerName" />
+                    <label for="Tel"> Radio IP</label>
+                    <input class="form-control" @bind-value="@_deviceEntity.RadioIp" id="Tel" />
+                </div>
+                <div class="col-md-6">
+                    <label for="Mobile"> Radio Model</label>
+                    <input class="form-control" @bind-value="@_deviceEntity.RadioModel" id="Mobile" />
+                    <label for="Mobile"> Radio Metro Site</label>
+                    <input class="form-control" @bind-value="@_deviceEntity.RadioMetroSite" id="Mobile" />
+                </div>
             </div>
-            <div class="col-md-6">
-                <label for="Mobile"> Radio Model</label>
-                <input class="form-control" @bind-value="@_deviceEntity.RadioModel" id="Mobile" />
-                <label for="Mobile"> Radio Metro Site</label>
-                <input class="form-control" @bind-value="@_deviceEntity.RadioMetroSite" id="Mobile" />
+
+            <div class="row">
+                <div class="col-md-6">
+                    <label>@nameof(_deviceEntity.IsAuto)</label>
+                </div>
+                <div class="dropdown  col-md-6">
+                    @*<input @bind-value="@_device.BackupActivationIsAuto"/>*@
+                    <select class="form-control" @bind="@_deviceEntity.IsAuto">
+                        <option value="-1"></option>
+                        <option value="0">                    Manual                 </option>
+                        <option value="1">                     Auto                 </option>
+                    </select>
+                </div>
             </div>
+
+            <input type="hidden" @bind-value="@_deviceEntity.Id" />
+        </div>
+        <div class="form-group">
+            <button type="button" class="btn btn-primary" @onclick="@(async () => await UpdateDevice(ID))">Save</button>
+
+            <button type="button" class="btn btn-danger" @onclick="Cancel">Cancel</button>
         </div>
 
-        <div class="row">
-            <div class="col-md-6">
-                <label>@nameof(_deviceEntity.IsAuto)</label>
-            </div>
-            <div class="dropdown  col-md-6">
-                @*<input @bind-value="@_device.BackupActivationIsAuto"/>*@
-                <select class="form-control" @bind="@_deviceEntity.IsAuto">
-                    <option value="-1" @bind="@_deviceEntity.IsAuto"></option>
-                    <option value="0">                    Manual                 </option>
-                    <option value="1">                     Auto                 </option>
-                </select>
-            </div>
-        </div>
-
-        <input type="hidden" @bind-value="@_deviceEntity.Id" />
     </div>
-    <div class="form-group">
-        <button type="button" class="btn btn-primary" @onclick="@(async () => await UpdateDevice(ID))">Save</button>
-
-        <button type="button" class="btn btn-danger" @onclick="Cancel">Cancel</button>
-    </div>
-
-</div>
+}
 
 @code  {
     [CascadingParameter] BlazoredModalInstance BlazoredModal { get; set; }
     [CascadingParameter] ModalParameters Parameters { get; set; }
-
+    string errorStr;
 
     [Parameter] public int ID { get; set; }
 
@@ -73,18 +84,19 @@
         try
         {
             _deviceEntity = await deviceManager.GetDeviceById(ID);
+            errorStr = null;
         }
-        catch (System.Exception)
+        catch (Exception ex)
         {
 
-            throw;
+            errorStr = ex.Message;
         }
 
     }
- 
+
     protected async Task UpdateDevice(int id)
     {
-    
+
         await deviceManager.Update(_deviceEntity);
         await BlazoredModal.Close(ModalResult.Ok<DeviceList>(_deviceEntity));
         NavigationManager.NavigateTo("/customer" + "/" + _deviceEntity.CustomerId, true);

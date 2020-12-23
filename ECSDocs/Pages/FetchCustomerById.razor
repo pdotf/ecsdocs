@@ -29,7 +29,7 @@ else
 {
     <div class="container-fluid">
         <div>
-            @*ShowAddDevice(_customerEntity.id)*@
+            @*ShowAddDevice(_customerEntity.id) OpenAddDevice()*@
             <button @onclick="async() => ShowEditCustomer(_customerEntity.id).ConfigureAwait(true)" class="btn btn-primary">Edit</button>
             <button @onclick="async() =>  ShowAddDevice(_customerEntity.id)" class="btn btn-success">Add Device</button>
             <button @onclick="async() => Deletecustomer(_customerEntity.id)" class="btn btn-danger">Delete Customer</button>
@@ -37,6 +37,72 @@ else
 
 
         </div>
+        @if (ShowPopup)
+        {
+            @**@
+            <div class="modal fade show d-block"    tabindex="-1" style="display:block" role="dialog">
+
+                <div class="modal-dialog">
+
+                    <div class="modal-content">
+
+                        <div class="modal-header">
+
+                            <h3 class="modal-title"><dfn>Add Device</dfn></h3>
+
+                            <!-- Button to close the popup -->
+
+                            <button type="button" class="close"
+                                    @onclick="ClosePopup">
+
+                                <span aria-hidden="true">X</span>
+
+                            </button>
+
+                        </div>
+
+                        <!-- Edit form for the current forecast -->
+
+                        <div class="modal-body">
+
+                            <input class="form-control" type="text"
+                                   placeholder="Radio Name"
+                                   @bind="_devlist.RadioName" />
+
+                            <input class="form-control" type="text"
+                                   placeholder="Radio Ip"
+                                   @bind="_devlist.RadioIp" />
+
+                            <input class="form-control" type="text"
+                                   placeholder="Radio Model"
+                                   @bind="_devlist.RadioModel" />
+
+                            <input class="form-control" type="text"
+                                   placeholder="Radio Metro Site"
+                                   @bind="_devlist.RadioMetroSite" />
+
+                            <input class="form-control" type="text"
+                                   placeholder="Automatic or manual"
+                                   @bind="_devlist.IsAuto" />
+
+                            <br />
+
+                            <!-- Button to save the forecast -->
+
+                            <button type="button" class="btn btn-primary" @onclick="() => CreateDevice(CustomerID)">
+
+                                Save
+
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+        }
 
         <MatList SingleSelection="true" TwoLine="true" @bind-value="@_customerFullDataModel.id">
             <div class="row">
@@ -172,9 +238,9 @@ else
             </div>
         </MatList>
         <Divider Type="DividerType.Dotted" />
-        <h4>
+        <h2>
             @nameof(_customerFullDataModel.Comment)
-        </h4>
+        </h2>
 
         <p class="block-with-text" dir="rtl" style="color: green;">@_customerFullDataModel.Comment</p>
 
@@ -274,8 +340,8 @@ else
 }
 
 
- 
-   
+
+
 
 
 @code {
@@ -308,9 +374,32 @@ else
 
     int? total;
 
-    protected string ReplaceNewLines()
+    bool ShowPopup = false;
+
+    void ClosePopup()
+
     {
-        return _customerFullDataModel.Comment.Replace("\r\n", "<br />");
+
+        // Close the Popup
+
+        ShowPopup = false;
+
+    }
+    async Task OpenAddDevice()
+    {
+        _devlist = new DeviceList();
+        ShowPopup = true;
+
+    }
+
+    protected async Task CreateDevice(int id)
+    {
+        ShowPopup = false;
+        _devlist.CustomerId = id;
+        var state = await DeviceManager.AddDevice(_devlist, null);
+
+        //NavigationManager.NavigateTo(uri: state != 0 ? "/Error" : "/customer" + "/" + id.ToString(), true);
+
     }
     protected override async Task OnInitializedAsync()
     {
@@ -367,12 +456,12 @@ else
         var parameters = new ModalParameters();
         parameters.Add(nameof(DeviceAdd.CustomerID), id);
 
-         //Modal.Show<DeviceAdd>("", parameters);
-        NavigationManager.NavigateTo($"/addDevice/{CustomerID}", false);
+        Modal.Show<DeviceAdd>($"Add Device", parameters);
+        //NavigationManager.NavigateTo($"/addDevice/{CustomerID}", false);
     }
     protected async Task UpdateCustomers(int id)
     {
-         
+
         await CustomerManager.Update(_customerEntity);
         //await BlazoredModal.Close(ModalResult.Ok<Customers>(_customerEntity));
         //RefreshRecords(currentPage);
