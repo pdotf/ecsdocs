@@ -18,7 +18,7 @@
 }
 else
 {
-   
+
     <div class="float-left">
         <input type="text" id="txtSearch" placeholder="Search Customer name..." class="form-control" @bind="SearchTerm" @bind:event="oninput" />
     </div>
@@ -34,7 +34,7 @@ else
         <DataGridColumn TItem="Customers" Field="@nameof(Customers.AccountManager)" Caption="Account Manager" />
         <DataGridColumn TItem="Customers" Field="@nameof(Customers.id)" Caption="Action">
             <DisplayTemplate>
-                <Button Color="Color.Success" Clicked="async() => ShowCustomerDetail(context.id)">Detail</Button>
+                <Button Color="Color.Success" Clicked="async() => ShowCustomerDetail(context.id).ConfigureAwait(true)">Detail</Button>
             </DisplayTemplate>
         </DataGridColumn>
 
@@ -134,14 +134,22 @@ else
     }
 
 
-
+    string errorStr;
     protected async Task ShowCustomerDetail(int id)
     {
-        var parameters = new ModalParameters();
-        parameters.Add(nameof(FetchCustomerById.ID), id);
-        customerEntity = await customerManager.GetById(id);
-        //Modal.Show<FetchCustomerById>("Customer Detail", parameters);
-        NavigationManager.NavigateTo(url + "/" + id.ToString(), true);
+
+        customerEntity = await customerManager?.GetById(id);
+        try
+        {
+            NavigationManager.NavigateTo($"{url}/{id}", true);
+            errorStr = null;
+
+        }
+        catch (Exception ex)
+        {
+
+            errorStr = ex.Message;
+        }
     }
 
 

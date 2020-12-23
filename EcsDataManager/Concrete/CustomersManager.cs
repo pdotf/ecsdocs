@@ -69,6 +69,7 @@ namespace EcsDataManager.Concrete
 
         public Task<Customers> GetById(int Id)
         {
+
             var article = Task.FromResult(_dapperManager.Get<Customers>($"select * from [Customers] where ID = {Id}", null,
                     commandType: CommandType.Text));
             return article;
@@ -83,7 +84,7 @@ namespace EcsDataManager.Concrete
         public Task<int> UpdateComment(Customers customers)
         {
             var dbPara = new DynamicParameters();
-            dbPara.Add("Id", customers.id, DbType.String);
+            dbPara.Add("Id", customers.id, DbType.Int32);
             dbPara.Add("Comment", customers.Comment, DbType.String);
 
               var updateArticle = Task.FromResult(_dapperManager.Update<int>("Sp_UpdateCustomersComment",
@@ -95,7 +96,7 @@ namespace EcsDataManager.Concrete
         public Task<int> Update(Customers customers)
         {
             var dbPara = new DynamicParameters();
-            dbPara.Add("Id", customers.id, DbType.String);
+            dbPara.Add("Id", customers.id, DbType.Int32);
             dbPara.Add("CustomerName", customers.CustomerName, DbType.String);
             dbPara.Add("Tel", customers.Tel, DbType.String);
             dbPara.Add("Mobile", customers.Mobile, DbType.String);

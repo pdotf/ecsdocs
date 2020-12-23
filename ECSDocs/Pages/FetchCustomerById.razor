@@ -1,5 +1,5 @@
-﻿@page "/customer"
-@page "/customer/{CustomerID}"
+﻿@*@page "/customer"*@
+@page "/customer/{customerID:int}"
 @using EcsDataManager.Contracts
 @using EcsDataManager.Entities
 @inject ICustomersManager CustomerManager
@@ -31,7 +31,7 @@ else
         <div>
             @*ShowAddDevice(_customerEntity.id)*@
             <button @onclick="async() => ShowEditCustomer(_customerEntity.id).ConfigureAwait(true)" class="btn btn-primary">Edit</button>
-            <button @onclick="async() =>  modal.Open()" class="btn btn-success">Add Device</button>
+            <button @onclick="async() =>  ShowAddDevice(_customerEntity.id)" class="btn btn-success">Add Device</button>
             <button @onclick="async() => Deletecustomer(_customerEntity.id)" class="btn btn-danger">Delete Customer</button>
             <button @onclick="async() => ShowUpdateCommentPage(_customerEntity.id)" class="btn btn-warning">Update Comment</button>
 
@@ -273,30 +273,19 @@ else
     </div>
 }
 
-<ModalComponent @ref="modal">
-    <Title><dfn>Add Device</dfn></Title>
-    <Body>
-        
-        <DeviceAdd ID="@_customerEntity.id" />
-    </Body>    
-    <Footer>
-        <button type="button" class="btn btn-primary" @onclick="() => CreateDevice(_customerEntity.id)">Save changes</button>
-        <button type="button" class="btn btn-secondary" data-dismiss="modal" @onclick="() => modal.Close()">Close</button>
-    </Footer>
-</ModalComponent>
 
  
    
 
 
 @code {
-    private ModalComponent modal { get; set; }
+
 
     [CascadingParameter] public IModalService Modal { get; set; }
     //[CascadingParameter] BlazoredModalInstance BlazoredModal { get; set; }
 
-    [Parameter] public string ID { get; set; }
-    [Parameter] public string CustomerID { get; set; }
+    [Parameter] public int ID { get; set; }
+    [Parameter] public int CustomerID { get; set; }
     Customers _customerModel;
     Customers _customerEntity = new Customers();
 
@@ -329,11 +318,10 @@ else
 
         try
         {
-            _customerEntity = await CustomerManager.GetById(Convert.ToInt32(CustomerID));
-            _customerFullDataModel = await CustomerManager.GetById(Convert.ToInt32(CustomerID));
-            _devices = await DeviceManager?.GetDeviceByCustomerId(Convert.ToInt32(CustomerID));
-            //_devlist=await DeviceManager?.Get
-            _dev = await DeviceManager?.GetMainDeviceById(Convert.ToInt32(CustomerID));
+            _customerEntity = await CustomerManager.GetById(CustomerID);
+            _customerFullDataModel = await CustomerManager.GetById(CustomerID);
+            _devices = await DeviceManager?.GetDeviceByCustomerId(CustomerID);
+            _dev = await DeviceManager?.GetMainDeviceById(CustomerID);
 
             total = _devices?.Count();
             errorString = null;
@@ -345,14 +333,7 @@ else
             //NavigationManager.NavigateTo(@"\Error", true);
         }
     }
-    protected async Task CreateDevice(int id)
-    {
-        _dev.CustomerId = id;
-        var state = await DeviceManager.AddDevice(_dev, null);
-        
-        NavigationManager.NavigateTo(uri: state != 0 ? "/Error" : "/customer" + "/" + id.ToString(), true);
 
-    }
     protected async Task ShowEditCustomer(int id)
     {
 
@@ -384,14 +365,14 @@ else
     protected async Task ShowAddDevice(int id)
     {
         var parameters = new ModalParameters();
-        parameters.Add(nameof(DeviceAdd.ID), id);
+        parameters.Add(nameof(DeviceAdd.CustomerID), id);
 
-        Modal.Show<DeviceAdd>("Add Device", parameters);
+         //Modal.Show<DeviceAdd>("", parameters);
+        NavigationManager.NavigateTo($"/addDevice/{CustomerID}", false);
     }
     protected async Task UpdateCustomers(int id)
     {
-        var parameters = new ModalParameters();
-        parameters.Add(nameof(EditCustomer.CustomerID), id);
+         
         await CustomerManager.Update(_customerEntity);
         //await BlazoredModal.Close(ModalResult.Ok<Customers>(_customerEntity));
         //RefreshRecords(currentPage);
@@ -402,7 +383,7 @@ else
         /* var parameters = new ModalParameters();
         parameters.Add(nameof(EditCustomer.CustomerID), id); */
         await CustomerManager.Delete(id);
-        _customerModel = await CustomerManager.GetById(Convert.ToInt32(ID));
+        _customerModel = await CustomerManager.GetById(ID);
         NavigationManager.NavigateTo("/customerlist", true);
     }
     protected async Task ShowUpdateCommentPage(int id)
@@ -477,7 +458,7 @@ else
 
     public async Task RefreshRecords(int currentPage)
     {
-        _customerModel = await CustomerManager.GetById(Convert.ToInt32(ID));
+        _customerModel = await CustomerManager.GetById(ID);
         _curPage = currentPage;
         this.StateHasChanged();
     }

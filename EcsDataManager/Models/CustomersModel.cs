@@ -10,33 +10,31 @@ namespace EcsDataManager.Models
     {
         public int id { get; set; }
 
-        [Required(AllowEmptyStrings = false, ErrorMessage = " * required field.")]
         public string CustomerName { get; set; }
-        [Required(AllowEmptyStrings = false, ErrorMessage = " * required field.")]
         public string Tel { get; set; }
-        [Required(AllowEmptyStrings = false, ErrorMessage = " * required field.")]
+        
         public string Mobile { get; set; }
-        [Required(AllowEmptyStrings = false, ErrorMessage = " * required field.")]
+        
         public string OwnerTeam { get; set; }
-        [Required(AllowEmptyStrings = false, ErrorMessage = " * required field.")]
+        
         public string ServiceType { get; set; }
-        [Required(AllowEmptyStrings = false, ErrorMessage = " * required field.")]
+        
         public string ServiceTopology { get; set; }
-        [Required(AllowEmptyStrings = false, ErrorMessage = " * required field.")]
+        
         public string AccountManager { get; set; }
-        [Required(AllowEmptyStrings = false, ErrorMessage = " * required field.")]
+        
         public string IpHQ { get; set; }
-        [Required(AllowEmptyStrings = false, ErrorMessage = " * required field.")]
+        
         public string AAAGroup { get; set; }
-        [Required(AllowEmptyStrings = false, ErrorMessage = " * required field.")]
+        
         public string IpTunnel { get; set; }
-        [Required(AllowEmptyStrings = false, ErrorMessage = " * required field.")]
+        
         public string WanIpRange { get; set; }
-        [Required(AllowEmptyStrings = false, ErrorMessage = " * required field.")]
+        
         public string LanIpRange { get; set; }
-        [Required(AllowEmptyStrings = false, ErrorMessage = " * required field.")]
+        
         public string VRF { get; set; }
-        [Required(AllowEmptyStrings = false, ErrorMessage = " * required field.")]
+        
         public string VpnToolsName { get; set; }
         public string RadioMainName { get; set; }
         public string RadioMainIp { get; set; }

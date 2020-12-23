@@ -9,9 +9,7 @@ namespace EcsDataManager.Entities
     public class Customers
     {
 
-        [Key]
         public int id { get; set; }
-
         public string CustomerName { get; set; }
         public string Tel { get; set; }
         public string Mobile { get; set; }

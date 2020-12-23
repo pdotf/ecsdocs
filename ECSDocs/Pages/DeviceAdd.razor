@@ -1,75 +1,175 @@
-﻿@page "/addDevice/{ID}"
+﻿@page "/addDevice/{CustomerID:int}"
 @using EcsDataManager.Contracts
 @using EcsDataManager.Entities
 @inject IDeviceManager deviceManager
-@inject Microsoft.AspNetCore.Components.NavigationManager navigationManager
-
-<div class="container-fluid">
+@inject NavigationManager NavigationManager
 
 
+@using System.ComponentModel.DataAnnotations
+@using System.IO
+@using System.Net.Http.Headers
 
+<div class="modal" tabindex="-1" style="display:block" role="dialog">
 
-    <div class="row">
-        <div class="col-md-6">
-            <label>@nameof(_device.RadioName)</label>
+    <div class="modal-dialog">
+
+        <div class="modal-content">
+
+            <div class="modal-header">
+
+                <h3 class="modal-title"><dfn>Add Device</dfn></h3>
+
+                <!-- Button to close the popup -->
+
+                <button type="button" class="close"
+                        @onclick="Cancel">
+
+                    <span aria-hidden="true">X</span>
+
+                </button>
+
+            </div>
+
+            <!-- Edit form for the current forecast -->
+
+            <div class="modal-body">
+
+                <input class="form-control" type="text"
+                       placeholder="Radio Name"
+                       @bind="_device.RadioName" />
+
+                <input class="form-control" type="text"
+                       placeholder="Radio Ip"
+                       @bind="_device.RadioIp" />
+
+                <input class="form-control" type="text"
+                       placeholder="Radio Model"
+                       @bind="_device.RadioModel" />
+
+                <input class="form-control" type="text"
+                       placeholder="Radio Metro Site"
+                       @bind="_device.RadioMetroSite" />
+
+                <input class="form-control" type="text"
+                       placeholder="Automatic or manual"
+                       @bind="_device.IsAuto" />
+
+                <br />
+
+                <!-- Button to save the forecast -->
+
+                <button type="button" class="btn btn-primary" @onclick="() => CreateDevice(CustomerID)">
+
+                    Save
+
+                </button>
+
+            </div>
+
         </div>
-        <div class="col-md-6">
-            <input @bind-value="@_device.RadioName" />
-        </div>
+
     </div>
-    <div class="row">
-        <div class="col-md-6">
-            <label>@nameof(_device.RadioIp)</label>
-        </div>
-        <div class="col-md-6">
-            <input @bind-value="@_device.RadioIp" />
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-6">
-            <label>@nameof(_device.RadioModel)</label>
-        </div>
-        <div class="col-md-6">
-            <input @bind-value="@_device.RadioModel" />
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-6">
-            <label>@nameof(_device.RadioMetroSite)</label>
-        </div>
-        <div class="col-md-6">
-            <input @bind-value="@_device.RadioMetroSite" />
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-6">
-            <label>@nameof(_device.IsAuto)</label>
-        </div>
-        <div class="dropdown  col-md-6">
-            <select class="form-control" @bind="@_device.IsAuto" id="isAutoSelect">
-                <option value="" />
-                <option value="0">                    Manual                 </option>
-                <option value="1">                     Auto                 </option>
-            </select>
-        </div>
-    </div>
-   
 
-    <input type="hidden" @bind-value="@_customers.id" />
 </div>
 
+@*<ModalComponent @ref="modal">
+        <Title><dfn>Add Device</dfn></Title>
+        <Body>
+
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-6">
+                        <label>@nameof(_device.RadioName)</label>
+                    </div>
+                    <div class="col-md-6">
+                        <input @bind-value="@_device.RadioName" />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <label>@nameof(_device.RadioIp)</label>
+                    </div>
+                    <div class="col-md-6">
+                        <input @bind-value="@_device.RadioIp" />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <label>@nameof(_device.RadioModel)</label>
+                    </div>
+                    <div class="col-md-6">
+                        <input @bind-value="@_device.RadioModel" />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <label>@nameof(_device.RadioMetroSite)</label>
+                    </div>
+                    <div class="col-md-6">
+                        <input @bind-value="@_device.RadioMetroSite" />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <label>@nameof(_device.IsAuto)</label>
+                    </div>
+                    <div class="dropdown  col-md-6">
+                        <select class="form-control" @bind="@_device.IsAuto" id="isAutoSelect">
+                            <option value="" />
+                            <option value="0">                    Manual                 </option>
+                            <option value="1">                     Auto                 </option>
+                        </select>
+                    </div>
+                </div>
+
+
+                <input type="hidden" @bind-value="@_customers.id" />
+            </div>
+        </Body>
+        <Footer>
+            <button type="button" class="btn btn-primary" @onclick="() => CreateDevice(_customers.id)">Save changes</button>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal" @onclick="() => modal.Close()">Close</button>
+        </Footer>
+    </ModalComponent>*@
+
+
+
+
+
 @code {
-    Dropdown dropdown;
-    [CascadingParameter] public IModalService Modal { get; set; }
+
+    [CascadingParameter] BlazoredModalInstance BlazoredModal { get; set; }
+    [CascadingParameter] ModalParameters Parameters { get; set; }
     List<DeviceList> _devices = new List<DeviceList>();
     DeviceList _device = new DeviceList();
     Customers _customers = new Customers();
-    [Parameter] public int ID { get; set; }
+    [Parameter] public int CustomerID { get; set; }
 
+    protected async Task CreateDevice(int id)
+    {
+        //ShowPopup = false;
+        _device.CustomerId = id;
+        var state = await deviceManager.AddDevice(_device, null);
 
+        NavigationManager.NavigateTo(uri: state != 0 ? "/Error" : "/customer" + "/" + id.ToString(), true);
+
+    }
 
     void Cancel()
     {
-        navigationManager.NavigateTo("/customer" + "/" + ID.ToString());
+        NavigationManager.NavigateTo("/customer" + "/" + CustomerID.ToString());
     }
+
+    bool ShowPopup = false;
+
+    void ClosePopup()
+
+    {
+
+        // Close the Popup
+
+        ShowPopup = false;
+
+    }
+
 }

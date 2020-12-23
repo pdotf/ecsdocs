@@ -21,7 +21,7 @@ namespace EcsDataManager.Concrete
         {
             var dbPara = new DynamicParameters();
             //CustomerName,Tel,Mobile,OwnerTeam,ServiceType,ServiceTopology,AccountManager,IpHQ,AAAGroup,IpTunnel,WanIpRange,LanIpRange,VRF,VpnToolsName
-            dbPara.Add("CustomerId", devices.CustomerId, DbType.String);
+            dbPara.Add("CustomerId", devices.CustomerId, DbType.Int32);
             dbPara.Add("RadioName", devices.RadioName, DbType.String);
             dbPara.Add("RadioIp", devices.RadioIp, DbType.String);
             dbPara.Add("RadioModel", devices.RadioModel, DbType.String);
@@ -56,7 +56,7 @@ namespace EcsDataManager.Concrete
         {
             var dbPara = new DynamicParameters();
             dbPara.Add("Id", devices.Id, DbType.String);
-            dbPara.Add("CustomerId", devices.CustomerId, DbType.String);
+            dbPara.Add("CustomerId", devices.CustomerId, DbType.Int32);
             dbPara.Add("RadioName", devices.RadioName, DbType.String);
             dbPara.Add("RadioIp", devices.RadioIp, DbType.String); dbPara.Add("RadioModel", devices.RadioModel, DbType.String);
             dbPara.Add("RadioMetroSite", devices.RadioMetroSite, DbType.String);

@@ -1,4 +1,4 @@
-﻿@page "/editDevice/{id}"
+﻿@page "/editDevice/{id:int}"
 @using EcsDataManager.Contracts
 @using EcsDataManager.Entities
 @inject IDeviceManager deviceManager
@@ -41,9 +41,9 @@
             <div class="dropdown  col-md-6">
                 @*<input @bind-value="@_device.BackupActivationIsAuto"/>*@
                 <select class="form-control" @bind="@_deviceEntity.IsAuto">
-                    <option value="" selected></option>
-                    <option value="Manual">                    Manual                 </option>
-                    <option value="Auto">                     Auto                 </option>
+                    <option value="-1" @bind="@_deviceEntity.IsAuto"></option>
+                    <option value="0">                    Manual                 </option>
+                    <option value="1">                     Auto                 </option>
                 </select>
             </div>
         </div>
@@ -81,16 +81,10 @@
         }
 
     }
-
-    //protected override void OnInitialized()
-    //{
-    //    _deviceEntity = CustomersManager.GetCustomerById(Id: ID);
-    //}
-
+ 
     protected async Task UpdateDevice(int id)
     {
-        var parameters = new ModalParameters();
-        parameters.Add(nameof(DeviceEdit.ID), id);
+    
         await deviceManager.Update(_deviceEntity);
         await BlazoredModal.Close(ModalResult.Ok<DeviceList>(_deviceEntity));
         NavigationManager.NavigateTo("/customer" + "/" + _deviceEntity.CustomerId, true);
