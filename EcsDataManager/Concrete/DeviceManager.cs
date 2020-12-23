@@ -61,7 +61,6 @@ namespace EcsDataManager.Concrete
             dbPara.Add("RadioIp", devices.RadioIp, DbType.String); dbPara.Add("RadioModel", devices.RadioModel, DbType.String);
             dbPara.Add("RadioMetroSite", devices.RadioMetroSite, DbType.String);
             dbPara.Add("IsAuto", devices.IsAuto, DbType.String);
-            dbPara.Add("Is", devices.IsMain, DbType.String);
 
 
             var updateDevice = Task.FromResult(_dapperManager.Update<int>("Sp_UpdateDevice",
