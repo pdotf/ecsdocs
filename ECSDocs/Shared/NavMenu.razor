@@ -19,7 +19,7 @@
     <Figure Size="FigureSize.Is96x96" class="text-center">
         <FigureImage Source="/css/brand.png" AlternateText="128x128" Style="text-align:center" />
     </Figure>
-    
+
 
 </div>
 
@@ -35,7 +35,15 @@
         </MatNavSubMenuHeader>
         <MatNavSubMenuList>
             <MatNavItem Href="/customerlist"><MatIcon Icon="list"></MatIcon> Customer list</MatNavItem>
-            <MatNavItem Href="/addCustomer"><MatIcon Icon="person_add"></MatIcon> Add Customer</MatNavItem>
+
+            <AuthorizeView>
+                <Authorized>
+                    @if (@context.User.IsInRole(ADMINISTRATION_ROLE))
+                    {
+                        <MatNavItem Href="/addCustomer"><MatIcon Icon="person_add"></MatIcon> Add Customer</MatNavItem>
+                    }
+                </Authorized>
+            </AuthorizeView>
         </MatNavSubMenuList>
     </MatNavSubMenu>
 
@@ -48,7 +56,7 @@
 @code {
 
 
-
+    string ADMINISTRATION_ROLE = "Administrators";
     private bool collapseNavMenu = true;
     private bool expandSubNav;
     [Inject] IJSRuntime JS { get; set; }
