@@ -50,8 +50,6 @@ namespace EcsDataManager.Concrete
             return articleId;
         }
 
-
-
         public Task<int> Update(DeviceList devices)
         {
             var dbPara = new DynamicParameters();

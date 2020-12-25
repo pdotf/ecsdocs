@@ -14,5 +14,21 @@ namespace EcsDataManager.Entities
         public string RadioMetroSite { get; set; }
         public Int16 IsAuto { get; set; }
         public Int16 IsMain { get; set; }
+
+        public string IsAutomatic
+        {
+            get
+            {
+                if (IsAuto == 1)
+                {
+                    return "Auto";
+                }
+                else
+                {
+                    return "Manuel";
+                }
+
+            }
+        }
     }
 }
