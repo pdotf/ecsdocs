@@ -6,6 +6,7 @@
 @inject ICustomerUrlManager CUrlManager
 @inject IDeviceManager DeviceManager
 @inject NavigationManager NavigationManager
+@inject IJSRuntime JSRuntime
 
 
 
@@ -30,86 +31,94 @@ else
     <div class="container-fluid">
         <div>
             @*ShowAddDevice(_customerEntity.id) OpenAddDevice()*@
-            <button @onclick="async() => ShowEditCustomer(_customerEntity.id).ConfigureAwait(true)" class="btn btn-primary">Edit</button>
+
 
             <AuthorizeView>
                 <Authorized>
                     @if (@context.User.IsInRole(ADMINISTRATION_ROLE))
                     {
+                        <button @onclick="async() => ShowEditCustomer(_customerEntity.id).ConfigureAwait(true)" class="btn btn-primary">Edit</button>
                         <button @onclick="async() =>  ShowAddDevice(_customerEntity.id)" class="btn btn-success">Add Device</button>
                         <button @onclick="async() => Deletecustomer(_customerEntity.id)" class="btn btn-danger">Delete Customer</button>
+                        <button @onclick="async() => ShowUpdateCommentPage(_customerEntity.id)" class="btn btn-warning">Update Comment</button>
+
+                        if (_customerUrlEntity is null)
+                        {
+                            <button @onclick="async () => AddLinkPopUp()" class="btn btn-light">Add Link</button>
+                        }
+                        else
+                        {
+                            <button @onclick="async() => OpenLink()" class="btn btn-light">Nagios</button>
+                        }
+                    }
+                    else if (@context.User.IsInRole("Users"))
+                    {
+                        <button @onclick="async() => ShowUpdateCommentPage(_customerEntity.id)" class="btn btn-warning">Update Comment</button>
                     }
                 </Authorized>
             </AuthorizeView>
-            <button @onclick="async() => ShowUpdateCommentPage(_customerEntity.id)" class="btn btn-warning">Update Comment</button>
 
+            @if (ShowPopup)
+            {
+                <!-- This is the popup to create or edit a user -->
+                <div class="modal" tabindex="-1" style="display:block" role="dialog">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h3 class="modal-title"><dfn>Add Url link</dfn></h3>
+                                <!-- Button to close the popup -->
+                                <button type="button" class="close"
+                                        @onclick="ClosePopup">
+                                    <span aria-hidden="true">X</span>
+                                </button>
+                            </div>
+                            <!-- Edit form for the current user -->
+                            <div class="modal-body">
+                                <!-- Only show Id if not a new user -->
+                                @if (_customerUrlEntity.id != 0)
+                                {
+                                    <p>@_customerUrlEntity.id</p>
+                                }
+                                <!-- Only allow edit if a new user -->
+                                @if (_customerUrlEntity.customerId != 0)
+                                {
+                                    <p>@_customerUrlEntity.customerId</p>
+                                }
+                                else
+                                {
+                                    <input class="form-control" type="text"
+                                           placeholder="Url"
+                                           @bind="_customerUrlEntity.link" />
+                                }
+
+                                <br /><br />
+                                <!-- Button to save the user -->
+                                <button class="btn btn-primary"
+                                        @onclick="AddLink">
+                                    Save
+                                </button>
+                                <!-- Only show delete button if not a new record -->
+                                @if (_customerUrlEntity.id != 0)
+                                {
+                                    <!-- Button to delete the forecast -->
+                                    <button class="btn btn-danger">
+                                        Delete
+                                    </button>
+                                    @*@onclick= "DeleteUser"*@
+                                }
+                                <br />
+                                <span style="color:red">@errorStr</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            }
 
         </div>
         @if (ShowPopup)
         {
-            @**@
-            <div class="modal fade show d-block" tabindex="-1" style="display:block" role="dialog">
 
-                <div class="modal-dialog">
-
-                    <div class="modal-content">
-
-                        <div class="modal-header">
-
-                            <h3 class="modal-title"><dfn>Add Device</dfn></h3>
-
-                            <!-- Button to close the popup -->
-
-                            <button type="button" class="close"
-                                    @onclick="ClosePopup">
-
-                                <span aria-hidden="true">X</span>
-
-                            </button>
-
-                        </div>
-
-                        <!-- Edit form for the current forecast -->
-
-                        <div class="modal-body">
-
-                            <input class="form-control" type="text"
-                                   placeholder="Radio Name"
-                                   @bind="_devlist.RadioName" />
-
-                            <input class="form-control" type="text"
-                                   placeholder="Radio Ip"
-                                   @bind="_devlist.RadioIp" />
-
-                            <input class="form-control" type="text"
-                                   placeholder="Radio Model"
-                                   @bind="_devlist.RadioModel" />
-
-                            <input class="form-control" type="text"
-                                   placeholder="Radio Metro Site"
-                                   @bind="_devlist.RadioMetroSite" />
-
-                            <input class="form-control" type="text"
-                                   placeholder="Automatic or manual"
-                                   @bind="_devlist.IsAuto" />
-
-                            <br />
-
-                            <!-- Button to save the forecast -->
-
-                            <button type="button" class="btn btn-primary" @onclick="() => CreateDevice(CustomerID)">
-
-                                Save
-
-                            </button>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-            </div>
         }
 
         <MatList SingleSelection="true" TwoLine="true" @bind-value="@_customerFullDataModel.id">
@@ -458,6 +467,8 @@ else
         // Close the Popup
 
         ShowPopup = false;
+        errorStr = null;
+        errorString = null;
 
     }
     async Task OpenAddDevice()
@@ -476,10 +487,46 @@ else
         //NavigationManager.NavigateTo(uri: state != 0 ? "/Error" : "/customer" + "/" + id.ToString(), true);
 
     }
+    public async Task NavigateToUrlAsync(string url, bool openInNewTab)
+    {
+        if (openInNewTab)
+        {
+            await JSRuntime.InvokeAsync<object>("open", url, "_blank");
+        }
+        else
+        {
+            this.NavigationManager.NavigateTo(url);
+        }
+    }
+    protected async Task OpenLink()
+    {
+        NavigateToUrlAsync(_customerUrlEntity.link, true);
 
+    }
+    protected async Task AddLinkPopUp()
+    {
+
+        _customerUrlEntity = new CustomerUrl();
+        ShowPopup = true;
+
+    }
+    string errorStr;
     protected async Task AddLink()
     {
-        var urlState = await CUrlManager.AddUrl(_customerUrlEntity,1);
+        var check = await CUrlManager.GetMainUrlById(CustomerID);
+        if (check?.customerId == null)
+        {
+            _customerUrlEntity.customerId = CustomerID;
+           
+            var urlState = await CUrlManager.AddUrl(_customerUrlEntity, 1);
+            errorStr = null;
+            ShowPopup = false;
+        }
+        else
+        {
+            errorStr = "link is exists";
+        }
+
 
     }
     protected override async Task OnInitializedAsync()
@@ -487,7 +534,7 @@ else
         try
         {
             _customerEntity = await CustomerManager.GetById(CustomerID);
-
+            _customerUrlEntity = await CUrlManager.GetMainUrlById(CustomerID);
             _customerFullDataModel = await CustomerManager.GetById(CustomerID);
             _devices = await DeviceManager?.GetDeviceByCustomerId(CustomerID);
             _dev = await DeviceManager?.GetMainDeviceById(CustomerID);

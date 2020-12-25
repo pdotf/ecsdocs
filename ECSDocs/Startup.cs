@@ -74,6 +74,8 @@ namespace ECSDocs
             services.AddScoped<ICustomersManager, CustomersManager>();
             services.AddScoped<IDeviceManager, DeviceManager>();
             services.AddScoped<ICustomer, CustomersManager>();
+            services.AddScoped<ICustomerUrlManager, CustomerUrlManager>();
+
             //Register dapper in scope  
             services.AddScoped<IDapperManager, DapperManager>();
 

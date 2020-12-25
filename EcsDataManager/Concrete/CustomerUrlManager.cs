@@ -22,6 +22,7 @@ namespace EcsDataManager.Concrete
         {
             var dbPara = new DynamicParameters();
 
+            dbPara.Add("id", urls.id, DbType.Int32);
             dbPara.Add("customerId", urls.customerId, DbType.Int32);
             dbPara.Add("link", urls.link, DbType.String);
 
@@ -78,7 +79,7 @@ namespace EcsDataManager.Concrete
         public Task<int> Update(CustomerUrl urls)
         {
             var dbPara = new DynamicParameters();
-
+            dbPara.Add("id", urls.id, DbType.Int32);
             dbPara.Add("customerId", urls.customerId, DbType.Int32);
             dbPara.Add("link", urls.link, DbType.String);
             var updateUrl = Task.FromResult(_dapperManager.Update<int>("Sp_UpdateUrl",
