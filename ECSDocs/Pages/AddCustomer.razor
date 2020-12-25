@@ -203,8 +203,6 @@
     {
         var customerState = await customerManager.Create(_customer);
 
-
-
         if (customerState != 0)
         {
             _devices.CustomerId = customerState;

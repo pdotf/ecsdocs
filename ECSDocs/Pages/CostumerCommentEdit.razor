@@ -22,21 +22,26 @@ else if (_customerEntity is null)
 }
 else
 {
-    <div class="form-group">
-        <button type="button" class="btn btn-primary" @onclick="@(async () => await UpdateComment())">Save</button>
-
-        <button type="button" class="btn btn-danger" @onclick="Cancel">Cancel</button>
-    </div>
+    
 
     <div class="simple-form">
 
         <div class="container-fluid">
-            <div class="row">
-                <div class="text-wrap">
 
-                   @*<input class="form-control" @bind-value="@_customerEntity.Comment" id="Comment" placeholder="Comment" size="500" />*@
+            <div class="form-group float-md-right">
+                <button type="button" class="btn btn-primary" @onclick="@(async () => await UpdateComment())">Save</button>
 
-                    <textarea   @bind-value="@_customerEntity.Comment"  @bind-value:event="oninput" style="width:auto;" cols="100" rows="20" dir="rtl" ></textarea>
+                <button type="button" class="btn btn-danger" @onclick="Cancel">Cancel</button>
+            </div>
+
+            <div class="row float-right">
+                <div class="col-md-8">
+                    <div class="text-wrap">
+
+                        @*<input class="form-control" @bind-value="@_customerEntity.Comment" id="Comment" placeholder="Comment" size="500" />*@
+
+                        <textarea @bind-value="@_customerEntity.Comment" @bind-value:event="oninput" style="width:auto;overflow-y:scroll" cols="100" rows="20" dir="rtl"></textarea>
+                    </div>
                 </div>
             </div>
         </div>
