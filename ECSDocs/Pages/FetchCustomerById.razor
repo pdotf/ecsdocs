@@ -3,7 +3,7 @@
 @using EcsDataManager.Contracts
 @using EcsDataManager.Entities
 @inject ICustomersManager CustomerManager
-
+@inject ICustomerUrlManager CUrlManager
 @inject IDeviceManager DeviceManager
 @inject NavigationManager NavigationManager
 
@@ -31,7 +31,7 @@ else
         <div>
             @*ShowAddDevice(_customerEntity.id) OpenAddDevice()*@
             <button @onclick="async() => ShowEditCustomer(_customerEntity.id).ConfigureAwait(true)" class="btn btn-primary">Edit</button>
-            
+
             <AuthorizeView>
                 <Authorized>
                     @if (@context.User.IsInRole(ADMINISTRATION_ROLE))
@@ -244,14 +244,15 @@ else
                     </Field>
                 </div>
             </div>
+            <div class="row">
+                <div class="col-md-8">
+                    <h4>
+                        @nameof(_customerFullDataModel.Comment)
+                    </h4>
+                    <textarea readonly class="block-with-text" cols="110" rows="30" dir="rtl" style="color:green;width:auto;overflow-y: scroll;">@_customerFullDataModel.Comment</textarea>
+                </div>
+            </div>
         </MatList>
-        <Divider Type="DividerType.Dotted" />
-        <h2>
-            @nameof(_customerFullDataModel.Comment)
-        </h2>
-
-        <p class="block-with-text" dir="rtl" style="color: green;">@_customerFullDataModel.Comment</p>
-
         @if (_dev == null)
         {
             <p>No Devices Found for customer</p>
@@ -260,8 +261,7 @@ else
         {
             <br />
             <br />
-            <Divider Type="DividerType.Dotted" />
-            <h4>Main Radio :</h4>
+            <h3>Main Radio :</h3>
             <div class="row">
                 <div class="col-md-3">
 
@@ -301,7 +301,7 @@ else
 
 
             <input type="hidden" @bind-value="@_customerEntity.id" />
-            <h4>Backup Radio :</h4>
+            <h3>Backup Radio :</h3>
             @if (_devices == null)
             {
                 <p>
@@ -310,22 +310,88 @@ else
             }
             else
             {
+                @foreach (var item in _devices)
+                {
+                    <Card>
+                        <div class="row">
 
-                <div class="mat-layout-grid mat-layout-grid-align-left">
+                            <div class="col-md-3">
+                                <h6>Radio Name:</h6>
+                            </div>
+                            <div class="col-md-7">
+                                <h6><span style="color:green">@item.RadioName</span></h6>
+                            </div>
+
+                        </div>
+                        <div class="row">
+                            <div class="col-md-3">
+                                <h6>Radio IP:</h6>
+                            </div>
+                            <div class="col-md-6">
+                                <h6><span style="color:green">@item.RadioIp</span></h6>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-3">
+                                <h6>
+                                    Radio Metro Site:
+                                </h6>
+                            </div>
+                            <div class="col-md-6">
+                                <h6><span style="color:green">@item.RadioMetroSite</span></h6>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-3">
+                                <h6>
+                                    Radio Model:
+                                </h6>
+                            </div>
+                            <div class="col-md-6">
+                                <h6><span style="color:green">@item.RadioModel</span></h6>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-3">
+                                <h6>
+                                    Backup Activation:
+                                </h6>
+                            </div>
+                            <div class="col-md-6">
+                                <h6><span style="color:green">@item.IsAutomatic</span></h6>
+                            </div>
+                        </div>
+                        <AuthorizeView>
+                            <Authorized>
+                                @if (@context.User.IsInRole(ADMINISTRATION_ROLE))
+                                {
+                                    <div class="row">
+                                        <div class="col-md-2 float-right">
+                                            <Button Color="Color.Success" Clicked="async () => ShowEditDevice(item.Id)">Edit</Button>
+                                            <Button Color="Color.Danger" Clicked="async () => DeleteDevice(item.Id)">Delete</Button>
+                                        </div>
+                                    </div>
+                                }
+                            </Authorized>
+                        </AuthorizeView>
+                    </Card>
+
+                }
+                <!--<div class="mat-layout-grid mat-layout-grid-align-left">
                     <div class="mat-layout-grid-inner">
                         <div class="mat-layout-grid-cell mat-layout-grid-cell-span-12">
 
                             <DataGrid TItem="DeviceList"
                                       Data="@_devices"
                                       ReadData="@OnInitializedAsync"
-                                      TotalItems="@total" Editable="true" Sortable="true" Striped="true">
-                                @*<DataGridColumn TItem="Customers" Field="@nameof(Customers.RowNumber)" Caption="#" />*@
+                                      TotalItems="@total" Editable="true" Sortable="true" Striped="true">-->
+                @*<DataGridColumn TItem="Customers" Field="@nameof(Customers.RowNumber)" Caption="#" />*@
 
-                                <DataGridColumn TItem="DeviceList" Field="@nameof(DeviceList.RadioName)" Caption="Backup Name" />
+                <!--<DataGridColumn TItem="DeviceList" Field="@nameof(DeviceList.RadioName)" Caption="Backup Name" />
                                 <DataGridColumn TItem="DeviceList" Field="@nameof(DeviceList.RadioIp)" Caption="Backup Ip" />
                                 <DataGridColumn TItem="DeviceList" Field="@nameof(DeviceList.RadioModel)" Caption="Backup Model" />
                                 <DataGridColumn TItem="DeviceList" Field="@nameof(DeviceList.RadioMetroSite)" Caption="Backup Metro Site" />
-                                <DataGridColumn TItem="DeviceList" Field="@nameof(DeviceList.IsAuto)" Caption="Backup Activation" />
+                                <DataGridColumn TItem="DeviceList" Field="@nameof(DeviceList.IsAutomatic)" Caption="Backup Activation" />
                                 <DataGridColumn TItem="DeviceList" Field="@nameof(DeviceList.Id)" Caption="Action">
                                     <DisplayTemplate>
                                         <Button Color="Color.Success" Clicked="async() => ShowEditDevice(context.Id)">Edit</Button>
@@ -337,7 +403,7 @@ else
                         </div>
 
                     </div>
-                </div>
+                </div>-->
             }
 
 
@@ -362,6 +428,7 @@ else
     [Parameter] public int CustomerID { get; set; }
     Customers _customerModel;
     Customers _customerEntity = new Customers();
+    CustomerUrl _customerUrlEntity = new CustomerUrl();
 
     Customers _customerFullDataModel = new Customers();
     List<DeviceList> _devices = new List<DeviceList>();
@@ -409,13 +476,18 @@ else
         //NavigationManager.NavigateTo(uri: state != 0 ? "/Error" : "/customer" + "/" + id.ToString(), true);
 
     }
+
+    protected async Task AddLink()
+    {
+        var urlState = await CUrlManager.AddUrl(_customerUrlEntity,1);
+
+    }
     protected override async Task OnInitializedAsync()
     {
-
-
         try
         {
             _customerEntity = await CustomerManager.GetById(CustomerID);
+
             _customerFullDataModel = await CustomerManager.GetById(CustomerID);
             _devices = await DeviceManager?.GetDeviceByCustomerId(CustomerID);
             _dev = await DeviceManager?.GetMainDeviceById(CustomerID);
