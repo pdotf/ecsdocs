@@ -44,7 +44,7 @@ else
                         <button @onclick="async() => Deletecustomer(_customerEntity.id)" class="btn btn-danger">Delete Customer</button>
                         <button @onclick="async() => ShowUpdateCommentPage(_customerEntity.id)" class="btn btn-warning">Update Comment</button>
 
-                        if (_customerUrlEntity is null)
+                        if (string.IsNullOrWhiteSpace(_customerUrlEntity?.link)==true)
                         {
                             <button @onclick="async () => AddLinkPopUp()" class="btn btn-light">Add Link</button>
                         }
