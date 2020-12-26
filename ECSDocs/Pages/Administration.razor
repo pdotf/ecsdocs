@@ -8,8 +8,8 @@
 <h3>Administration</h3>
 <AuthorizeView>
     <Authorized>
-        @if (@context.User.IsInRole(ADMINISTRATION_ROLE))
-        {
+        @*@if (@context.User.IsInRole(ADMINISTRATION_ROLE))
+        {*@
             <table class="table">
                 <thead>
                     <tr>
@@ -106,11 +106,11 @@
                 </div>
             }
             <button class="btn btn-success" @onclick="AddNewUser">Add User</button>
-        }
+        @*}
         else
         {
             <p>You're not signed in as a user in @ADMINISTRATION_ROLE.</p>
-        }
+        }*@
     </Authorized>
     <NotAuthorized>
         <p>You're not loggged in.</p>
@@ -152,128 +152,130 @@
     }
     async Task SaveUser()
     {
-        try
+
+        // Is this an existing user?
+        if (objUser.Id != "")
         {
-            //// Is this an existing user?
-            //if (objUser.Id != "")
-            //{
-            //    // To be implemented later...
-            //}
-            //else
-            //{
-            //    // Insert new user
-            //    var NewUser =
-            //        new IdentityUser
-            //        {
-            //            UserName = objUser.UserName,
-            //            Email = objUser.Email
-            //        };
-            //    var CreateResult =
-            //        await _UserManager
-            //        .CreateAsync(NewUser, objUser.PasswordHash);
-            //    if (!CreateResult.Succeeded)
-            //    {
-            //        if (CreateResult
-            //            .Errors
-            //            .FirstOrDefault() != null)
-            //        {
-            //            strError =
-            //                CreateResult
-            //                .Errors
-            //                .FirstOrDefault()
-            //                .Description;
-            //        }
-            //        else
-            //        {
-            //            strError = "Create error";
-            //        }
-            //        // Keep the popup opened
-            //        return;
-            //    }
-            //    else
-            //    {
-            //        // Handle Roles
-            //        if (CurrentUserRole == ADMINISTRATION_ROLE)
-            //        {
-            //            // Put admin in Administrator role
-            //            await _UserManager
-            //                .AddToRoleAsync(NewUser, ADMINISTRATION_ROLE);
-            //        }
-            //    }
-            //}
-            // Get the user
-            var user = await _UserManager.FindByIdAsync(objUser.Id);
-            // Update Email
-            user.Email = objUser.Email;
-            // Update the user
-            await _UserManager.UpdateAsync(user);
-            // Only update password if the current value
-            // is not the default value
-            if (objUser.PasswordHash != "*****")
+            try
             {
-                var resetToken =
-                    await _UserManager.GeneratePasswordResetTokenAsync(user);
-                var passworduser =
-                    await _UserManager.ResetPasswordAsync(
-                        user,
-                        resetToken,
-                        objUser.PasswordHash);
-                if (!passworduser.Succeeded)
+                // To be implemented later...
+                // Get the user
+                var user = await _UserManager.FindByIdAsync(objUser.Id);
+                // Update Email
+                user.Email = objUser.Email;
+                // Update the user
+                await _UserManager.UpdateAsync(user);
+                // Only update password if the current value
+                // is not the default value
+                if (objUser.PasswordHash != "*****")
                 {
-                    if (passworduser.Errors.FirstOrDefault() != null)
+                    var resetToken =
+                        await _UserManager.GeneratePasswordResetTokenAsync(user);
+                    var passworduser =
+                        await _UserManager.ResetPasswordAsync(
+                            user,
+                            resetToken,
+                            objUser.PasswordHash);
+                    if (!passworduser.Succeeded)
                     {
-                        strError =
-                            passworduser
-                            .Errors
-                            .FirstOrDefault()
-                            .Description;
+                        if (passworduser.Errors.FirstOrDefault() != null)
+                        {
+                            strError =
+                                passworduser
+                                .Errors
+                                .FirstOrDefault()
+                                .Description;
+                        }
+                        else
+                        {
+                            strError = "Pasword error";
+                        }
+                        // Keep the popup opened
+                        return;
                     }
-                    else
-                    {
-                        strError = "Pasword error";
-                    }
-                    // Keep the popup opened
-                    return;
                 }
+                // Handle Roles
+                // Is user in administrator role?
+                var UserResult =
+                    await _UserManager
+                    .IsInRoleAsync(user, ADMINISTRATION_ROLE);
+                // Is Administrator role selected 
+                // but user is not an Administrator?
+                if (
+                    (CurrentUserRole == ADMINISTRATION_ROLE)
+                    &
+                    (!UserResult))
+                {
+                    // Put admin in Administrator role
+                    await _UserManager
+                        .AddToRoleAsync(user, ADMINISTRATION_ROLE);
+                }
+                else
+                {
+                    // Is Administrator role not selected 
+                    // but user is an Administrator?
+                    if ((CurrentUserRole != ADMINISTRATION_ROLE)
+                        &
+                        (UserResult))
+                    {
+                        // Remove user from Administrator role
+                        await _UserManager
+                            .RemoveFromRoleAsync(user, ADMINISTRATION_ROLE);
+                    }
+                }
+                // Close the Popup
+                ShowPopup = false;
+                // Refresh Users
+                GetUsers();
             }
-            // Handle Roles
-            // Is user in administrator role?
-            var UserResult =
-                await _UserManager
-                .IsInRoleAsync(user, ADMINISTRATION_ROLE);
-            // Is Administrator role selected 
-            // but user is not an Administrator?
-            if (
-                (CurrentUserRole == ADMINISTRATION_ROLE)
-                &
-                (!UserResult))
+            catch (Exception ex)
             {
-                // Put admin in Administrator role
-                await _UserManager
-                    .AddToRoleAsync(user, ADMINISTRATION_ROLE);
+                strError = ex.GetBaseException().Message;
+            }
+        }
+        else
+        {
+            // Insert new user
+            var NewUser =
+                new IdentityUser
+                {
+                    UserName = objUser.UserName,
+                    Email = objUser.Email
+                };
+            var CreateResult =
+                await _UserManager .CreateAsync(NewUser, objUser.PasswordHash);
+            if (!CreateResult.Succeeded)
+            {
+                if (CreateResult
+                    .Errors
+                    .FirstOrDefault() != null)
+                {
+                    strError =
+                        CreateResult
+                        .Errors
+                        .FirstOrDefault()
+                        .Description;
+                }
+                else
+                {
+                    strError = "Create error";
+                }
+                // Keep the popup opened
+                return;
             }
             else
             {
-                // Is Administrator role not selected 
-                // but user is an Administrator?
-                if ((CurrentUserRole != ADMINISTRATION_ROLE)
-                    &
-                    (UserResult))
+                // Handle Roles
+                if (CurrentUserRole == ADMINISTRATION_ROLE)
                 {
-                    // Remove user from Administrator role
+                    // Put admin in Administrator role
                     await _UserManager
-                        .RemoveFromRoleAsync(user, ADMINISTRATION_ROLE);
+                        .AddToRoleAsync(NewUser, ADMINISTRATION_ROLE);
+                    ShowPopup = false;
                 }
             }
-            // Close the Popup
-            ShowPopup = false;
-            // Refresh Users
-            GetUsers();
         }
-        catch (Exception ex)
-        {
-            strError = ex.GetBaseException().Message;
-        }
+
     }
     async Task EditUser(IdentityUser _IdentityUser)
     {
