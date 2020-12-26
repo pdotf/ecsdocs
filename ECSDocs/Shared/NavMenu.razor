@@ -31,16 +31,50 @@
 
     <MatNavSubMenu @bind-Expanded="@navSubMenuOpenState">
         <MatNavSubMenuHeader>
-            <MatNavItem AllowSelection="false"><MatIcon Icon="router"></MatIcon> Customers</MatNavItem>
+            <MatNavItem AllowSelection="false"><MatIcon Icon="router"></MatIcon> VPN</MatNavItem>
         </MatNavSubMenuHeader>
         <MatNavSubMenuList>
-            <MatNavItem Href="/customerlist"><MatIcon Icon="list"></MatIcon> Customer list</MatNavItem>
+            <MatNavItem Href="/vpncustomerlist"><MatIcon Icon="list"></MatIcon>Customers</MatNavItem>
 
             <AuthorizeView>
                 <Authorized>
                     @if (@context.User.IsInRole(ADMINISTRATION_ROLE))
                     {
-                        <MatNavItem Href="/addCustomer"><MatIcon Icon="person_add"></MatIcon> Add Customer</MatNavItem>
+                        <MatNavItem Href="/addVpnCustomer"><MatIcon Icon="person_add"></MatIcon> Add VPN Customer</MatNavItem>
+                    }
+                </Authorized>
+            </AuthorizeView>
+        </MatNavSubMenuList>
+    </MatNavSubMenu>
+    <MatNavSubMenu @bind-Expanded="@apnNavOpenState">
+        <MatNavSubMenuHeader>
+            <MatNavItem AllowSelection="false"><MatIcon Icon="sim_card"></MatIcon> APN</MatNavItem>
+        </MatNavSubMenuHeader>
+        <MatNavSubMenuList>
+            <MatNavItem Href="/apncustomerlist"><MatIcon Icon="list"></MatIcon>Customers</MatNavItem>
+
+            <AuthorizeView>
+                <Authorized>
+                    @if (@context.User.IsInRole(ADMINISTRATION_ROLE))
+                    {
+                        <MatNavItem Href="/addApnCustomer"><MatIcon Icon="person_add"></MatIcon> Add Customer</MatNavItem>
+                    }
+                </Authorized>
+            </AuthorizeView>
+        </MatNavSubMenuList>
+    </MatNavSubMenu>
+    <MatNavSubMenu @bind-Expanded="@IntrNavOpenState">
+        <MatNavSubMenuHeader>
+            <MatNavItem AllowSelection="false"><MatIcon Icon="device_hub"></MatIcon> Intranet</MatNavItem>
+        </MatNavSubMenuHeader>
+        <MatNavSubMenuList>
+            <MatNavItem Href="/intranetcustomerlist"><MatIcon Icon="list"></MatIcon>Customers</MatNavItem>
+
+            <AuthorizeView>
+                <Authorized>
+                    @if (@context.User.IsInRole(ADMINISTRATION_ROLE))
+                    {
+                        <MatNavItem Href="/addIntranetCustomer"><MatIcon Icon="person_add"></MatIcon> Add Customer</MatNavItem>
                     }
                 </Authorized>
             </AuthorizeView>
@@ -61,7 +95,7 @@
     private bool expandSubNav;
     [Inject] IJSRuntime JS { get; set; }
 
-    bool navSubMenuOpenState;
+    bool navSubMenuOpenState; bool apnNavOpenState; bool IntrNavOpenState;
 
     private string NavMenuCssClass => collapseNavMenu ? "collapse" : null;
 
