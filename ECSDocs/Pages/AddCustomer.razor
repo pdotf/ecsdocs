@@ -18,173 +18,201 @@
 </div>
 <div class="container-fluid" style=";position: relative; display: table; overflow-y: auto; overflow-x: auto; width: auto; min-width: 300px; float:left">
     <div class="container">
-        <div class="row">
-            <div class="col-md-5">
-                <label>Customer Name</label>
-            </div>
-            <div class="col-md-7">
-                <input style="width:100%" @bind-value="@_customer.CustomerName" />
-            </div>
+        <EditForm Model="@_devices" OnValidSubmit="() => CreateCustomer()">
+            <DataAnnotationsValidator />
+            <div class="row">
+                <div class="col-md-5">
+                    <label>Customer Name</label>
+                </div>
+                <div class="col-md-7">
+                    <InputText style="width:100%" @bind-Value="@_customer.CustomerName" />
+                    <ValidationMessage For="@(()=>_customer.CustomerName)" />
+                </div>
 
-            <div class="col-md-5">
-                <label>Tel</label>
+                <div class="col-md-5">
+                    <label>Tel</label>
+                </div>
+                <div class="col-md-7">
+                    <InputText style="width:100%" @bind-Value="@_customer.Tel" />
+                    <ValidationMessage For="@(()=>_customer.Tel)" />
+                </div>
             </div>
-            <div class="col-md-7">
-                <input style="width:100%" @bind-value="@_customer.Tel" />
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-5">
-                <label>Mobile</label>
-            </div>
-            <div class="col-md-7">
-                <input style="width:100%" @bind-value="@_customer.Mobile" />
-            </div>
+            <div class="row">
+                <div class="col-md-5">
+                    <label>Mobile</label>
+                </div>
+                <div class="col-md-7">
+                    <InputText style="width:100%" @bind-Value="@_customer.Mobile" />
+                    <ValidationMessage For="@(()=>_customer.Mobile)" />
+                </div>
 
-            <div class="col-md-5">
-                <label>Owner Team</label>
+                <div class="col-md-5">
+                    <label>Owner Team</label>
+                </div>
+                <div class="col-md-7">
+                    <InputText style="width:100%" @bind-Value="@_customer.OwnerTeam" />
+                    <ValidationMessage For="@(()=>_customer.OwnerTeam)" />
+                </div>
             </div>
-            <div class="col-md-7">
-                <input style="width:100%" @bind-value="@_customer.OwnerTeam" />
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-5">
-                <label>Service Type</label>
-            </div>
-            <div class="col-md-7">
-                <input style="width:100%" @bind-value="@_customer.ServiceType" />
-            </div>
+            <div class="row">
+                <div class="col-md-5">
+                    <label>Service Type</label>
+                </div>
+                <div class="col-md-7">
+                    <InputText style="width:100%" @bind-Value="@_customer.ServiceType" />
+                    <ValidationMessage For="@(()=>_customer.ServiceType)" />
+                </div>
 
-            <div class="col-md-5">
-                <label>Service Topology</label>
+                <div class="col-md-5">
+                    <label>Service Topology</label>
+                </div>
+                <div class="col-md-7">
+                    <InputText style="width:100%" @bind-Value="@_customer.ServiceTopology" />
+                    <ValidationMessage For="@(()=>_customer.ServiceTopology)" />
+                </div>
             </div>
-            <div class="col-md-7">
-                <input style="width:100%" @bind-value="@_customer.ServiceTopology" />
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-5">
-                <label>Account Manager</label>
-            </div>
-            <div class="col-md-7">
-                <input style="width:100%" @bind-value="@_customer.AccountManager" />
-            </div>
+            <div class="row">
+                <div class="col-md-5">
+                    <label>Account Manager</label>
+                </div>
+                <div class="col-md-7">
+                    <InputText style="width:100%" @bind-Value="@_customer.AccountManager" />
+                    <ValidationMessage For="@(()=>_customer.AccountManager)" />
+                </div>
 
-            <div class="col-md-5">
-                <label>IpHQ</label>
+                <div class="col-md-5">
+                    <label>IpHQ</label>
+                </div>
+                <div class="col-md-7">
+                    <InputText style="width:100%" @bind-Value="@_customer.IpHQ" />
+                    <ValidationMessage For="@(()=>_customer.IpHQ)" />
+                </div>
             </div>
-            <div class="col-md-7">
-                <input style="width:100%" @bind-value="@_customer.IpHQ" />
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-5">
-                <label>AAAGroup</label>
-            </div>
-            <div class="col-md-7">
-                <input style="width:100%" @bind-value="@_customer.AAAGroup" />
-            </div>
+            <div class="row">
+                <div class="col-md-5">
+                    <label>AAAGroup</label>
+                </div>
+                <div class="col-md-7">
+                    <InputText style="width:100%" @bind-Value="@_customer.AAAGroup" />
+                    <ValidationMessage For="@(()=>_customer.AAAGroup)" />
+                </div>
 
-            <div class="col-md-5">
-                <label>Ip Tunnel</label>
+                <div class="col-md-5">
+                    <label>Ip Tunnel</label>
+                </div>
+                <div class="col-md-7">
+                    <InputText style="width:100%" @bind-Value="@_customer.IpTunnel" />
+                    <ValidationMessage For="@(()=>_customer.IpTunnel)" />
+                </div>
             </div>
-            <div class="col-md-7">
-                <input style="width:100%" @bind-value="@_customer.IpTunnel" />
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-5">
-                <label>Wan Ip Range</label>
-            </div>
-            <div class="col-md-7">
-                <input style="width:100%" @bind-value="@_customer.WanIpRange" />
-            </div>
+            <div class="row">
+                <div class="col-md-5">
+                    <label>Wan Ip Range</label>
+                </div>
+                <div class="col-md-7">
+                    <InputText style="width:100%" @bind-Value="@_customer.WanIpRange" />
+                    <ValidationMessage For="@(()=>_customer.WanIpRange)" />
+                </div>
 
-            <div class="col-md-5">
-                <label>Lan Ip Range</label>
+                <div class="col-md-5">
+                    <label>Lan Ip Range</label>
+                </div>
+                <div class="col-md-7">
+                    <InputText style="width:100%" @bind-Value="@_customer.LanIpRange" />
+                    <ValidationMessage For="@(()=>_customer.LanIpRange)" />
+                </div>
             </div>
-            <div class="col-md-7">
-                <input style="width:100%" @bind-value="@_customer.LanIpRange" />
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-5">
-                <label>VRF</label>
-            </div>
-            <div class="col-md-7">
-                <input style="width:100%" @bind-value="@_customer.VRF" />
-            </div>
+            <div class="row">
+                <div class="col-md-5">
+                    <label>VRF</label>
+                </div>
+                <div class="col-md-7">
+                    <InputText style="width:100%" @bind-Value="@_customer.VRF" />
+                    <ValidationMessage For="@(()=>_customer.VRF)" />
+                </div>
 
-            <div class="col-md-5">
-                <label>Vpn Tools Name</label>
+                <div class="col-md-5">
+                    <label>Vpn Tools Name</label>
+                </div>
+                <div class="col-md-7">
+                    <InputText style="width:100%" @bind-Value="@_customer.VpnToolsName" />
+                    <ValidationMessage For="@(()=>_customer.VpnToolsName)" />
+                </div>
             </div>
-            <div class="col-md-7">
-                <input style="width:100%" @bind-value="@_customer.VpnToolsName" />
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-5">
-                <label>APN</label>
-            </div>
-            <div class="col-md-7">
-                <input style="width:100%" @bind-value="@_customer.APN" />
-            </div>
-            <div class="col-md-5">
-                <label>Comment</label>
-            </div>
-            <div class="col-md-7">
-                <input style="width:100%" @bind-value="@_customer.Comment" />
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-5">
-                <label>Radio  Name</label>
-            </div>
-            <div class="col-md-7">
-                <input style="width:100%" @bind-value="@_devices.RadioName" />
-            </div>
+            <div class="row">
+                <div class="col-md-5">
+                    <label>APN</label>
+                </div>
+                <div class="col-md-7">
+                    <InputText style="width:100%" @bind-Value="@_customer.APN" />
+                    <ValidationMessage For="@(()=>_customer.APN)" />
+                </div>
+                <div class="col-md-5">
+                    <label>Comment</label>
+                </div>
+                <div class="col-md-7">
+                    <input style="width:100%" @bind-value="@_customer.Comment" />
 
-            <div class="col-md-5">
-                <label> Radio IP</label>
+                </div>
             </div>
-            <div class="col-md-7">
-                <input style="width:100%" @bind-value="@_devices.RadioIp" />
+            <div class="row">
+                <input style="width:100%" type="hidden" @bind-value="@_customer.id" />
             </div>
+         
+         
+            <div class="row">
+                <div class="col-md-5">
+                    <label>Radio  Name</label>
+                </div>
+                <div class="col-md-7">
+                    <InputText style="width:100%" @bind-Value="@_devices.RadioName" />
+                    <ValidationMessage For="@(()=>_devices.RadioName)" />
+                </div>
+
+                <div class="col-md-5">
+                    <label> Radio IP</label>
+                </div>
+                <div class="col-md-7">
+                    <InputText style="width:100%" @bind-Value="@_devices.RadioIp" />
+                    <ValidationMessage For="@(()=>_devices.RadioIp)" />
+                </div>
+
+            </div>
+            <div class="row">
+                <div class="col-md-5">
+                    <label> Radio Model</label>
+                </div>
+                <div class="col-md-7">
+                    <InputText style="width:100%" @bind-Value="@_devices.RadioModel" />
+                    <ValidationMessage For="@(()=>_devices.RadioModel)" />
+                </div>
+
+                <div class="col-md-5">
+                    <label> Radio Metro Site</label>
+                </div>
+                <div class="col-md-7">
+                    <InputText style="width:100%" @bind-Value="@_devices.RadioMetroSite" />
+                    <ValidationMessage For="@(()=>_devices.RadioMetroSite)" />
+                </div>
 
 
+            </div>
+            <div class="row">
+                <input type="hidden" @bind-value="@_devices.Id" />
 
-        </div>
-        <div class="row">
-            <div class="col-md-5">
-                <label> Radio Model</label>
             </div>
-            <div class="col-md-7">
-                <input style="width:100%" @bind-value="@_devices.RadioModel" />
+            <div class="row">
+                <div class="col-md-1">
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </div>
+                <div class="col-md-1">
+                    <button type="submit" class="btn btn-danger" @onclick="() => Cancel()">Cancel</button>
+                </div>
             </div>
-
-            <div class="col-md-5">
-                <label> Radio Metro Site</label>
-            </div>
-            <div class="col-md-7">
-                <input style="width:100%" @bind-value="@_devices.RadioMetroSite" />
-            </div>
-           
-
-        </div>
-        <div class="row">
-
-            <input style="width:100%" type="hidden" @bind-value="@_customer.id" />
-        </div>
-        <div class="row">
-            <div class="col-md-1">
-                <button type="button" class="btn btn-primary" @onclick="() => CreateCustomer()">Save</button>
-            </div>
-            <div class="col-md-1">
-                <button type="button" class="btn btn-danger" @onclick="() => Cancel()">Cancel</button>
-            </div>
-        </div>
+        </EditForm>
     </div>
+
+
 </div>
 
 
@@ -198,22 +226,31 @@
     Alert Success;
     Snackbar snackbar;
 
-
+    int cc ;
     protected async Task CreateCustomer()
     {
-        var customerState = await customerManager.Create(_customer);
-
-        if (customerState != 0)
+        cc = await customerManager.Create(_customer);
+        if (cc != 0)
         {
-            _devices.CustomerId = customerState;
-            var deviceState = await DeviceManager.AddDevice(_devices,1);
-            navigationManager.NavigateTo($@"/customerlist", true);
-            snackbar.Show();
+            if (_devices != null)
+            {
+                _devices.CustomerId = cc;
+                var deviceState = await DeviceManager.AddDevice(_devices, 1);
+                navigationManager.NavigateTo($@"/customerlist", true);
+                snackbar.Show();
+            }
+
         }
         else
         {
             navigationManager.NavigateTo($@"/Error", true);
         }
+
+
+    }
+    protected async Task CreatMainDevice()
+    {
+
 
 
     }

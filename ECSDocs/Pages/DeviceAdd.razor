@@ -11,117 +11,75 @@
 
 <div class="simple-form">
     <div class="container-fluid">
+        <EditForm Model="@_device" OnValidSubmit="() => CreateDevice(CustomerID)">
+            <DataAnnotationsValidator />
+            <div class="row">
+                <div class="col-md-6">
+                    <InputText class="form-control" type="text"
+                               placeholder="Radio Name"
+                               @bind-Value="_device.RadioName" />
+                    <ValidationMessage For="@(()=>_device.RadioName)" />
 
-        <div class="row">
-            <div class="col-md-6">
-                <input class="form-control" type="text"
-                       placeholder="Radio Name"
-                       @bind="_device.RadioName" />
+                </div>
+
+                <div class="col-md-6">
+                    <InputText class="form-control" type="text"
+                               placeholder="Radio Ip"
+                               @bind-Value="_device.RadioIp" />
+                    <ValidationMessage For="@(()=>_device.RadioIp)" />
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <InputText class="form-control" type="text"
+                               placeholder="Radio Model"
+                               @bind-Value="_device.RadioModel" />
+                    <ValidationMessage For="@(()=>_device.RadioModel)" />
+                </div>
+
+                <div class="col-md-6">
+                    <InputText class="form-control" type="text"
+                               placeholder="Radio Metro Site"
+                               @bind-Value="_device.RadioMetroSite" />
+                    <ValidationMessage For="@(()=>_device.RadioMetroSite)" />
+                </div>
             </div>
 
-            <div class="col-md-6">
-                <input class="form-control" type="text"
-                       placeholder="Radio Ip"
-                       @bind="_device.RadioIp" />
+            <div class="row">
+                <div class="dropdown  col-md-6">
+                    @*<input @bind-value="@_device.BackupActivationIsAuto"/>*@
+                    <select class="form-control" @bind="@_device.IsAuto">
+                        <option value="-1"></option>
+                        <option value="0">                    Manual                 </option>
+                        <option value="1">                     Auto                 </option>
+                    </select>
+                </div>
+
+                @*<div class="col-md-6">
+                    <InputText class="form-control" type=""
+                               placeholder="Automatic or manual"
+                               @bind-Value="_device.IsAutomatic" />
+                </div>*@
             </div>
-        </div>
-        <div class="row">
-            <div class="col-md-6">
-                <input class="form-control" type="text"
-                       placeholder="Radio Model"
-                       @bind="_device.RadioModel" />
+
+            <br />
+
+            <!-- Button to save the forecast -->
+
+            <div class="row">
+                <div class="col-md-2">
+                    <button type="submit" class="btn btn-primary">
+
+                        Save
+
+                    </button>
+                </div>
+                <div class="col-md-2"><button type="button" class="btn btn-secondary" data-dismiss="modal" @onclick="() => Cancel()">Close</button></div>
             </div>
 
-            <div class="col-md-6" >
-                <input class="form-control" type="text"
-                       placeholder="Radio Metro Site"
-                       @bind="_device.RadioMetroSite" />
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="col-md-6">
-                <input class="form-control" type="text"
-                       placeholder="Automatic or manual"
-                       @bind="_device.IsAuto" />
-            </div>
-        </div>
-
-        <br />
-
-        <!-- Button to save the forecast -->
-
-        <div class="row">
-            <div class="col-md-2">
-                <button type="button" class="btn btn-primary" @onclick="() => CreateDevice(CustomerID)">
-
-                    Save
-
-                </button>
-            </div>
-            <div class="col-md-2"><button type="button" class="btn btn-secondary" data-dismiss="modal" @onclick="() => Cancel()">Close</button></div>
-        </div>
-
-
+        </EditForm>
     </div>
 </div>
-@*<div class="container-fluid">
-        <div class="row">
-            <div class="col-md-6">
-                <label>@nameof(_device.RadioName)</label>
-            </div>
-            <div class="col-md-6">
-                <input @bind-value="@_device.RadioName" />
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-6">
-                <label>@nameof(_device.RadioIp)</label>
-            </div>
-            <div class="col-md-6">
-                <input @bind-value="@_device.RadioIp" />
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-6">
-                <label>@nameof(_device.RadioModel)</label>
-            </div>
-            <div class="col-md-6">
-                <input @bind-value="@_device.RadioModel" />
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-6">
-                <label>@nameof(_device.RadioMetroSite)</label>
-            </div>
-            <div class="col-md-6">
-                <input @bind-value="@_device.RadioMetroSite" />
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-6">
-                <label>@nameof(_device.IsAuto)</label>
-            </div>
-            <div class="dropdown  col-md-6">
-                <select class="form-control" @bind="@_device.IsAuto" id="isAutoSelect">
-                    <option value="" />
-                    <option value="0">                    Manual                 </option>
-                    <option value="1">                     Auto                 </option>
-                </select>
-            </div>
-        </div>
-
-
-        <input type="hidden" @bind-value="@_customers.id" />
-    </div>
-
-    <button type="button" class="btn btn-primary" @onclick="() => CreateDevice(_customers.id)">Save changes</button>
-    <button type="button" class="btn btn-secondary" data-dismiss="modal" @onclick="() => Cancel()">Close</button>*@
-
-
-
-
-
 
 @code {
 
