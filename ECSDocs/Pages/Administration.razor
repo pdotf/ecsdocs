@@ -271,8 +271,11 @@
                     // Put admin in Administrator role
                     await _UserManager
                         .AddToRoleAsync(NewUser, ADMINISTRATION_ROLE);
-                    ShowPopup = false;
+
                 }
+                ShowPopup = false;
+                // Refresh Users
+                GetUsers();
             }
         }
 
