@@ -34,11 +34,7 @@ namespace EcsDataManager.Concrete
             {
                 dbPara.Add("IsMain", ismain, DbType.String);
             }
-            var urlId = Task.FromResult(_dapperManager.Insert<int>(@"INSERT INTO 
-             EcsDocs.dbo.CustomerUrl
-             (CustomerId,link,IsMain)
-            VALUES
-            (@CustomerId,@link,@isMain)",
+            var urlId = Task.FromResult(_dapperManager.Insert<int>(@"INSERT INTO EcsDocs.dbo.CustomerUrl (CustomerId,link,IsMain) VALUES      (@CustomerId,@link,@isMain)",
                 dbPara,
                 commandType: CommandType.Text));
             return urlId;
