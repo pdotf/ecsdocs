@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace EcsDataManager.Concrete
 {
-    public class ApnCustomerManager: IApnCustomerManager<ApnCustomers>
+    public class ApnCustomerManager : IApnCustomerManager<ApnCustomers>
     {
         private readonly IDapperManager _dapperManager;
 
@@ -30,28 +30,20 @@ namespace EcsDataManager.Concrete
             var dbPara = new DynamicParameters();
             //CustomerName,Tel,Mobile,OwnerTeam,ServiceType,ServiceTopology,AccountManager,IpHQ,AAAGroup,IpTunnel,WanIpRange,LanIpRange,VRF,VpnToolsName
             dbPara.Add("CustomerName", customers.CustomerName, DbType.String);
-            dbPara.Add("Tel", customers.Tel, DbType.String);
+            dbPara.Add("Tell", customers.Tell, DbType.String);
             dbPara.Add("Mobile", customers.Mobile, DbType.String);
             dbPara.Add("OwnerTeam", customers.OwnerTeam, DbType.String);
-            dbPara.Add("ServiceType", customers.ServiceType, DbType.String);
-            dbPara.Add("ServiceTopology", customers.ServiceTopology, DbType.String);
-            dbPara.Add("AccountManager", customers.AccountManager, DbType.String);
-            dbPara.Add("IpHQ", customers.IpHQ, DbType.String);
-            dbPara.Add("AAAGroup", customers.AAAGroup, DbType.String);
-            dbPara.Add("IpTunnel", customers.IpTunnel, DbType.String);
             dbPara.Add("WanIpRange", customers.WanIpRange, DbType.String);
-            dbPara.Add("LanIpRange", customers.LanIpRange, DbType.String);
-            dbPara.Add("VRF", customers.VRF, DbType.String);
-            dbPara.Add("VpnToolsName", customers.VpnToolsName, DbType.String);
-            dbPara.Add("APN", customers.APN, DbType.String);
+            dbPara.Add("AccessList", customers.AccessList, DbType.String);
+            dbPara.Add("NumberOfSimCard", customers.NumberOfSimCard, DbType.String);
             dbPara.Add("Comment", customers.Comment, DbType.String);
 
 
             var articleId = Task.FromResult(_dapperManager.Insert<int>(@"INSERT INTO 
              EcsDocs.dbo.ApnCustomers
-             (CustomerName,Tel,Mobile,OwnerTeam,ServiceType,ServiceTopology,AccountManager,IpHQ,AAAGroup,IpTunnel,WanIpRange,LanIpRange,VRF,VpnToolsName,APN,Comment)
+             (CustomerName,Tell,Mobile,OwnerTeam,WanIpRange,AccessList,NumberOfSimCard,Comment)
             VALUES
-            (@CustomerName,@Tel,@Mobile,@OwnerTeam,@ServiceType,@ServiceTopology,@AccountManager,@IpHQ,@AAAGroup,@IpTunnel,@WanIpRange,@LanIpRange,@VRF,@VpnToolsName,@APN,@Comment);SELECT CAST(SCOPE_IDENTITY() as int)",
+            (@CustomerName,@Tell,@Mobile,@OwnerTeam,@WanIpRange,@AccessList,@NumberOfSimCard,@Comment);SELECT CAST(SCOPE_IDENTITY() as int)",
                             dbPara,
                             commandType: CommandType.Text));
 
@@ -96,27 +88,18 @@ namespace EcsDataManager.Concrete
         public Task<int> Update(ApnCustomers customers)
         {
             var dbPara = new DynamicParameters();
-            dbPara.Add("Id", customers.Id, DbType.Int32);
             dbPara.Add("CustomerName", customers.CustomerName, DbType.String);
-            dbPara.Add("Tel", customers.Tel, DbType.String);
+            dbPara.Add("Tell", customers.Tell, DbType.String);
             dbPara.Add("Mobile", customers.Mobile, DbType.String);
             dbPara.Add("OwnerTeam", customers.OwnerTeam, DbType.String);
-            dbPara.Add("ServiceType", customers.ServiceType, DbType.String);
-            dbPara.Add("ServiceTopology", customers.ServiceTopology, DbType.String);
-            dbPara.Add("AccountManager", customers.AccountManager, DbType.String);
-            dbPara.Add("IpHQ", customers.IpHQ, DbType.String);
-            dbPara.Add("AAAGroup", customers.AAAGroup, DbType.String);
-            dbPara.Add("IpTunnel", customers.IpTunnel, DbType.String);
             dbPara.Add("WanIpRange", customers.WanIpRange, DbType.String);
-            dbPara.Add("LanIpRange", customers.LanIpRange, DbType.String);
-            dbPara.Add("VRF", customers.VRF, DbType.String);
-            dbPara.Add("VpnToolsName", customers.VpnToolsName, DbType.String);
-            dbPara.Add("APN", customers.APN, DbType.String);
+            dbPara.Add("AccessList", customers.AccessList, DbType.String);
+            dbPara.Add("NumberOfSimCard", customers.NumberOfSimCard, DbType.String);
+            dbPara.Add("Comment", customers.Comment, DbType.String);
 
 
 
-
-            var updateArticle = Task.FromResult(_dapperManager.Update<int>("Sp_UpdateCustomer",
+            var updateArticle = Task.FromResult(_dapperManager.Update<int>("Sp_UpdateApnCustomer",
                 dbPara,
                 commandType: CommandType.StoredProcedure));
             return updateArticle;
@@ -128,7 +111,7 @@ namespace EcsDataManager.Concrete
                 commandType: CommandType.Text);
             return article;
         }
- 
+
 
         public Task<List<ApnCustomers>> ListAllWithoutPaging(string orderBy, string direction, string search)
         {
@@ -137,6 +120,6 @@ namespace EcsDataManager.Concrete
             return articles;
         }
 
-        
+
     }
 }

@@ -42,7 +42,10 @@ namespace EcsDataManager.Entities
 
         public string Comment { get; set; }
 
-         
+        public string AccessList { get; set; }
+
+
+
 
 
     }

@@ -1,10 +1,8 @@
-﻿@page "/apncustomer"
-@page "/apncustomer/{customerID:int}"
+﻿@page "/apncustomers/customer"
+@page "/apncustomers/customer/{customerID:int}"
 @using EcsDataManager.Contracts
 @using EcsDataManager.Entities
-@inject ICustomersManager<Customers> CustomerManager
-@inject ICustomerUrlManager CUrlManager
-@inject IDeviceManager DeviceManager
+@inject IApnCustomerManager<ApnCustomers> CustomerManager
 @inject NavigationManager NavigationManager
 @inject IJSRuntime JSRuntime
 
@@ -31,7 +29,7 @@ else
 
     <div class="container-fluid">
         <div>
-            @*ShowAddDevice(_customerEntity.id) OpenAddDevice()*@
+            @*ShowAddDevice(_customerEntity.Id) OpenAddDevice()*@
 
 
             <AuthorizeView>
@@ -39,368 +37,138 @@ else
 
                     @if (@context.User.IsInRole(ADMINISTRATION_ROLE))
                     {
-                        <button @onclick="async() => ShowEditCustomer(_customerEntity.id).ConfigureAwait(true)" class="btn btn-primary">Edit</button>
-                        <button @onclick="async() =>  ShowAddDevice(_customerEntity.id)" class="btn btn-success">Add Device</button>
-                        <button @onclick="async() => Deletecustomer(_customerEntity.id)" class="btn btn-danger">Delete Customer</button>
-                        <button @onclick="async() => ShowUpdateCommentPage(_customerEntity.id)" class="btn btn-warning">Update Comment</button>
+                        <button @onclick="async() => ShowEditCustomer(_customerEntity.Id).ConfigureAwait(true)" class="btn btn-primary">Edit</button>
+                        <button @onclick="async() => Deletecustomer(_customerEntity.Id)" class="btn btn-danger">Delete Customer</button>
+                        <button @onclick="async() => ShowUpdateCommentPage(_customerEntity.Id)" class="btn btn-warning">Update Comment</button>
 
-                        if (string.IsNullOrWhiteSpace(_customerUrlEntity?.link)==true)
-                        {
-                            <button @onclick="async () => AddLinkPopUp()" class="btn btn-light">Add Link</button>
-                        }
-                        else
-                        {
-                            <button @onclick="async() => OpenLink()" class="btn btn-light">Nagios</button>
-                        }
                     }
                     else if (@context.User.IsInRole("Users"))
                     {
-                        <button @onclick="async() => ShowUpdateCommentPage(_customerEntity.id)" class="btn btn-warning">Update Comment</button>
+                        <button @onclick="async() => ShowUpdateCommentPage(_customerEntity.Id)" class="btn btn-warning">Update Comment</button>
                     }
                 </Authorized>
             </AuthorizeView>
 
-            @if (ShowPopup)
-            {
-                <EditForm Model="@_customerUrlEntity" OnValidSubmit="AddLink">
-                    <DataAnnotationsValidator />
-                    <!-- This is the popup to create or edit a user -->
-                    <div class="modal" tabindex="-1" style="display:block" role="dialog">
-                        <div class="modal-dialog">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h3 class="modal-title"><dfn>Add Url link</dfn></h3>
-                                    <!-- Button to close the popup -->
-                                    <button type="button" class="close"
-                                            @onclick="ClosePopup">
-                                        <span aria-hidden="true">X</span>
-                                    </button>
-                                </div>
-                                <!-- Edit form for the current user -->
-                                <div class="modal-body">
-
-                                    <!-- Only show Id if not a new user -->
-                                    @if (_customerUrlEntity.id != 0)
-                                    {
-                                        <p>@_customerUrlEntity.id</p>
-                                    }
-                                    <!-- Only allow edit if a new user -->
-                                    @if (_customerUrlEntity.customerId != 0)
-                                    {
-                                        <p>@_customerUrlEntity.customerId</p>
-                                    }
-                                    else
-                                    {
-
-                                        <InputText @bind-Value="_customerUrlEntity.link" />
-                                        <ValidationMessage For="@(() => _customerUrlEntity.link)" />
-
-                                    }
-
-                                    <br /><br />
-
-                                    <!-- Button to save the user -->
-                                    <button type="submit" class="btn btn-primary">
-                                        Save
-                                    </button>
-
-                                    <!-- Only show delete button if not a new record -->
-                                    @if (_customerUrlEntity.id != 0)
-                                    {
-                                        <!-- Button to delete the forecast -->
-                                        <button class="btn btn-danger">
-                                            Delete
-                                        </button>
-                                        @*@onclick= "DeleteUser"*@
-                                    }
-                                    <br />
-                                    <span style="color:red">@errorStr</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </EditForm>
-            }
-
-
         </div>
-
-        <MatList SingleSelection="true" TwoLine="true" @bind-value="@_customerFullDataModel.id">
+        <br />
+        <br />
+        <Card>
             <div class="row">
-                <div class="col-md-6">
-                    <Field>
-                        <FieldLabel>
-                            @nameof(_customerFullDataModel.CustomerName)
-
-                        </FieldLabel>
-                        <Field><span style="color:green">@_customerFullDataModel.CustomerName</span></Field>
-                    </Field>
-
-                    <Field>
-                        <FieldLabel>
-                            Tell
-
-                        </FieldLabel>
-                        <Field><span style="color:green">@_customerFullDataModel.Tel</span></Field>
-                    </Field>
+                <div class="col-md-2">
+                    <h6>
+                        Customer Name:
+                    </h6>
                 </div>
-                <div class="col-md-6">
-                    <Field>
-                        <FieldLabel>
-                            @nameof(_customerFullDataModel.Mobile)
-
-                        </FieldLabel>
-                        <Field><span style="color:green">@_customerFullDataModel.Mobile</span></Field>
-                    </Field>
-
-                    <Field>
-                        <FieldLabel>
-                            @nameof(_customerFullDataModel.OwnerTeam)
-                        </FieldLabel>
-                        <Field><span style="color:green">@_customerFullDataModel.OwnerTeam</span></Field>
-
-                    </Field>
+                <div class="col-md-10">
+                    <h6>
+                        <span style="color:green">@_customerFullDataModel.CustomerName</span>
+                    </h6>
                 </div>
             </div>
-            <Divider Type="DividerType.Dotted" />
+            <br />
+            
             <div class="row">
-                <div class="col-md-3">
-                    <Field>
-                        <FieldLabel>
-                            @nameof(_customerFullDataModel.ServiceType)
-                        </FieldLabel>
-                        <Field><span style="color:green">@_customerFullDataModel.ServiceType</span></Field>
+                <div class="col-md-2">
+                    <h6>
+                        Tell:
 
-                    </Field>
-
-                    <Field>
-                        <FieldLabel>
-                            @nameof(_customerFullDataModel.ServiceTopology)
-                        </FieldLabel>
-                        <Field><span style="color:green">@_customerFullDataModel.ServiceTopology</span></Field>
-
-                    </Field>
+                    </h6>
                 </div>
-                <div class="col-md-3">
-                    <Field>
-                        <FieldLabel>
-                            @nameof(_customerFullDataModel.AccountManager)
-
-                        </FieldLabel>
-                        <Field><span style="color:green">@_customerFullDataModel.AccountManager</span></Field>
-                    </Field>
-                    <Field>
-                        <FieldLabel>
-                            @nameof(_customerFullDataModel.IpHQ)
-
-                        </FieldLabel>
-                        <Field><span style="color:green">@_customerFullDataModel.IpHQ</span></Field>
-                    </Field>
-                </div>
-                <div class="col-md-3">
-                    <Field>
-                        <FieldLabel>
-                            @nameof(_customerFullDataModel.AAAGroup)
-                        </FieldLabel>
-                        <Field><span style="color:green">@_customerFullDataModel.AAAGroup</span></Field>
-
-                    </Field>
-                    <Field>
-                        <FieldLabel>
-                            @nameof(_customerFullDataModel.IpTunnel)
-                        </FieldLabel>
-                        <Field><span style="color:green">@_customerFullDataModel.IpTunnel</span></Field>
-
-                    </Field>
-                </div>
-                <div class="col-md-3">
-                    <Field>
-                        <FieldLabel>
-                            @nameof(_customerFullDataModel.WanIpRange)
-                        </FieldLabel>
-                        <Field><span style="color:green">@_customerFullDataModel.WanIpRange</span></Field>
-
-                    </Field>
-                    <Field>
-                        <FieldLabel>
-                            @nameof(_customerFullDataModel.LanIpRange)
-                        </FieldLabel>
-                        <Field><span style="color:green">@_customerFullDataModel.LanIpRange</span></Field>
-
-                    </Field>
+                <div class="col-md-10">
+                    <h6>
+                        <span style="color:green">@_customerFullDataModel.Tell</span>
+                    </h6>
                 </div>
             </div>
+            <br />
+           
             <div class="row">
-                <div class="col-md-3">
-                    <Field>
-                        <FieldLabel>
-                            @nameof(_customerFullDataModel.VRF)
-                        </FieldLabel>
-                        <Field><span style="color:green">@_customerFullDataModel.VRF</span></Field>
-
-                    </Field>
-                    <Field>
-                        <FieldLabel>
-                            @nameof(_customerFullDataModel.VpnToolsName)
-                        </FieldLabel>
-                        <Field><span style="color:green">@_customerFullDataModel.VpnToolsName</span></Field>
-
-                    </Field>
+                <div class="col-md-2">
+                    <h6>
+                        Mobile:
+                    </h6>
                 </div>
-                <div class="col-md-3">
-                    <Field>
-                        <FieldLabel>
-                            @nameof(_customerFullDataModel.APN)
-                        </FieldLabel>
-                        <Field><span style="color:green">@_customerFullDataModel.APN</span></Field>
-
-                    </Field>
+                <div class="col-md-10">
+                    <h6><span style="color:green">@_customerFullDataModel.Mobile</span></h6>
                 </div>
             </div>
+            <br />
+            
             <div class="row">
-                <div class="col-md-8">
+                <div class="col-md-2">
+                    <h6>
+                        Owner Team:
+                    </h6>
+                </div>
+                <div class="col-md-10">
+                    <h6><span style="color:green">@_customerFullDataModel.OwnerTeam</span></h6>
+                </div>
+            </div>
+            <br />
+            
+
+            <div class="row">
+                <div class="col-md-2">
+                    <h6>
+                        Wan Ip Range:
+                    </h6>
+                </div>
+                <div class="col-md-10">
+                    <h6><span style="color:green">@_customerFullDataModel.WanIpRange</span></h6>
+                </div>
+            </div>
+            <br />
+            
+            <div class="row">
+                <div class="col-md-2">
+                    <h6>
+                      Access List:
+                    </h6>
+                </div>
+                <div class="col-md-10">
+                    <h6>
+                        <span style="color:green">@_customerFullDataModel.AccessList</span>
+                    </h6>
+                </div>
+            </div>
+            <br />
+           
+            <div class="row">
+                <div class="col-md-2">
+                    <h6>
+                        Number Of SimCard:
+
+                    </h6>
+                </div>
+                <div class="col-md-10"><h6><span style="color:green">@_customerFullDataModel.NumberOfSimCard</span></h6></div>
+            </div>
+            <br />
+            <br />
+            <br />
+            
+            <div class="row">
+                <div class="col-md-10">
                     <h4>
                         @nameof(_customerFullDataModel.Comment)
                     </h4>
                     <textarea readonly class="block-with-text" cols="110" rows="30" dir="rtl" style="color:green;width:auto;overflow-y: scroll;">@_customerFullDataModel.Comment</textarea>
                 </div>
             </div>
-        </MatList>
-        @if (_dev == null)
-        {
-            <p>No Devices Found for customer</p>
-        }
-        else
-        {
-            <br />
-            <br />
-            <h3>Main Radio :</h3>
-            <div class="row">
-                <div class="col-md-3">
-
-                    <Field>
-                        <FieldLabel>
-                            @nameof(_dev.RadioName)
-                        </FieldLabel>
-                        <Field><span style="color:green">@_dev.RadioName</span></Field>
-
-                    </Field>
-                    <Field>
-                        <FieldLabel>
-                            @nameof(_dev.RadioIp)
-                        </FieldLabel>
-                        <Field><span style="color:green">@_dev.RadioIp</span></Field>
-
-                    </Field>
-                </div>
-                <div class="col-md-3">
-                    <Field>
-                        <FieldLabel>
-                            @nameof(_dev.RadioModel)
-                        </FieldLabel>
-                        <Field><span style="color:green">@_dev.RadioModel</span></Field>
-
-                    </Field>
-                    <Field>
-                        <FieldLabel>
-                            @nameof(_dev.RadioMetroSite)
-                        </FieldLabel>
-                        <Field><span style="color:green">@_dev.RadioMetroSite</span></Field>
-
-                    </Field>
-                </div>
-            </div>
 
 
 
-            <input type="hidden" @bind-value="@_customerEntity.id" />
-            <h3>Backup Radio :</h3>
-            @if (_devices == null)
-            {
-                <p>
-                    No Extra Devices Found for customer
-                </p>
-            }
-            else
-            {
-                @foreach (var item in _devices)
-                {
-                    <Card>
-                        <div class="row">
-
-                            <div class="col-md-3">
-                                <h6>Radio Name:</h6>
-                            </div>
-                            <div class="col-md-7">
-                                <h6><span style="color:green">@item.RadioName</span></h6>
-                            </div>
-
-                        </div>
-                        <div class="row">
-                            <div class="col-md-3">
-                                <h6>Radio IP:</h6>
-                            </div>
-                            <div class="col-md-6">
-                                <h6><span style="color:green">@item.RadioIp</span></h6>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-3">
-                                <h6>
-                                    Radio Metro Site:
-                                </h6>
-                            </div>
-                            <div class="col-md-6">
-                                <h6><span style="color:green">@item.RadioMetroSite</span></h6>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-3">
-                                <h6>
-                                    Radio Model:
-                                </h6>
-                            </div>
-                            <div class="col-md-6">
-                                <h6><span style="color:green">@item.RadioModel</span></h6>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-3">
-                                <h6>
-                                    Backup Activation:
-                                </h6>
-                            </div>
-                            <div class="col-md-6">
-                                <h6><span style="color:green">@item.IsAutomatic</span></h6>
-                            </div>
-                        </div>
-
-                        <AuthorizeView>
-                            <Authorized>
-                                @if (@context.User.IsInRole(ADMINISTRATION_ROLE))
-                                {
-                                    <div class="row">
-                                        <div class="col-md-2 float-right">
-                                            <Button Color="Color.Success" Clicked="async () => ShowEditDevice(item.Id)">Edit</Button>
-                                            <Button Color="Color.Danger" Clicked="async () => DeleteDevice(item.Id)">Delete</Button>
-                                        </div>
-                                    </div>
-                                }
-                            </Authorized>
-                        </AuthorizeView>
-                    </Card>
-
-                }
-                
-            }
 
 
-        }
 
+            <input type="hidden" @bind-value="@_customerEntity.Id" />
 
+        </Card>
     </div>
-
 }
+
+
+
+           
 
 
 
@@ -413,16 +181,12 @@ else
     [CascadingParameter] public IModalService Modal { get; set; }
     //[CascadingParameter] BlazoredModalInstance BlazoredModal { get; set; }
 
-    [Parameter] public int ID { get; set; }
+    [Parameter] public int Id { get; set; }
     [Parameter] public int CustomerID { get; set; }
-    Customers _customerModel;
-    Customers _customerEntity = new Customers();
-    CustomerUrl _customerUrlEntity = new CustomerUrl();
+    ApnCustomers _customerModel;
+    ApnCustomers _customerEntity = new ApnCustomers();
 
-    Customers _customerFullDataModel = new Customers();
-    List<DeviceList> _devices = new List<DeviceList>();
-    DeviceList _dev = new DeviceList();
-    DeviceList _devlist = new DeviceList();
+    ApnCustomers _customerFullDataModel = new ApnCustomers();
 
     //DeviceList device = new DeviceList();
     string errorString;
@@ -431,7 +195,7 @@ else
 
     int _curPage;
 
-    string _sortColumnName = "ID";
+    string _sortColumnName = "Id";
     string _sortDir = "DESC";
 
     #endregion
@@ -451,25 +215,12 @@ else
         errorString = null;
 
     }
-    async Task OpenAddDevice()
-    {
-        _devlist = new DeviceList();
-        ShowPopup = true;
 
-    }
     private void HandleValidSubmit()
     {
         Console.WriteLine("OnValidSubmit");
     }
-    protected async Task CreateDevice(int id)
-    {
-        ShowPopup = false;
-        _devlist.CustomerId = id;
-        var state = await DeviceManager.AddDevice(_devlist, null);
 
-        //NavigationManager.NavigateTo(uri: state != 0 ? "/Error" : "/customer" + "/" + id.ToString(), true);
-
-    }
     public async Task NavigateToUrlAsync(string url, bool openInNewTab)
     {
         if (openInNewTab)
@@ -481,49 +232,16 @@ else
             this.NavigationManager.NavigateTo(url);
         }
     }
-    protected async Task OpenLink()
-    {
-        NavigateToUrlAsync(_customerUrlEntity.link, true);
 
-    }
-    protected async Task AddLinkPopUp()
-    {
-
-        _customerUrlEntity = new CustomerUrl();
-        ShowPopup = true;
-
-    }
     string errorStr;
-    protected async Task AddLink()
-    {
-        var check = await CUrlManager.GetMainUrlById(CustomerID);
-        var check2 =  _customerUrlEntity.link;
-        if (check?.customerId == null)
-        {
-            _customerUrlEntity.customerId = CustomerID;
 
-            var urlState = await CUrlManager.AddUrl(_customerUrlEntity, 1);
-            errorStr = null;
-            ShowPopup = false;
-        }
-        else
-        {
-            errorStr = "link is exists";
-        }
-
-
-    }
     protected override async Task OnInitializedAsync()
     {
         try
         {
             _customerEntity = await CustomerManager.GetById(CustomerID);
-            _customerUrlEntity = await CUrlManager.GetMainUrlById(CustomerID);
             _customerFullDataModel = await CustomerManager.GetById(CustomerID);
-            _devices = await DeviceManager?.GetDeviceByCustomerId(CustomerID);
-            _dev = await DeviceManager?.GetMainDeviceById(CustomerID);
 
-            total = _devices?.Count();
             errorString = null;
 
         }
@@ -534,63 +252,46 @@ else
         }
     }
 
-    protected async Task ShowEditCustomer(int id)
+    protected async Task ShowEditCustomer(int Id)
     {
 
         //var parameters = new ModalParameters();
-        //parameters.Add(nameof(EditCustomer.CustomerID), id);
+        //parameters.Add(nameof(EditCustomer.CustomerID), Id);
         //parameters.Add(nameof(EditCustomer.CustomerID), CustomerID);
         //Modal.Show<EditCustomer>("Edit Customer", parameters);
         NavigationManager.NavigateTo("/EditCustomer" + "/" + CustomerID, true);
     }
 
-    protected async Task ShowEditDevice(int id)
-    {
-        try
-        {
-            var parameters = new ModalParameters();
-            parameters.Add(nameof(DeviceEdit.ID), id);
-            //DeviceManager.GetDeviceById();
-            Modal.Show<DeviceEdit>("Edit Device", parameters);
-            errorString = null;
 
-        }
-        catch (System.Exception ex)
-        {
-
-            errorString = ex.Message;
-        }
-
-    }
-    protected async Task ShowAddDevice(int id)
+    protected async Task ShowAddDevice(int Id)
     {
         var parameters = new ModalParameters();
-        parameters.Add(nameof(DeviceAdd.CustomerID), id);
+        parameters.Add(nameof(DeviceAdd.CustomerID), Id);
 
         Modal.Show<DeviceAdd>($"Add Device", parameters);
         //NavigationManager.NavigateTo($"/addDevice/{CustomerID}", false);
     }
-    protected async Task UpdateCustomers(int id)
+    protected async Task UpdateCustomers(int Id)
     {
 
         await CustomerManager.Update(_customerEntity);
-        //await BlazoredModal.Close(ModalResult.Ok<Customers>(_customerEntity));
+        //await BlazoredModal.Close(ModalResult.Ok<ApnCustomers>(_customerEntity));
         //RefreshRecords(currentPage);
         NavigationManager.NavigateTo($"/customer/{CustomerID}", true);
     }
-    protected async Task Deletecustomer(int id)
+    protected async Task Deletecustomer(int Id)
     {
         /* var parameters = new ModalParameters();
-        parameters.Add(nameof(EditCustomer.CustomerID), id); */
-        await CustomerManager.Delete(id);
-        _customerModel = await CustomerManager.GetById(ID);
+        parameters.Add(nameof(EditCustomer.CustomerID), Id); */
+        await CustomerManager.Delete(Id);
+        _customerModel = await CustomerManager.GetById(Id);
         NavigationManager.NavigateTo("/vpncustomerlist", true);
     }
-    protected async Task ShowUpdateCommentPage(int id)
+    protected async Task ShowUpdateCommentPage(int Id)
     {
         try
         {
-            NavigationManager.NavigateTo("/customer" + "/" + id + "/" + "CostumerCommentEdit", true);
+            NavigationManager.NavigateTo("/customer" + "/" + Id + "/" + "CostumerCommentEdit", true);
             errorString = null;
 
         }
@@ -600,11 +301,7 @@ else
             errorString = ex.Message;
         }
     }
-    protected async Task DeleteDevice(int id)
-    {
-        await DeviceManager.Delete(id);
-        NavigationManager.NavigateTo($"/customer/{CustomerID}", true);
-    }
+
 
     async Task Cancel()
     {
@@ -658,7 +355,7 @@ else
 
     public async Task RefreshRecords(int currentPage)
     {
-        _customerModel = await CustomerManager.GetById(ID);
+        _customerModel = await CustomerManager.GetById(Id);
         _curPage = currentPage;
         this.StateHasChanged();
     }

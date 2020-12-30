@@ -43,10 +43,10 @@ else
             @*<DataGridColumn TItem="Customers" Field="@nameof(ApnCustomers.RowNumber)" Caption="#" />*@
             <DataGridColumn TItem="ApnCustomers" Field="@nameof(ApnCustomers.CustomerName)" Caption="Customer Name" />
             <DataGridColumn TItem="ApnCustomers" Field="@nameof(ApnCustomers.OwnerTeam)" Caption="Owner Team" />
-            <DataGridColumn TItem="ApnCustomers" Field="@nameof(ApnCustomers.ServiceType)" Caption="Service Type" />
-            <DataGridColumn TItem="ApnCustomers" Field="@nameof(ApnCustomers.ServiceTopology)" Caption="Service Topology" />
-            <DataGridColumn TItem="ApnCustomers" Field="@nameof(ApnCustomers.ServiceTopology)" Caption="Account Manager" />
-            <DataGridColumn TItem="ApnCustomers" Field="@nameof(ApnCustomers.AccountManager)" Caption="Action">
+            <DataGridColumn TItem="ApnCustomers" Field="@nameof(ApnCustomers.WanIpRange)" Caption="Wan Ip Range" />
+            <DataGridColumn TItem="ApnCustomers" Field="@nameof(ApnCustomers.NumberOfSimCard)" Caption="Number Of SimCard" />
+            
+            <DataGridColumn TItem="ApnCustomers" Field="@nameof(ApnCustomers.Id)" Caption="Action">
                 <DisplayTemplate>
                     <Button Color="Color.Success" Clicked="async() => ShowCustomerDetail(context.Id).ConfigureAwait(true)">Detail</Button>
                 </DisplayTemplate>
