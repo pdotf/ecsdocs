@@ -23,6 +23,7 @@ using System.Threading.Tasks;
 using Blazorise;
 using Blazorise.Bootstrap;
 using Blazorise.Icons.FontAwesome;
+using EcsDataManager.Entities;
 
 namespace ECSDocs
 {
@@ -71,9 +72,10 @@ namespace ECSDocs
             services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<IdentityUser>>();
             services.AddDatabaseDeveloperPageExceptionFilter();
             services.AddSingleton<WeatherForecastService>();
-            services.AddScoped<ICustomersManager, CustomersManager>();
+            services.AddScoped<ICustomersManager<Customers>, CustomersManager>();
+            services.AddScoped<IApnCustomerManager<ApnCustomers>, ApnCustomerManager>();
             services.AddScoped<IDeviceManager, DeviceManager>();
-            services.AddScoped<ICustomer, CustomersManager>();
+            services.AddScoped<ICustomer<Customers>, CustomersManager>();
             services.AddScoped<ICustomerUrlManager, CustomerUrlManager>();
 
             //Register dapper in scope  

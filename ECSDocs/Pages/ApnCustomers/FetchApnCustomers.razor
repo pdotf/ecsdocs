@@ -1,0 +1,125 @@
+﻿@page "/ApnCustomers/customerlist"
+@inject EcsDataManager.Contracts.IApnCustomerManager<ApnCustomers> ApnCustomerManager
+@using EcsDataManager.Contracts
+@using EcsDataManager.Concrete
+@using EcsDataManager.Entities
+@inject NavigationManager NavigationManager
+@*<link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">*@
+
+<div class="container-fluid">
+    <div class="row">
+        @*<button class="btn btn-success" @onclick="@(() => Modal.Show<addVpnCustomer>("Add customer"))">Add Customer</button>*@
+        <div class="col-md-2 float-left"><button class="btn btn-success" @onclick="@(()=> GoToAddApnCustomer())">Add Customer</button></div>
+        <div class="col-md-6 float-right">
+            <div class="dropdown">
+                <button data-toggle="dropdown" class="btn btn-success">Export</button>
+                <div class="dropdown-menu">
+                    Excel
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<br />
+
+@if (_apnCustomerModel == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+
+    <div class="float-left">
+        <input type="text" id="txtSearch" placeholder="Search Customer name..." class="form-control" @bind="SearchTerm" @bind:event="oninput" />
+
+    </div>
+    <br />
+    <br />
+    <div>
+        <DataGrid TItem="ApnCustomers"
+                  Data="@_apnCustomerModel"
+                  ReadData="@OnReadData"
+                  TotalItems="@totalcustomers" Hoverable="true" SelectedRowStyling="@OnSelectedRowStyling" Editable="true" Sortable="true" Striped="true">
+            @*<DataGridColumn TItem="Customers" Field="@nameof(ApnCustomers.RowNumber)" Caption="#" />*@
+            <DataGridColumn TItem="ApnCustomers" Field="@nameof(ApnCustomers.CustomerName)" Caption="Customer Name" />
+            <DataGridColumn TItem="ApnCustomers" Field="@nameof(ApnCustomers.OwnerTeam)" Caption="Owner Team" />
+            <DataGridColumn TItem="ApnCustomers" Field="@nameof(ApnCustomers.ServiceType)" Caption="Service Type" />
+            <DataGridColumn TItem="ApnCustomers" Field="@nameof(ApnCustomers.ServiceTopology)" Caption="Service Topology" />
+            <DataGridColumn TItem="ApnCustomers" Field="@nameof(ApnCustomers.ServiceTopology)" Caption="Account Manager" />
+            <DataGridColumn TItem="ApnCustomers" Field="@nameof(ApnCustomers.AccountManager)" Caption="Action">
+                <DisplayTemplate>
+                    <Button Color="Color.Success" Clicked="async() => ShowCustomerDetail(context.Id).ConfigureAwait(true)">Detail</Button>
+                </DisplayTemplate>
+            </DataGridColumn>
+
+        </DataGrid>
+    </div>
+
+
+}
+
+
+@code {
+
+    int endPage;
+    private string searchTerm;
+    private string SearchTerm
+    {
+        get { return searchTerm; }
+        set { searchTerm = value; FilterRecords(); }
+    }
+    List<ApnCustomers> _apnCustomerModel = new List<ApnCustomers>();
+    ApnCustomers _customerEntity = new ApnCustomers();
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        _apnCustomerModel = await ApnCustomerManager.ListAllWithoutPaging("", "", "");
+
+
+    }
+    protected async Task GoToAddApnCustomer()
+    {
+        NavigationManager.NavigateTo("ApnCustomers/addCustomer", true);
+    }
+    void OnSelectedRowStyling(ApnCustomers employee, DataGridRowStyling styling)
+    {
+        styling.Background = Background.Transparent;
+    }
+    string errorStr;
+    protected async Task ShowCustomerDetail(int id)
+    {
+
+        _customerEntity = await ApnCustomerManager?.GetById(id);
+        try
+        {
+            NavigationManager.NavigateTo($"ApnCustomers/Customer/{id}", true);
+            errorStr = null;
+
+        }
+        catch (Exception ex)
+        {
+
+            errorStr = ex.Message;
+        }
+    }
+
+    int totalcustomers;
+    async Task OnReadData(DataGridReadDataEventArgs<ApnCustomers> e)
+    {
+        // this can be call to anything, in this case we're calling a fictional api
+        // var response = await Http.GetJsonAsync<Customers[]>($"some-api/Customerss?page={e.Page}&pageSize={e.PageSize}");
+
+        _apnCustomerModel = await ApnCustomerManager.ListAllWithoutPaging("", "", "");
+        totalcustomers = _apnCustomerModel.Count();
+
+        // always call StateHasChanged!
+        StateHasChanged();
+    }
+    public void FilterRecords()
+    {
+        endPage = 0;
+        this.OnInitializedAsync().Wait();
+    }
+
+}

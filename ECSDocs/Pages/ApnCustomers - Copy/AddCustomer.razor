@@ -1,8 +1,8 @@
-﻿@page "/addVpnCustomer"
+﻿@page "/ApnCustomers/addCustomer"
 @using EcsDataManager.Contracts
 @using EcsDataManager.Entities
 @inject IDeviceManager DeviceManager
-@inject ICustomersManager<Customers> customerManager
+@inject IApnCustomerManager<ApnCustomers> customerManager
 @inject Microsoft.AspNetCore.Components.NavigationManager navigationManager
 <Alert Color="Color.Success" @ref="Success">
     <AlertMessage>Well done!</AlertMessage>
@@ -156,7 +156,7 @@
                 </div>
             </div>
             <div class="row">
-                <input style="width:100%" type="hidden" @bind-value="@_customer.id" />
+                <input style="width:100%" type="hidden" @bind-value="@_customer.Id" />
             </div>
          
          
@@ -219,8 +219,8 @@
 @code {
 
     [CascadingParameter] public IModalService Modal { get; set; }
-    List<Customers> Customers = new List<Customers>();
-    Customers _customer = new Customers();
+    List<ApnCustomers> Customers = new List<ApnCustomers>();
+    ApnCustomers _customer = new ApnCustomers();
     DeviceList _devices = new DeviceList();
 
     Alert Success;
@@ -236,7 +236,7 @@
             {
                 _devices.CustomerId = cc;
                 var deviceState = await DeviceManager.AddDevice(_devices, 1);
-                navigationManager.NavigateTo($@"/vpncustomerlist", true);
+                navigationManager.NavigateTo($@"ApnCustomers/customerlist", true);
                 snackbar.Show();
             }
 
@@ -257,6 +257,6 @@
 
     void Cancel()
     {
-        navigationManager.NavigateTo("/vpncustomerlist");
+        navigationManager.NavigateTo("ApnCustomers/customerlist");
     }
 }

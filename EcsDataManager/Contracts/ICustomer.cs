@@ -7,11 +7,11 @@ using EcsDataManager.Entities;
 
 namespace EcsDataManager.Contracts
 {
-    public interface ICustomer
+    public interface ICustomer<T>
     {
 
-        Customers GetCustomerById(int Id);
-        Task<int> UpdateComment(Customers customers);
+        T GetCustomerById(int Id);
+        Task<int> UpdateComment(T customers);
 
     }
 }
