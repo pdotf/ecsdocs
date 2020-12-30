@@ -30,7 +30,7 @@
 
     <MatNavSubMenu @bind-Expanded="@navSubMenuOpenState">
         <MatNavSubMenuHeader>
-            <MatNavItem AllowSelection="false"><MatIcon Icon="router"></MatIcon> VPN</MatNavItem>
+            <MatNavItem AllowSelection="false"><MatIcon Icon="domain"></MatIcon> VPN</MatNavItem>
         </MatNavSubMenuHeader>
         <MatNavSubMenuList>
             <MatNavItem Href="/vpncustomerlist"><MatIcon Icon="list"></MatIcon>Customers</MatNavItem>
@@ -79,7 +79,26 @@
             </AuthorizeView>
         </MatNavSubMenuList>
     </MatNavSubMenu>
+    <MatNavSubMenu @bind-Expanded="@TANavOpenState">
+        <MatNavSubMenuHeader>
+            <MatNavItem AllowSelection="false"><MatIcon Icon="nature_people"></MatIcon> TA</MatNavItem>
+        </MatNavSubMenuHeader>
+        <MatNavSubMenuList>
+            <MatNavItem Href="/coordinatorlist"><MatIcon Icon="list"></MatIcon>Coordinator</MatNavItem>
 
+            <AuthorizeView>
+                <Authorized>
+                    @if (@context.User.IsInRole(ADMINISTRATION_ROLE))
+                    {
+                    <MatNavItem Href="/addCoordinator"><MatIcon Icon="person_add"></MatIcon> Add Coordinator</MatNavItem>
+                    }
+                </Authorized>
+            </AuthorizeView>
+        </MatNavSubMenuList>
+    </MatNavSubMenu>
+    <MatNavItem Href="/cpeinfo">
+        <MatIcon Icon="router"></MatIcon> CPE Models
+    </MatNavItem>
     <MatNavItem Href="/administration">
         <MatIcon Icon="settings"></MatIcon> Administration
     </MatNavItem>
@@ -94,7 +113,7 @@
     private bool expandSubNav;
     [Inject] IJSRuntime JS { get; set; }
 
-    bool navSubMenuOpenState; bool apnNavOpenState; bool IntrNavOpenState;
+    bool navSubMenuOpenState; bool apnNavOpenState; bool IntrNavOpenState;bool TANavOpenState;
 
     private string NavMenuCssClass => collapseNavMenu ? "collapse" : null;
 

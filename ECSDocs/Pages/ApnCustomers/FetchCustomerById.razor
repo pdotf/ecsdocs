@@ -1,8 +1,8 @@
-﻿@*@page "/customer"*@
-@page "/ApnCustomers/customer/{customerID:int}"
+﻿@page "/apncustomer"
+@page "/apncustomer/{customerID:int}"
 @using EcsDataManager.Contracts
 @using EcsDataManager.Entities
-@inject IApnCustomerManager<ApnCustomers> CustomerManager
+@inject ICustomersManager<Customers> CustomerManager
 @inject ICustomerUrlManager CUrlManager
 @inject IDeviceManager DeviceManager
 @inject NavigationManager NavigationManager
@@ -31,7 +31,7 @@ else
 
     <div class="container-fluid">
         <div>
-            @*ShowAddDevice(_customerEntity.Id) OpenAddDevice()*@
+            @*ShowAddDevice(_customerEntity.id) OpenAddDevice()*@
 
 
             <AuthorizeView>
@@ -39,10 +39,10 @@ else
 
                     @if (@context.User.IsInRole(ADMINISTRATION_ROLE))
                     {
-                        <button @onclick="async() => ShowEditCustomer(_customerEntity.Id).ConfigureAwait(true)" class="btn btn-primary">Edit</button>
-                        <button @onclick="async() =>  ShowAddDevice(_customerEntity.Id)" class="btn btn-success">Add Device</button>
-                        <button @onclick="async() => Deletecustomer(_customerEntity.Id)" class="btn btn-danger">Delete Customer</button>
-                        <button @onclick="async() => ShowUpdateCommentPage(_customerEntity.Id)" class="btn btn-warning">Update Comment</button>
+                        <button @onclick="async() => ShowEditCustomer(_customerEntity.id).ConfigureAwait(true)" class="btn btn-primary">Edit</button>
+                        <button @onclick="async() =>  ShowAddDevice(_customerEntity.id)" class="btn btn-success">Add Device</button>
+                        <button @onclick="async() => Deletecustomer(_customerEntity.id)" class="btn btn-danger">Delete Customer</button>
+                        <button @onclick="async() => ShowUpdateCommentPage(_customerEntity.id)" class="btn btn-warning">Update Comment</button>
 
                         if (string.IsNullOrWhiteSpace(_customerUrlEntity?.link)==true)
                         {
@@ -55,7 +55,7 @@ else
                     }
                     else if (@context.User.IsInRole("Users"))
                     {
-                        <button @onclick="async() => ShowUpdateCommentPage(_customerEntity.Id)" class="btn btn-warning">Update Comment</button>
+                        <button @onclick="async() => ShowUpdateCommentPage(_customerEntity.id)" class="btn btn-warning">Update Comment</button>
                     }
                 </Authorized>
             </AuthorizeView>
@@ -125,7 +125,7 @@ else
 
         </div>
 
-        <MatList SingleSelection="true" TwoLine="true" @bind-value="@_customerFullDataModel.Id">
+        <MatList SingleSelection="true" TwoLine="true" @bind-value="@_customerFullDataModel.id">
             <div class="row">
                 <div class="col-md-6">
                     <Field>
@@ -313,7 +313,7 @@ else
 
 
 
-            <input type="hidden" @bind-value="@_customerEntity.Id" />
+            <input type="hidden" @bind-value="@_customerEntity.id" />
             <h3>Backup Radio :</h3>
             @if (_devices == null)
             {
@@ -413,13 +413,13 @@ else
     [CascadingParameter] public IModalService Modal { get; set; }
     //[CascadingParameter] BlazoredModalInstance BlazoredModal { get; set; }
 
-    [Parameter] public int Id { get; set; }
+    [Parameter] public int ID { get; set; }
     [Parameter] public int CustomerID { get; set; }
-    ApnCustomers _customerModel;
-    ApnCustomers _customerEntity = new ApnCustomers();
+    Customers _customerModel;
+    Customers _customerEntity = new Customers();
     CustomerUrl _customerUrlEntity = new CustomerUrl();
 
-    ApnCustomers _customerFullDataModel = new ApnCustomers();
+    Customers _customerFullDataModel = new Customers();
     List<DeviceList> _devices = new List<DeviceList>();
     DeviceList _dev = new DeviceList();
     DeviceList _devlist = new DeviceList();
@@ -431,7 +431,7 @@ else
 
     int _curPage;
 
-    string _sortColumnName = "Id";
+    string _sortColumnName = "ID";
     string _sortDir = "DESC";
 
     #endregion
@@ -461,13 +461,13 @@ else
     {
         Console.WriteLine("OnValidSubmit");
     }
-    protected async Task CreateDevice(int Id)
+    protected async Task CreateDevice(int id)
     {
         ShowPopup = false;
-        _devlist.CustomerId = Id;
+        _devlist.CustomerId = id;
         var state = await DeviceManager.AddDevice(_devlist, null);
 
-        //NavigationManager.NavigateTo(uri: state != 0 ? "/Error" : "/customer" + "/" + Id.ToString(), true);
+        //NavigationManager.NavigateTo(uri: state != 0 ? "/Error" : "/customer" + "/" + id.ToString(), true);
 
     }
     public async Task NavigateToUrlAsync(string url, bool openInNewTab)
@@ -534,22 +534,22 @@ else
         }
     }
 
-    protected async Task ShowEditCustomer(int Id)
+    protected async Task ShowEditCustomer(int id)
     {
 
         //var parameters = new ModalParameters();
-        //parameters.Add(nameof(EditCustomer.CustomerID), Id);
+        //parameters.Add(nameof(EditCustomer.CustomerID), id);
         //parameters.Add(nameof(EditCustomer.CustomerID), CustomerID);
         //Modal.Show<EditCustomer>("Edit Customer", parameters);
         NavigationManager.NavigateTo("/EditCustomer" + "/" + CustomerID, true);
     }
 
-    protected async Task ShowEditDevice(int Id)
+    protected async Task ShowEditDevice(int id)
     {
         try
         {
             var parameters = new ModalParameters();
-            parameters.Add(nameof(DeviceEdit.ID), Id);
+            parameters.Add(nameof(DeviceEdit.ID), id);
             //DeviceManager.GetDeviceById();
             Modal.Show<DeviceEdit>("Edit Device", parameters);
             errorString = null;
@@ -562,15 +562,15 @@ else
         }
 
     }
-    protected async Task ShowAddDevice(int Id)
+    protected async Task ShowAddDevice(int id)
     {
         var parameters = new ModalParameters();
-        parameters.Add(nameof(DeviceAdd.CustomerID), Id);
+        parameters.Add(nameof(DeviceAdd.CustomerID), id);
 
         Modal.Show<DeviceAdd>($"Add Device", parameters);
         //NavigationManager.NavigateTo($"/addDevice/{CustomerID}", false);
     }
-    protected async Task UpdateCustomers(int Id)
+    protected async Task UpdateCustomers(int id)
     {
 
         await CustomerManager.Update(_customerEntity);
@@ -578,19 +578,19 @@ else
         //RefreshRecords(currentPage);
         NavigationManager.NavigateTo($"/customer/{CustomerID}", true);
     }
-    protected async Task Deletecustomer(int Id)
+    protected async Task Deletecustomer(int id)
     {
         /* var parameters = new ModalParameters();
-        parameters.Add(nameof(EditCustomer.CustomerID), Id); */
-        await CustomerManager.Delete(Id);
-        _customerModel = await CustomerManager.GetById(Id);
-        NavigationManager.NavigateTo("/ApnCustomers/customerlist", true);
+        parameters.Add(nameof(EditCustomer.CustomerID), id); */
+        await CustomerManager.Delete(id);
+        _customerModel = await CustomerManager.GetById(ID);
+        NavigationManager.NavigateTo("/vpncustomerlist", true);
     }
-    protected async Task ShowUpdateCommentPage(int Id)
+    protected async Task ShowUpdateCommentPage(int id)
     {
         try
         {
-            NavigationManager.NavigateTo("/ApnCustomers/customer" + "/" + Id + "/" + "CostumerCommentEdit", true);
+            NavigationManager.NavigateTo("/customer" + "/" + id + "/" + "CostumerCommentEdit", true);
             errorString = null;
 
         }
@@ -600,16 +600,16 @@ else
             errorString = ex.Message;
         }
     }
-    protected async Task DeleteDevice(int Id)
+    protected async Task DeleteDevice(int id)
     {
-        await DeviceManager.Delete(Id);
-        NavigationManager.NavigateTo($"/ApnCustomers/customer/{CustomerID}", true);
+        await DeviceManager.Delete(id);
+        NavigationManager.NavigateTo($"/customer/{CustomerID}", true);
     }
 
     async Task Cancel()
     {
         //await BlazoredModal.Cancel();
-        NavigationManager.NavigateTo($"/ApnCustomers/customer/{CustomerID}", true);
+        NavigationManager.NavigateTo($"/customer/{CustomerID}", true);
     }
     private bool _isSortedAscending;
     private string _activeSortColumn;
@@ -658,7 +658,7 @@ else
 
     public async Task RefreshRecords(int currentPage)
     {
-        _customerModel = await CustomerManager.GetById(Id);
+        _customerModel = await CustomerManager.GetById(ID);
         _curPage = currentPage;
         this.StateHasChanged();
     }
