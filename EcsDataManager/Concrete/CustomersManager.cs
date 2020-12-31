@@ -44,14 +44,15 @@ namespace EcsDataManager.Concrete
             dbPara.Add("VRF", customers.VRF, DbType.String);
             dbPara.Add("VpnToolsName", customers.VpnToolsName, DbType.String);
             dbPara.Add("APN", customers.APN, DbType.String);
+             dbPara.Add("AccessList", customers.AccessList, DbType.String);
             dbPara.Add("Comment", customers.Comment, DbType.String);
 
 
             var articleId = Task.FromResult(_dapperManager.Insert<int>(@"INSERT INTO 
              EcsDocs.dbo.Customers
-             (CustomerName,Tel,Mobile,OwnerTeam,ServiceType,ServiceTopology,AccountManager,IpHQ,AAAGroup,IpTunnel,WanIpRange,LanIpRange,VRF,VpnToolsName,APN,Comment)
+             (CustomerName,Tel,Mobile,OwnerTeam,ServiceType,ServiceTopology,AccountManager,IpHQ,AAAGroup,IpTunnel,WanIpRange,LanIpRange,VRF,VpnToolsName,APN,Comment,AccessList)
             VALUES
-            (@CustomerName,@Tel,@Mobile,@OwnerTeam,@ServiceType,@ServiceTopology,@AccountManager,@IpHQ,@AAAGroup,@IpTunnel,@WanIpRange,@LanIpRange,@VRF,@VpnToolsName,@APN,@Comment);SELECT CAST(SCOPE_IDENTITY() as int)",
+            (@CustomerName,@Tel,@Mobile,@OwnerTeam,@ServiceType,@ServiceTopology,@AccountManager,@IpHQ,@AAAGroup,@IpTunnel,@WanIpRange,@LanIpRange,@VRF,@VpnToolsName,@APN,@Comment,@AccessList);SELECT CAST(SCOPE_IDENTITY() as int)",
                             dbPara,
                             commandType: CommandType.Text));
 
@@ -81,11 +82,12 @@ namespace EcsDataManager.Concrete
                ($"SELECT * FROM [Customers] WHERE CustomerName like '%{search}%' ORDER BY {orderBy} {direction} OFFSET {skip} ROWS FETCH NEXT {take} ROWS ONLY; ", null, commandType: CommandType.Text));
             return articles;
         }
-        public Task<int> UpdateComment(Customers customers)
+        public Task<int> UpdateComment(Customers customers,int ctype)
         {
             var dbPara = new DynamicParameters();
             dbPara.Add("Id", customers.id, DbType.Int32);
             dbPara.Add("Comment", customers.Comment, DbType.String);
+             dbPara.Add("CustomerType", ctype, DbType.Int32);
 
               var updateArticle = Task.FromResult(_dapperManager.Update<int>("Sp_UpdateCustomersComment",
                 dbPara,
@@ -111,6 +113,7 @@ namespace EcsDataManager.Concrete
             dbPara.Add("LanIpRange", customers.LanIpRange, DbType.String);
             dbPara.Add("VRF", customers.VRF, DbType.String);
             dbPara.Add("VpnToolsName", customers.VpnToolsName, DbType.String);
+             dbPara.Add("AccessList", customers.AccessList, DbType.String);
             dbPara.Add("APN", customers.APN, DbType.String);
             
 

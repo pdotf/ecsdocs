@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace EcsDataManager.Contracts
 {
-    public interface IApnCustomerManager<T>
+    public interface IApnCustomerManager<T>:ICustomer<T>
     {
         Task<int> Create(T customers);
         Task<int> Delete(int Id);

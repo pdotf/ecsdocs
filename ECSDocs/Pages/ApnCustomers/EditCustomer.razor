@@ -32,7 +32,7 @@ else
 {
     <Card>
         <div class="simple-form">
-            <EditForm Model="@_customerEntity" OnValidSubmit="@(async () => await UpdateCustomers(Convert.ToInt32(CustomerID)))">
+            <EditForm Model="@_customerEntity" OnValidSubmit="@(async () => await UpdateCustomers(CustomerID))">
                 <DataAnnotationsValidator />
                 <div class="container-fluid">
 
@@ -109,9 +109,10 @@ else
         if (_customerEntity != null)
         {
             await ApnCustomersManager.Update(_customerEntity);
+            NavigationManager.NavigateTo("/ApnCustomers/Customer" + "/" + CustomerID, true);
         }
 
-        NavigationManager.NavigateTo("/customer" + "/" + CustomerID, true);
+
     }
 
     async Task Cancel()

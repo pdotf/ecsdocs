@@ -29,7 +29,7 @@ namespace EcsDataManager.Entities
         [MaxLength(500)]
         public string AccessList { get; set; }
 
-        [Range(0, int.MaxValue, ErrorMessage = "Please enter valid integer Number")]
+        [RegularExpression("([1-9][0-9]*)", ErrorMessage = "Please enter valid integer Number")]
         [Required]
         public int NumberOfSimCard { get; set; }
          

@@ -73,11 +73,13 @@ namespace EcsDataManager.Concrete
                ($"SELECT * FROM [ApnCustomers] WHERE CustomerName like '%{search}%' ORDER BY {orderBy} {direction} OFFSET {skip} ROWS FETCH NEXT {take} ROWS ONLY; ", null, commandType: CommandType.Text));
             return articles;
         }
-        public Task<int> UpdateComment(ApnCustomers customers)
+        public Task<int> UpdateComment(ApnCustomers customers,int customertype)
         {
             var dbPara = new DynamicParameters();
             dbPara.Add("Id", customers.Id, DbType.Int32);
             dbPara.Add("Comment", customers.Comment, DbType.String);
+            
+            dbPara.Add("CustomerType",customertype, DbType.Int32);
 
             var updateArticle = Task.FromResult(_dapperManager.Update<int>("Sp_UpdateCustomersComment",
               dbPara,
@@ -88,6 +90,7 @@ namespace EcsDataManager.Concrete
         public Task<int> Update(ApnCustomers customers)
         {
             var dbPara = new DynamicParameters();
+ dbPara.Add("Id", customers.Id, DbType.Int32);
             dbPara.Add("CustomerName", customers.CustomerName, DbType.String);
             dbPara.Add("Tell", customers.Tell, DbType.String);
             dbPara.Add("Mobile", customers.Mobile, DbType.String);

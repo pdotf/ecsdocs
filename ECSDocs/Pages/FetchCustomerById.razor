@@ -44,7 +44,7 @@ else
                         <button @onclick="async() => Deletecustomer(_customerEntity.id)" class="btn btn-danger">Delete Customer</button>
                         <button @onclick="async() => ShowUpdateCommentPage(_customerEntity.id)" class="btn btn-warning">Update Comment</button>
 
-                        if (string.IsNullOrWhiteSpace(_customerUrlEntity?.link)==true)
+                        if (string.IsNullOrWhiteSpace(_customerUrlEntity?.link) == true)
                         {
                             <button @onclick="async () => AddLinkPopUp()" class="btn btn-light">Add Link</button>
                         }
@@ -124,278 +124,327 @@ else
 
 
         </div>
+        <br /><br />
+              <div>
+                  <div class="row container-fluid">
+                      <div class="col-md-2">
+                          <h6>
+                              @nameof(_customerFullDataModel.CustomerName):
 
-        <MatList SingleSelection="true" TwoLine="true" @bind-value="@_customerFullDataModel.id">
-            <div class="row">
-                <div class="col-md-6">
-                    <Field>
-                        <FieldLabel>
-                            @nameof(_customerFullDataModel.CustomerName)
+                          </h6>
+                      </div>
+                      <Card class="col-md-10">
+                          <h7><span style="color:green">@_customerFullDataModel.CustomerName</span></h7>
+                      </Card>
+                  </div>
+                  <div class="row container-fluid">
+                      <div class="col-md-2">
+                          <h6>
+                              Tell:
 
-                        </FieldLabel>
-                        <Field><span style="color:green">@_customerFullDataModel.CustomerName</span></Field>
-                    </Field>
+                          </h6>
+                      </div>
+                      <Card class="col-md-10"> <h7 dir="rtl"><span style="color:green">@_customerFullDataModel.Tel</span></h7></Card>
+                  </div>
+                  <div class="row container-fluid">
+                      <div class="col-md-2">
+                          <h6>
+                              @nameof(_customerFullDataModel.Mobile):
+                          </h6>
+                      </div>
+                      <Card class="col-md-10">
+                          <h7 dir="rtl"><span style="color:green">@_customerFullDataModel.Mobile</span></h7>
+                      </Card>
+                  </div>
+                  <div class="row container-fluid">
+                      <div class="col-md-2">
+                          <h6>
+                              @nameof(_customerFullDataModel.OwnerTeam):
 
-                    <Field>
-                        <FieldLabel>
-                            Tell
+                          </h6>
+                      </div>
+                      <Card class="col-md-10">
+                          <h7><span style="color:green">@_customerFullDataModel.OwnerTeam</span></h7>
+                      </Card>
+                  </div>
+                  <div class="row container-fluid">
+                      <div class="col-md-2">
+                          <h6>
+                              @nameof(_customerFullDataModel.ServiceType):
 
-                        </FieldLabel>
-                        <Field><span style="color:green">@_customerFullDataModel.Tel</span></Field>
-                    </Field>
-                </div>
-                <div class="col-md-6">
-                    <Field>
-                        <FieldLabel>
-                            @nameof(_customerFullDataModel.Mobile)
+                          </h6>
+                      </div>
+                      <Card class="col-md-10">
+                          <h7><span style="color:green">@_customerFullDataModel.ServiceType</span></h7>
+                      </Card>
+                  </div>
+                  <div class="row container-fluid">
+                      <div class="col-md-2">
+                          <h6>
+                              @nameof(_customerFullDataModel.ServiceTopology):
 
-                        </FieldLabel>
-                        <Field><span style="color:green">@_customerFullDataModel.Mobile</span></Field>
-                    </Field>
+                          </h6>
+                      </div>
+                      <Card class="col-md-10">
+                          <h7><span style="color:green">@_customerFullDataModel.ServiceTopology</span></h7>
+                      </Card>
+                  </div>
+                  <div class="row container-fluid">
+                      <div class="col-md-2">
+                          <h6>
+                              @nameof(_customerFullDataModel.AccountManager):
 
-                    <Field>
-                        <FieldLabel>
-                            @nameof(_customerFullDataModel.OwnerTeam)
-                        </FieldLabel>
-                        <Field><span style="color:green">@_customerFullDataModel.OwnerTeam</span></Field>
+                          </h6>
+                      </div>
+                      <Card class="col-md-10">
+                          <h7><span style="color:green">@_customerFullDataModel.AccountManager</span></h7>
+                      </Card>
+                  </div>
+                  <div class="row container-fluid">
+                      <div class="col-md-2">
+                          <h6>
+                              @nameof(_customerFullDataModel.IpHQ):
 
-                    </Field>
-                </div>
-            </div>
-            <Divider Type="DividerType.Dotted" />
-            <div class="row">
-                <div class="col-md-3">
-                    <Field>
-                        <FieldLabel>
-                            @nameof(_customerFullDataModel.ServiceType)
-                        </FieldLabel>
-                        <Field><span style="color:green">@_customerFullDataModel.ServiceType</span></Field>
+                          </h6>
+                      </div>
+                      <Card class="col-md-10">
+                          <h7><span style="color:green">@_customerFullDataModel.IpHQ</span></h7>
+                      </Card>
+                  </div>
+                  <div class="row container-fluid">
+                      <div class="col-md-2">
+                          <h6>
+                              @nameof(_customerFullDataModel.AAAGroup):
 
-                    </Field>
+                          </h6>
+                      </div>
+                      <Card class="col-md-10">
+                          <h7><span style="color:green">@_customerFullDataModel.AAAGroup</span></h7>
+                      </Card>
+                  </div>
+                  <div class="row container-fluid">
+                      <div class="col-md-2">
+                          <h6>
+                              @nameof(_customerFullDataModel.IpTunnel):
 
-                    <Field>
-                        <FieldLabel>
-                            @nameof(_customerFullDataModel.ServiceTopology)
-                        </FieldLabel>
-                        <Field><span style="color:green">@_customerFullDataModel.ServiceTopology</span></Field>
+                          </h6>
+                      </div>
+                      <Card class="col-md-10">
+                          <h7><span style="color:green">@_customerFullDataModel.IpTunnel</span></h7>
+                      </Card>
+                  </div>
+                  <div class="row container-fluid">
+                      <div class="col-md-2">
+                          <h6>
+                              @nameof(_customerFullDataModel.WanIpRange):
 
-                    </Field>
-                </div>
-                <div class="col-md-3">
-                    <Field>
-                        <FieldLabel>
-                            @nameof(_customerFullDataModel.AccountManager)
+                          </h6>
+                      </div>
+                      <Card class="col-md-10">
+                          <h7><span style="color:green">@_customerFullDataModel.WanIpRange</span></h7>
+                      </Card>
+                  </div>
+                  <div class="row container-fluid">
+                      <div class="col-md-2">
+                          <h6>
+                              @nameof(_customerFullDataModel.LanIpRange):
 
-                        </FieldLabel>
-                        <Field><span style="color:green">@_customerFullDataModel.AccountManager</span></Field>
-                    </Field>
-                    <Field>
-                        <FieldLabel>
-                            @nameof(_customerFullDataModel.IpHQ)
+                          </h6>
+                      </div>
+                      <Card class="col-md-10">
+                          <h7><span style="color:green">@_customerFullDataModel.LanIpRange</span></h7>
+                      </Card>
+                  </div>
+                  <div class="row container-fluid">
+                      <div class="col-md-2">
+                          <h6>
+                              @nameof(_customerFullDataModel.AccessList):
 
-                        </FieldLabel>
-                        <Field><span style="color:green">@_customerFullDataModel.IpHQ</span></Field>
-                    </Field>
-                </div>
-                <div class="col-md-3">
-                    <Field>
-                        <FieldLabel>
-                            @nameof(_customerFullDataModel.AAAGroup)
-                        </FieldLabel>
-                        <Field><span style="color:green">@_customerFullDataModel.AAAGroup</span></Field>
+                          </h6>
+                      </div>
+                      <Card class="col-md-10">
+                          <h7><span style="color:green">@_customerFullDataModel.AccessList</span></h7>
+                      </Card>
+                  </div>
+                  <div class="row container-fluid">
+                      <div class="col-md-2">
+                          <h6>
+                              @nameof(_customerFullDataModel.VRF):
 
-                    </Field>
-                    <Field>
-                        <FieldLabel>
-                            @nameof(_customerFullDataModel.IpTunnel)
-                        </FieldLabel>
-                        <Field><span style="color:green">@_customerFullDataModel.IpTunnel</span></Field>
+                          </h6>
+                      </div>
+                      <Card class="col-md-10">
+                          <h7><span style="color:green">@_customerFullDataModel.VRF</span></h7>
+                      </Card>
+                  </div>
+                  <div class="row container-fluid">
+                      <div class="col-md-2">
+                          <h6>
+                              @nameof(_customerFullDataModel.VpnToolsName):
 
-                    </Field>
-                </div>
-                <div class="col-md-3">
-                    <Field>
-                        <FieldLabel>
-                            @nameof(_customerFullDataModel.WanIpRange)
-                        </FieldLabel>
-                        <Field><span style="color:green">@_customerFullDataModel.WanIpRange</span></Field>
+                          </h6>
+                      </div>
+                      <Card class="col-md-10">
+                          <h7><span style="color:green">@_customerFullDataModel.VpnToolsName</span></h7>
+                      </Card>
+                  </div>
+                  <div class="row container-fluid">
+                      <div class="col-md-2">
+                          <h6>
+                              @nameof(_customerFullDataModel.APN):
 
-                    </Field>
-                    <Field>
-                        <FieldLabel>
-                            @nameof(_customerFullDataModel.LanIpRange)
-                        </FieldLabel>
-                        <Field><span style="color:green">@_customerFullDataModel.LanIpRange</span></Field>
+                          </h6>
+                      </div>
+                      <Card class="col-md-10">
+                          <h7><span style="color:green">@_customerFullDataModel.APN</span></h7>
+                      </Card>
+                  </div>
+                  <br />
+                  <div class="row container-fluid">
+                      <div class="col-md-2"><h6>Comment: </h6></div>
+                      <div class="col-md-10" dir="rtl">
+                          <MemoEdit @bind-Text="@_customerFullDataModel.Comment" ReadOnly="true" Float="Float.Right" Size="Size.ExtraLarge" Rows="10" />
+                      </div>
+                  </div>
+                  <br />
+                  @if (_dev == null)
+                  {
+                      <p>No Devices Found for customer</p>
+                  }
+                  else
+                  {
+                      <br />
+                      <br />
+                      <h3>Main Radio :</h3>
+                      <Card Class="container-fluid">
+                          <br />
+                          <div class="row">
+                              <div class="col-md-3">
 
-                    </Field>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-3">
-                    <Field>
-                        <FieldLabel>
-                            @nameof(_customerFullDataModel.VRF)
-                        </FieldLabel>
-                        <Field><span style="color:green">@_customerFullDataModel.VRF</span></Field>
+                                      <h6>
+                                          @nameof(_dev.RadioName)
+                                      </h6>
+                                      <h7><span style="color:green">@_dev.RadioName</span></h7>
 
-                    </Field>
-                    <Field>
-                        <FieldLabel>
-                            @nameof(_customerFullDataModel.VpnToolsName)
-                        </FieldLabel>
-                        <Field><span style="color:green">@_customerFullDataModel.VpnToolsName</span></Field>
+                                      <h6>
+                                          @nameof(_dev.RadioIp)
+                                      </h6>
+                                      <h7><span style="color:green">@_dev.RadioIp</span></h7>
 
-                    </Field>
-                </div>
-                <div class="col-md-3">
-                    <Field>
-                        <FieldLabel>
-                            @nameof(_customerFullDataModel.APN)
-                        </FieldLabel>
-                        <Field><span style="color:green">@_customerFullDataModel.APN</span></Field>
+                              </div>
+                              <div class="col-md-3">
+                               
+                                      <h6>
+                                          @nameof(_dev.RadioModel)
+                                      </h6>
+                                      <h7><span style="color:green">@_dev.RadioModel</span></h7>
 
-                    </Field>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-8">
-                    <h4>
-                        @nameof(_customerFullDataModel.Comment)
-                    </h4>
-                    <textarea readonly class="block-with-text" cols="110" rows="30" dir="rtl" style="color:green;width:auto;overflow-y: scroll;">@_customerFullDataModel.Comment</textarea>
-                </div>
-            </div>
-        </MatList>
-        @if (_dev == null)
-        {
-            <p>No Devices Found for customer</p>
-        }
-        else
-        {
-            <br />
-            <br />
-            <h3>Main Radio :</h3>
-            <div class="row">
-                <div class="col-md-3">
+                                   
+                                   
+                                      <h6>
+                                          @nameof(_dev.RadioMetroSite)
+                                      </h6>
+                                      <h7><span style="color:green">@_dev.RadioMetroSite</span></h7>
 
-                    <Field>
-                        <FieldLabel>
-                            @nameof(_dev.RadioName)
-                        </FieldLabel>
-                        <Field><span style="color:green">@_dev.RadioName</span></Field>
+                                   
+                              </div>
+                          </div>
+                          <br />
+                      </Card>
+                  }
+                  <br />
 
-                    </Field>
-                    <Field>
-                        <FieldLabel>
-                            @nameof(_dev.RadioIp)
-                        </FieldLabel>
-                        <Field><span style="color:green">@_dev.RadioIp</span></Field>
+                  <h3>Backup Radio :</h3>
+                  @if (_devices == null)
+                  {
+                      <p>
+                          No Extra Devices Found for customer
+                      </p>
+                  }
+                  else
 
-                    </Field>
-                </div>
-                <div class="col-md-3">
-                    <Field>
-                        <FieldLabel>
-                            @nameof(_dev.RadioModel)
-                        </FieldLabel>
-                        <Field><span style="color:green">@_dev.RadioModel</span></Field>
-
-                    </Field>
-                    <Field>
-                        <FieldLabel>
-                            @nameof(_dev.RadioMetroSite)
-                        </FieldLabel>
-                        <Field><span style="color:green">@_dev.RadioMetroSite</span></Field>
-
-                    </Field>
-                </div>
-            </div>
-
-
-
-            <input type="hidden" @bind-value="@_customerEntity.id" />
-            <h3>Backup Radio :</h3>
-            @if (_devices == null)
-            {
-                <p>
-                    No Extra Devices Found for customer
-                </p>
-            }
-            else
-            {
-                @foreach (var item in _devices)
-                {
-                    <Card>
-                        <div class="row">
-
-                            <div class="col-md-3">
-                                <h6>Radio Name:</h6>
-                            </div>
-                            <div class="col-md-7">
-                                <h6><span style="color:green">@item.RadioName</span></h6>
-                            </div>
-
-                        </div>
-                        <div class="row">
-                            <div class="col-md-3">
-                                <h6>Radio IP:</h6>
-                            </div>
-                            <div class="col-md-6">
-                                <h6><span style="color:green">@item.RadioIp</span></h6>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-3">
-                                <h6>
-                                    Radio Metro Site:
-                                </h6>
-                            </div>
-                            <div class="col-md-6">
-                                <h6><span style="color:green">@item.RadioMetroSite</span></h6>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-3">
-                                <h6>
-                                    Radio Model:
-                                </h6>
-                            </div>
-                            <div class="col-md-6">
-                                <h6><span style="color:green">@item.RadioModel</span></h6>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-3">
-                                <h6>
-                                    Backup Activation:
-                                </h6>
-                            </div>
-                            <div class="col-md-6">
-                                <h6><span style="color:green">@item.IsAutomatic</span></h6>
-                            </div>
-                        </div>
-
-                        <AuthorizeView>
-                            <Authorized>
-                                @if (@context.User.IsInRole(ADMINISTRATION_ROLE))
-                                {
-                                    <div class="row">
-                                        <div class="col-md-2 float-right">
-                                            <Button Color="Color.Success" Clicked="async () => ShowEditDevice(item.Id)">Edit</Button>
-                                            <Button Color="Color.Danger" Clicked="async () => DeleteDevice(item.Id)">Delete</Button>
-                                        </div>
-                                    </div>
-                                }
-                            </Authorized>
-                        </AuthorizeView>
-                    </Card>
-
-                }
-                
-            }
+                  {
+                      <br />
 
 
-        }
+
+                      @foreach (var item in _devices)
+                      {
+              <Card Class="container-fluid">
+                  <br />
+                  <div class="row">
+
+                      <div class="col-md-3">
+                          <h6>Radio Name:</h6>
+                      </div>
+                      <div class="col-md-7">
+                          <h7><span style="color:green">@item.RadioName</span></h7>
+                      </div>
+
+                  </div>
+                  <div class="row">
+                      <div class="col-md-3">
+                          <h6>Radio IP:</h6>
+                      </div>
+                      <div class="col-md-6">
+                          <h7><span style="color:green">@item.RadioIp</span></h7>
+                      </div>
+                  </div>
+                  <div class="row">
+                      <div class="col-md-3">
+                          <h6>
+                              Radio Metro Site:
+                          </h6>
+                      </div>
+                      <div class="col-md-6">
+                          <h7><span style="color:green">@item.RadioMetroSite</span></h7>
+                      </div>
+                  </div>
+                  <div class="row">
+                      <div class="col-md-3">
+                          <h6>
+                              Radio Model:
+                          </h6>
+                      </div>
+                      <div class="col-md-6">
+                          <h7><span style="color:green">@item.RadioModel</span></h7>
+                      </div>
+                  </div>
+                  <div class="row">
+                      <div class="col-md-3">
+                          <h6>
+                              Backup Activation:
+                          </h6>
+                      </div>
+                      <div class="col-md-6">
+                          <h7><span style="color:green">@item.IsAutomatic</span></h7>
+                      </div>
+                  </div>
+                  <br />
+                  <AuthorizeView>
+                      <Authorized>
+                          @if (@context.User.IsInRole(ADMINISTRATION_ROLE))
+                          {
+                              <div class="row">
+                                  <div class="col-md-2 float-right">
+                                      <Button Color="Color.Success" Clicked="async () => ShowEditDevice(item.Id)">Edit</Button>
+                                      <Button Color="Color.Danger" Clicked="async () => DeleteDevice(item.Id)">Delete</Button>
+                                  </div>
+                              </div>
+                          }
+                      </Authorized>
+                  </AuthorizeView>
+                  <br />
+              </Card>
+                          <br />
+                      }
+
+                  }
+
+
+
+              </div>
+
 
 
     </div>
@@ -497,7 +546,7 @@ else
     protected async Task AddLink()
     {
         var check = await CUrlManager.GetMainUrlById(CustomerID);
-        var check2 =  _customerUrlEntity.link;
+        var check2 = _customerUrlEntity.link;
         if (check?.customerId == null)
         {
             _customerUrlEntity.customerId = CustomerID;

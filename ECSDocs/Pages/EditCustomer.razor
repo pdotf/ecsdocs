@@ -74,6 +74,11 @@
                 <input class="form-control" @bind-value="@_customerEntity.APN" id="Mobile" />
 
             </div>
+            <div class="col-md-6">
+                <label for="Mobile">Access List</label>
+                <input class="form-control" @bind-value="@_customerEntity.AccessList" id="Mobile" />
+
+            </div>
             @if (_customerUrl is not null)
             {
                 <div class="col-md-6">

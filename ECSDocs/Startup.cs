@@ -83,6 +83,7 @@ namespace ECSDocs
             services.AddScoped<IApnCustomerManager<ApnCustomers>, ApnCustomerManager>();
             services.AddScoped<IDeviceManager, DeviceManager>();
             services.AddScoped<ICustomer<Customers>, CustomersManager>();
+            services.AddScoped<ICustomer<ApnCustomers>, ApnCustomerManager>();
             services.AddScoped<ICustomerUrlManager, CustomerUrlManager>();
 
             //Register dapper in scope  

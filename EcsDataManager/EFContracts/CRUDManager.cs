@@ -4,7 +4,7 @@ using System.Text;
 
 namespace EcsDataManager.EFContracts
 {
-   public class CRUDManager:ICRUDManager<>
+   public class CRUDManager
     {
     }
 }
