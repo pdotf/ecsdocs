@@ -1,7 +1,5 @@
-﻿@page "/ApnCustomers/customerlist"
-@inject EcsDataManager.Contracts.IApnCustomerManager<ApnCustomers> ApnCustomerManager
-@using EcsDataManager.Contracts
-@using EcsDataManager.Concrete
+﻿@page "/IntranetCustomers"
+@inject EcsDataManager.EFContracts.ICRUDManager<EcsDataManager.Entities.IntranetCustomers> CustomerManager
 @using EcsDataManager.Entities
 @inject NavigationManager NavigationManager
 @*<link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">*@
@@ -22,7 +20,7 @@
 </div>
 <br />
 
-@if (_apnCustomerModel == null)
+@if (_customerModel == null)
 {
     <p><em>Loading...</em></p>
 }
@@ -36,17 +34,16 @@ else
     <br />
     <br />
     <div>
-        <DataGrid TItem="ApnCustomers"
-                  Data="@_apnCustomerModel"
+        <DataGrid TItem="EcsDataManager.Entities.IntranetCustomers"
+                  Data="@_customerModel"
                   ReadData="@OnReadData"
                   TotalItems="@totalcustomers" Hoverable="true" SelectedRowStyling="@OnSelectedRowStyling" Editable="true" Sortable="true" Striped="true">
-            @*<DataGridColumn TItem="Customers" Field="@nameof(ApnCustomers.RowNumber)" Caption="#" />*@
-            <DataGridColumn TItem="ApnCustomers" Field="@nameof(ApnCustomers.CustomerName)" Caption="Customer Name" />
-            <DataGridColumn TItem="ApnCustomers" Field="@nameof(ApnCustomers.OwnerTeam)" Caption="Owner Team" />
-            <DataGridColumn TItem="ApnCustomers" Field="@nameof(ApnCustomers.ServiceType)" Caption="Service Type" />
-            <DataGridColumn TItem="ApnCustomers" Field="@nameof(ApnCustomers.ServiceTopology)" Caption="Service Topology" />
-            <DataGridColumn TItem="ApnCustomers" Field="@nameof(ApnCustomers.ServiceTopology)" Caption="Account Manager" />
-            <DataGridColumn TItem="ApnCustomers" Field="@nameof(ApnCustomers.AccountManager)" Caption="Action">
+            @*<DataGridColumn TItem="Customers" Field="@nameof(IntranetCustomers.RowNumber)" Caption="#" />*@
+            <DataGridColumn TItem="EcsDataManager.Entities.IntranetCustomers" Field="@nameof(EcsDataManager.Entities.IntranetCustomers.CustomerName)" Caption="Customer Name" />
+            <DataGridColumn TItem="EcsDataManager.Entities.IntranetCustomers" Field="@nameof(EcsDataManager.Entities.IntranetCustomers.OwnerTeam)" Caption="Owner Team" />
+            <DataGridColumn TItem="EcsDataManager.Entities.IntranetCustomers" Field="@nameof(EcsDataManager.Entities.IntranetCustomers.ServiceType)" Caption="Wan Ip Range" />
+
+            <DataGridColumn TItem="EcsDataManager.Entities.IntranetCustomers" Field="@nameof(EcsDataManager.Entities.IntranetCustomers.Id)" Caption="Action">
                 <DisplayTemplate>
                     <Button Color="Color.Success" Clicked="async() => ShowCustomerDetail(context.Id).ConfigureAwait(true)">Detail</Button>
                 </DisplayTemplate>
@@ -68,21 +65,21 @@ else
         get { return searchTerm; }
         set { searchTerm = value; FilterRecords(); }
     }
-    List<ApnCustomers> _apnCustomerModel = new List<ApnCustomers>();
-    ApnCustomers _customerEntity = new ApnCustomers();
+    List<EcsDataManager.Entities.IntranetCustomers> _customerModel = new List<EcsDataManager.Entities.IntranetCustomers>();
+    EcsDataManager.Entities.IntranetCustomers _customerEntity = new EcsDataManager.Entities.IntranetCustomers();
 
 
     protected override async Task OnInitializedAsync()
     {
-        _apnCustomerModel = await ApnCustomerManager.ListAllWithoutPaging("", "", "");
+        _customerModel = await CustomerManager.GetAll();
 
 
     }
     protected async Task GoToAddApnCustomer()
     {
-        NavigationManager.NavigateTo("ApnCustomers/addCustomer", true);
+        NavigationManager.NavigateTo("IntranetCustomers/addCustomer", true);
     }
-    void OnSelectedRowStyling(ApnCustomers employee, DataGridRowStyling styling)
+    void OnSelectedRowStyling(EcsDataManager.Entities.IntranetCustomers employee, DataGridRowStyling styling)
     {
         styling.Background = Background.Transparent;
     }
@@ -90,10 +87,10 @@ else
     protected async Task ShowCustomerDetail(int id)
     {
 
-        _customerEntity = await ApnCustomerManager?.GetById(id);
+        _customerEntity = await CustomerManager?.Get(id);
         try
         {
-            NavigationManager.NavigateTo($"ApnCustomers/Customer/{id}", true);
+            NavigationManager.NavigateTo($"IntranetCustomers/Customer/{id}", true);
             errorStr = null;
 
         }
@@ -105,13 +102,13 @@ else
     }
 
     int totalcustomers;
-    async Task OnReadData(DataGridReadDataEventArgs<ApnCustomers> e)
+    async Task OnReadData(DataGridReadDataEventArgs<EcsDataManager.Entities.IntranetCustomers> e)
     {
         // this can be call to anything, in this case we're calling a fictional api
         // var response = await Http.GetJsonAsync<Customers[]>($"some-api/Customerss?page={e.Page}&pageSize={e.PageSize}");
 
-        _apnCustomerModel = await ApnCustomerManager.ListAllWithoutPaging("", "", "");
-        totalcustomers = _apnCustomerModel.Count();
+        _customerModel = await CustomerManager?.GetAll();
+        totalcustomers = _customerModel.Count();
 
         // always call StateHasChanged!
         StateHasChanged();

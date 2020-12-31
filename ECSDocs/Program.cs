@@ -17,7 +17,7 @@ namespace ECSDocs
             var host = CreateHostBuilder(args).Build();
             using (var scope = host.Services.CreateScope())
             {
-                var db = scope.ServiceProvider.GetRequiredService<EcsDataManager.DataAccess.AppContext>();
+                var db = scope.ServiceProvider.GetRequiredService<EcsDataManager.DataAccess.EcsContext>();
                 db.Database.EnsureCreated();
             }
             host.Run();

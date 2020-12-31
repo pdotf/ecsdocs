@@ -64,16 +64,16 @@
     </MatNavSubMenu>
     <MatNavSubMenu @bind-Expanded="@IntrNavOpenState">
         <MatNavSubMenuHeader>
-            <MatNavItem AllowSelection="false"><MatIcon Icon="device_hub"></MatIcon> Intranet</MatNavItem>
+            <MatNavItem AllowSelection="false"><MatIcon Icon="device_hub"></MatIcon>Intranet</MatNavItem>
         </MatNavSubMenuHeader>
         <MatNavSubMenuList>
-            <MatNavItem Href="/intranetcustomerlist"><MatIcon Icon="list"></MatIcon>Customers</MatNavItem>
+            <MatNavItem Href="IntranetCustomers"><MatIcon Icon="list"></MatIcon>Customers</MatNavItem>
 
             <AuthorizeView>
                 <Authorized>
                     @if (@context.User.IsInRole(ADMINISTRATION_ROLE))
                     {
-                        <MatNavItem Href="/addIntranetCustomer"><MatIcon Icon="person_add"></MatIcon> Add Customer</MatNavItem>
+                        <MatNavItem Href="IntranetCustomers/addCustomer"><MatIcon Icon="person_add"></MatIcon> Add Customer</MatNavItem>
                     }
                 </Authorized>
             </AuthorizeView>

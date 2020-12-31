@@ -8,7 +8,7 @@ using System.Text;
 
 namespace EcsDataManager.DataAccess
 {
-    public class AppContextFactory : IDesignTimeDbContextFactory<AppContext>
+    public class AppContextFactory : IDesignTimeDbContextFactory<EcsContext>
     {
         public AppContextFactory()
         {
@@ -19,12 +19,12 @@ namespace EcsDataManager.DataAccess
             .AddJsonFile("appsettings.json")
             .Build();
 
-        public AppContext CreateDbContext(string[] args)
+        public EcsContext CreateDbContext(string[] args)
         {
-            var builder = new DbContextOptionsBuilder<AppContext>();
+            var builder = new DbContextOptionsBuilder<EcsContext>();
             builder.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
 
-            return new AppContext(builder.Options);
+            return new EcsContext(builder.Options);
         }
     }
 }

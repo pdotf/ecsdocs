@@ -5,12 +5,12 @@ using System.Threading.Tasks;
 
 namespace EcsDataManager.EFContracts
 {
-    public interface ICRUDManager<TEntityDto, TEntityViewDto, TId> 
+    public interface ICRUDManager<TEntity>
     {
-        Task Add(TEntityDto dto);
-        Task Update(TEntityDto dto);
-        Task Delete(TId id);
-        List<TEntityViewDto> GetAll(int currentPage, int rowPerPage, string search);
-        TEntityDto Get(TId id);
+        Task<List<TEntity>> GetAll();
+        Task<TEntity> Get(int id);
+        void Add(TEntity entity);
+        void Change(TEntity dbEntity, TEntity entity);
+        void Delete(TEntity entity);
     }
 }

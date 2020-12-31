@@ -1,0 +1,345 @@
+﻿@page "/Intranet/customer"
+@page "/Intranet/customer/{customerID:int}"
+@using EcsDataManager.Contracts
+@using EcsDataManager.Entities
+@inject IApnCustomerManager<ApnCustomers> CustomerManager
+@inject NavigationManager NavigationManager
+@inject IJSRuntime JSRuntime
+
+
+
+<link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+<link href="~/_content/Blazored.Modal/blazored-modal.css" rel="stylesheet" />
+
+
+
+@if (string.IsNullOrWhiteSpace(errorString) == false)
+{
+    <div class="h4">
+        @errorString
+    </div>
+}
+else if (_customerEntity is null)
+{
+    <div class="h4"><em>Loading...</em></div>
+    <p style="white-space: pre-line"> </p>
+}
+else
+{
+
+    <div class="container-fluid">
+        <div>
+            @*ShowAddDevice(_customerEntity.Id) OpenAddDevice()*@
+
+
+            <AuthorizeView>
+                <Authorized>
+
+                    @if (@context.User.IsInRole(ADMINISTRATION_ROLE))
+                    {
+                        <button @onclick="async() => ShowEditCustomer(_customerEntity.Id).ConfigureAwait(true)" class="btn btn-primary">Edit</button>
+                        <button @onclick="async() => Deletecustomer(_customerEntity.Id)" class="btn btn-danger">Delete Customer</button>
+                        <button @onclick="async() => ShowUpdateCommentPage(_customerEntity.Id)" class="btn btn-warning">Update Comment</button>
+
+                    }
+                    else if (@context.User.IsInRole("Users"))
+                    {
+                        <button @onclick="async() => ShowUpdateCommentPage(_customerEntity.Id)" class="btn btn-warning">Update Comment</button>
+                    }
+                </Authorized>
+            </AuthorizeView>
+
+        </div>
+        <br />
+        <br /><br />
+              <div>
+                  <div class="row container-fluid">
+                      <div class="col-md-2">
+                          <h6>
+                              @nameof(_customerFullDataModel.CustomerName):
+
+                          </h6>
+                      </div>
+                      <Card class="col-md-10">
+                          <h7><span style="color:green">@_customerFullDataModel.CustomerName</span></h7>
+                      </Card>
+                  </div>
+                  <div class="row container-fluid">
+                      <div class="col-md-2">
+                          <h6>
+                              @nameof(_customerFullDataModel.Tell):
+
+                          </h6>
+                      </div>
+                      <Card class="col-md-10">
+                          <h7><span style="color:green">@_customerFullDataModel.Tell</span></h7>
+                      </Card>
+                  </div>
+                  <div class="row container-fluid">
+                      <div class="col-md-2">
+                          <h6>
+                              @nameof(_customerFullDataModel.Mobile):
+
+                          </h6>
+                      </div>
+                      <Card class="col-md-10">
+                          <h7><span style="color:green">@_customerFullDataModel.Mobile</span></h7>
+                      </Card>
+                  </div>
+                  <div class="row container-fluid">
+                      <div class="col-md-2">
+                          <h6>
+                              @nameof(_customerFullDataModel.OwnerTeam):
+
+                          </h6>
+                      </div>
+                      <Card class="col-md-10">
+                          <h7><span style="color:green">@_customerFullDataModel.OwnerTeam</span></h7>
+                      </Card>
+                  </div>
+                  <div class="row container-fluid">
+                      <div class="col-md-2">
+                          <h6>
+                              @nameof(_customerFullDataModel.WanIpRange):
+
+                          </h6>
+                      </div>
+                      <Card class="col-md-10">
+                          <h7><span style="color:green">@_customerFullDataModel.WanIpRange</span></h7>
+                      </Card>
+                  </div>
+                  <div class="row container-fluid">
+                      <div class="col-md-2">
+                          <h6>
+                              @nameof(_customerFullDataModel.NumberOfSimCard):
+
+                          </h6>
+                      </div>
+                      <Card class="col-md-10">
+                          <h7><span style="color:green">@_customerFullDataModel.NumberOfSimCard</span></h7>
+                      </Card>
+                  </div>
+                  <div class="row container-fluid">
+                      <div class="col-md-2">
+                          <h6>
+                              @nameof(_customerFullDataModel.AccessList):
+
+                          </h6>
+                      </div>
+                      <Card class="col-md-10">
+                          <h7><span style="color:green">@_customerFullDataModel.AccessList</span></h7>
+                      </Card>
+                  </div>
+                  <br />
+                  <br />
+                  <div class="row container-fluid">
+                      <div class="col-md-2"><h6>Comment: </h6></div>
+                      <div class="col-md-10" dir="rtl">
+                          <MemoEdit @bind-Text="@_customerFullDataModel.Comment" ReadOnly="true" Float="Float.Right" Size="Size.ExtraLarge" Rows="10" />
+                      </div>
+                  </div>
+                  <br />
+                  <br />
+              </div>
+        
+    </div>
+}
+
+
+
+
+
+
+
+
+
+
+@code {
+
+
+    [CascadingParameter] public IModalService Modal { get; set; }
+    //[CascadingParameter] BlazoredModalInstance BlazoredModal { get; set; }
+
+    [Parameter] public int Id { get; set; }
+    [Parameter] public int CustomerID { get; set; }
+    ApnCustomers _customerModel;
+    ApnCustomers _customerEntity = new ApnCustomers();
+
+    ApnCustomers _customerFullDataModel = new ApnCustomers();
+
+    //DeviceList device = new DeviceList();
+    string errorString;
+    string ADMINISTRATION_ROLE = "Administrators";
+    #region Pagination
+
+    int _curPage;
+
+    string _sortColumnName = "Id";
+    string _sortDir = "DESC";
+
+    #endregion
+
+    int? total;
+
+    bool ShowPopup = false;
+
+    void ClosePopup()
+
+    {
+
+        // Close the Popup
+
+        ShowPopup = false;
+        errorStr = null;
+        errorString = null;
+
+    }
+
+    private void HandleValidSubmit()
+    {
+        Console.WriteLine("OnValidSubmit");
+    }
+
+    public async Task NavigateToUrlAsync(string url, bool openInNewTab)
+    {
+        if (openInNewTab)
+        {
+            await JSRuntime.InvokeAsync<object>("open", url, "_blank");
+        }
+        else
+        {
+            this.NavigationManager.NavigateTo(url);
+        }
+    }
+
+    string errorStr;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            _customerEntity = await CustomerManager.GetById(CustomerID);
+            _customerFullDataModel = await CustomerManager.GetById(CustomerID);
+
+            errorString = null;
+
+        }
+        catch (Exception ex)
+        {
+            errorString = $"Cannot Initialize the the page, {ex.Message}";
+            //NavigationManager.NavigateTo(@"\Error", true);
+        }
+    }
+
+    protected async Task ShowEditCustomer(int Id)
+    {
+
+        //var parameters = new ModalParameters();
+        //parameters.Add(nameof(EditCustomer.CustomerID), Id);
+        //parameters.Add(nameof(EditCustomer.CustomerID), CustomerID);
+        //Modal.Show<EditCustomer>("Edit Customer", parameters);
+        NavigationManager.NavigateTo("/ApnCustomers/EditCustomer" + "/" + CustomerID, true);
+    }
+
+
+    protected async Task ShowAddDevice(int Id)
+    {
+        var parameters = new ModalParameters();
+        parameters.Add(nameof(DeviceAdd.CustomerID), Id);
+
+        Modal.Show<DeviceAdd>($"Add Device", parameters);
+        //NavigationManager.NavigateTo($"/addDevice/{CustomerID}", false);
+    }
+    protected async Task UpdateCustomers(int Id)
+    {
+
+        await CustomerManager.Update(_customerEntity);
+        //await BlazoredModal.Close(ModalResult.Ok<ApnCustomers>(_customerEntity));
+        //RefreshRecords(currentPage);
+        NavigationManager.NavigateTo($"/customer/{CustomerID}", true);
+    }
+    protected async Task Deletecustomer(int Id)
+    {
+        /* var parameters = new ModalParameters();
+        parameters.Add(nameof(EditCustomer.CustomerID), Id); */
+        await CustomerManager.Delete(Id);
+        _customerModel = await CustomerManager.GetById(Id);
+        NavigationManager.NavigateTo("/vpncustomerlist", true);
+    }
+    protected async Task ShowUpdateCommentPage(int Id)
+    {
+        try
+        {
+            NavigationManager.NavigateTo("/ApnCustomers/customer" + "/" + Id + "/" + "CostumerCommentEdit", true);
+            errorString = null;
+
+        }
+        catch (Exception ex)
+        {
+
+            errorString = ex.Message;
+        }
+    }
+
+
+    async Task Cancel()
+    {
+        //await BlazoredModal.Cancel();
+        NavigationManager.NavigateTo($"/customer/{CustomerID}", true);
+    }
+    private bool _isSortedAscending;
+    private string _activeSortColumn;
+
+
+    private async Task SortTable(string columnName)
+    {
+        if (columnName != _activeSortColumn)
+        {
+            //_customerModel = await SortRecords(columnName, "ASC");
+            //_isSortedAscending = true;
+            //_activeSortColumn = columnName;
+        }
+        else
+        {
+            if (_isSortedAscending)
+            {
+                //_customerModel = await SortRecords(columnName, "DESC");
+            }
+            else
+            {
+                //_customerModel = await SortRecords(columnName, "ASC");
+            }
+
+            _isSortedAscending = !_isSortedAscending;
+        }
+        _sortColumnName = columnName;
+        _sortDir = _isSortedAscending ? "ASC" : "DESC";
+    }
+
+    private string SetSortIcon(string columnName)
+    {
+        if (_activeSortColumn != columnName)
+        {
+            return string.Empty;
+        }
+        if (_isSortedAscending)
+        {
+            return "fa-sort-up";
+        }
+        else
+        {
+            return "fa-sort-down";
+        }
+    }
+
+    public async Task RefreshRecords(int currentPage)
+    {
+        _customerModel = await CustomerManager.GetById(Id);
+        _curPage = currentPage;
+        this.StateHasChanged();
+    }
+
+
+
+
+}

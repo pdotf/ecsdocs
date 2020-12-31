@@ -6,11 +6,11 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using AppContext = EcsDataManager.DataAccess.AppContext;
+using EcsContext = EcsDataManager.DataAccess.EcsContext;
 
 namespace EcsDataManager.Migrations
 {
-    [DbContext(typeof(AppContext))]
+    [DbContext(typeof(EcsContext))]
     [Migration("20201231112306_InitialMigration")]
     partial class InitialMigration
     {

@@ -4,7 +4,8 @@ using System.Text;
 
 namespace EcsDataManager.EFContracts
 {
-   public class CRUDManager
+    public interface IUpdateComment<TEntity>
     {
+        void ChangeComment(TEntity dbEntity, TEntity entity);
     }
 }
