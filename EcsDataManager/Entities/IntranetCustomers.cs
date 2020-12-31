@@ -5,9 +5,8 @@ using System.Text;
 
 namespace EcsDataManager.Entities
 {
-    public class ApnCustomers
+    public class IntranetCustomers
     {
-        
         public int Id { get; set; }
 
         [Required(AllowEmptyStrings = false, ErrorMessage = nameof(CustomerName) + " is required.")]
@@ -22,21 +21,17 @@ namespace EcsDataManager.Entities
         [Required(AllowEmptyStrings = false, ErrorMessage = nameof(OwnerTeam) + " is required.")]
         [MaxLength(50)]
         public string OwnerTeam { get; set; }
-        [Required(AllowEmptyStrings = false, ErrorMessage = nameof(WanIpRange) + " is required.")]
-        [MaxLength(500)]
-        public string WanIpRange { get; set; }
-        [Required(AllowEmptyStrings = false, ErrorMessage = nameof(AccessList) + " is required.")]
-        [MaxLength(500)]
-        public string AccessList { get; set; }
+        [Required(AllowEmptyStrings = false, ErrorMessage = nameof(ServiceType) + " is required.")]
+        [MaxLength(10)]
+        public string ServiceType { get; set; }
 
-        [Range(0, int.MaxValue, ErrorMessage = "Please enter valid integer Number")]
-        [Required]
-        public int NumberOfSimCard { get; set; }
-         
+        [Required(AllowEmptyStrings = false, ErrorMessage = nameof(IpRange) + " is required.")]
+        [MaxLength(500)]
+        public string IpRange { get; set; }
+
+        [Required(AllowEmptyStrings = false, ErrorMessage = nameof(Comment) + " is required.")]
+
         [MaxLength(4000)]
         public string Comment { get; set; }
-
-        //navigation properties
-
     }
 }
