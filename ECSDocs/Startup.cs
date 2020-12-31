@@ -32,6 +32,7 @@ namespace ECSDocs
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
+            
         }
 
         public IConfiguration Configuration { get; }
@@ -44,10 +45,16 @@ namespace ECSDocs
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
 
+            services.AddDbContext<EcsDataManager.DataAccess.AppContext>(options =>
+                options.UseSqlServer(
+                    Configuration.GetConnectionString("DefaultConnection")));
+
+
+
             //services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
             //    .AddEntityFrameworkStores<ApplicationDbContext>();
 
-             services.AddDefaultIdentity<IdentityUser>()
+            services.AddDefaultIdentity<IdentityUser>()
                 .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
@@ -105,6 +112,8 @@ namespace ECSDocs
             {
                 app.UseDeveloperExceptionPage();
                 app.UseMigrationsEndPoint();
+                
+                 
             }
             else
             {
