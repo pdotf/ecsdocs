@@ -1,7 +1,7 @@
-﻿@page "/Intranet/EditCustomer/{customerID:int}"
-@using EcsDataManager.Contracts
+﻿@page "/IntranetCustomers/EditCustomer/{customerID:int}"
+@using EcsDataManager.EFContracts
 @using EcsDataManager.Entities
-@inject IApnCustomerManager<ApnCustomers> ApnCustomersManager
+@inject ICRUDManager<IntranetCustomers> CustomersManager
 @inject NavigationManager NavigationManager
 
 @using System.ComponentModel.DataAnnotations
@@ -53,16 +53,12 @@ else
 
                     <div class="row">
                         <div class="col-md-6">
-                            <label for="CustomerName">Number Of SimCard</label>
-                            <input class="form-control" @bind-value="@_customerEntity.NumberOfSimCard" id="NumberOfSimCard" />
-                            <label for="Tel">Access List</label>
-                            <input class="form-control" @bind-value="@_customerEntity.AccessList" id="AccessList" />
+                            <label for="CustomerName">Service Type</label>
+                            <input class="form-control" @bind-value="@_customerEntity.ServiceType" id="NumberOfSimCard" />
+                            <label for="Tel">Ip Range</label>
+                            <input class="form-control" @bind-value="@_customerEntity.IpRange" id="AccessList" />
                         </div>
-                        <div class="col-md-6">
-                            <label for="Mobile">Wan Ip Range</label>
-                            <input class="form-control" @bind-value="@_customerEntity.WanIpRange" id="WanIpRange" />
-
-                        </div>
+                       
                     </div>
 
                     <input type="hidden" @bind-value="@_customerEntity.Id" />
@@ -71,7 +67,7 @@ else
 
                 </div>
                 <div class="form-group">
-                    <button type="submit" class="btn btn-primary" >Save</button>
+                    <button type="submit" class="btn btn-primary">Save</button>
 
                     <button type="button" class="btn btn-danger" @onclick="Cancel">Cancel</button>
                 </div>
@@ -84,14 +80,14 @@ else
 
     [Parameter] public int CustomerID { get; set; }
 
-    ApnCustomers _customerModel;
-    ApnCustomers _customerEntity = new ApnCustomers();
+    IntranetCustomers _customerModel;
+    IntranetCustomers _customerEntity = new IntranetCustomers();
     string errorstring;
     protected override async Task OnInitializedAsync()
     {
         try
         {
-            _customerEntity = await ApnCustomersManager?.GetById(CustomerID);
+            _customerEntity = await CustomersManager?.Get(CustomerID);
             errorstring = null;
         }
         catch (Exception ex)
@@ -108,8 +104,8 @@ else
     {
         if (_customerEntity != null)
         {
-            await ApnCustomersManager.Update(_customerEntity);
-            NavigationManager.NavigateTo("/ApnCustomers/Customer" + "/" + CustomerID, true);
+            await CustomersManager.Change(_customerModel,_customerEntity);
+            NavigationManager.NavigateTo("/IntranetCustomers/Customer" + "/" + CustomerID, true);
         }
 
 
@@ -117,7 +113,7 @@ else
 
     async Task Cancel()
     {
-        NavigationManager.NavigateTo("/customer" + "/" + CustomerID);
+        NavigationManager.NavigateTo("/IntranetCustomers/customer" + "/" + CustomerID);
     }
 
     void Reset()

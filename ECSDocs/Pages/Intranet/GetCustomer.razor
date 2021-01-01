@@ -1,8 +1,8 @@
-﻿@page "/Intranet/customer"
-@page "/Intranet/customer/{customerID:int}"
-@using EcsDataManager.Contracts
+﻿@page "/IntranetCustomers/customer"
+@page "/IntranetCustomers/customer/{customerID:int}"
+@using EcsDataManager.EFContracts
 @using EcsDataManager.Entities
-@inject IApnCustomerManager<ApnCustomers> CustomerManager
+@inject ICRUDManager<IntranetCustomers> CustomerManager
 @inject NavigationManager NavigationManager
 @inject IJSRuntime JSRuntime
 
@@ -26,12 +26,9 @@ else if (_customerEntity is null)
 }
 else
 {
-
     <div class="container-fluid">
         <div>
             @*ShowAddDevice(_customerEntity.Id) OpenAddDevice()*@
-
-
             <AuthorizeView>
                 <Authorized>
 
@@ -52,107 +49,88 @@ else
         </div>
         <br />
         <br /><br />
-              <div>
-                  <div class="row container-fluid">
-                      <div class="col-md-2">
-                          <h6>
-                              @nameof(_customerFullDataModel.CustomerName):
+        <div>
+            <div class="row container-fluid">
+                <div class="col-md-2">
+                    <h6>
+                        @nameof(_customerFullDataModel.CustomerName):
 
-                          </h6>
-                      </div>
-                      <Card class="col-md-10">
-                          <h7><span style="color:green">@_customerFullDataModel.CustomerName</span></h7>
-                      </Card>
-                  </div>
-                  <div class="row container-fluid">
-                      <div class="col-md-2">
-                          <h6>
-                              @nameof(_customerFullDataModel.Tell):
+                    </h6>
+                </div>
+                <Card class="col-md-10">
+                    <h7><span style="color:green">@_customerFullDataModel.CustomerName</span></h7>
+                </Card>
+            </div>
+            <div class="row container-fluid">
+                <div class="col-md-2">
+                    <h6>
+                        @nameof(_customerFullDataModel.Tell):
 
-                          </h6>
-                      </div>
-                      <Card class="col-md-10">
-                          <h7><span style="color:green">@_customerFullDataModel.Tell</span></h7>
-                      </Card>
-                  </div>
-                  <div class="row container-fluid">
-                      <div class="col-md-2">
-                          <h6>
-                              @nameof(_customerFullDataModel.Mobile):
+                    </h6>
+                </div>
+                <Card class="col-md-10">
+                    <h7><span style="color:green">@_customerFullDataModel.Tell</span></h7>
+                </Card>
+            </div>
+            <div class="row container-fluid">
+                <div class="col-md-2">
+                    <h6>
+                        @nameof(_customerFullDataModel.Mobile):
 
-                          </h6>
-                      </div>
-                      <Card class="col-md-10">
-                          <h7><span style="color:green">@_customerFullDataModel.Mobile</span></h7>
-                      </Card>
-                  </div>
-                  <div class="row container-fluid">
-                      <div class="col-md-2">
-                          <h6>
-                              @nameof(_customerFullDataModel.OwnerTeam):
+                    </h6>
+                </div>
+                <Card class="col-md-10">
+                    <h7><span style="color:green">@_customerFullDataModel.Mobile</span></h7>
+                </Card>
+            </div>
+            <div class="row container-fluid">
+                <div class="col-md-2">
+                    <h6>
+                        @nameof(_customerFullDataModel.OwnerTeam):
 
-                          </h6>
-                      </div>
-                      <Card class="col-md-10">
-                          <h7><span style="color:green">@_customerFullDataModel.OwnerTeam</span></h7>
-                      </Card>
-                  </div>
-                  <div class="row container-fluid">
-                      <div class="col-md-2">
-                          <h6>
-                              @nameof(_customerFullDataModel.WanIpRange):
+                    </h6>
+                </div>
+                <Card class="col-md-10">
+                    <h7><span style="color:green">@_customerFullDataModel.OwnerTeam</span></h7>
+                </Card>
+            </div>
+            <div class="row container-fluid">
+                <div class="col-md-2">
+                    <h6>
+                        @nameof(_customerFullDataModel.ServiceType):
 
-                          </h6>
-                      </div>
-                      <Card class="col-md-10">
-                          <h7><span style="color:green">@_customerFullDataModel.WanIpRange</span></h7>
-                      </Card>
-                  </div>
-                  <div class="row container-fluid">
-                      <div class="col-md-2">
-                          <h6>
-                              @nameof(_customerFullDataModel.NumberOfSimCard):
+                    </h6>
+                </div>
+                <Card class="col-md-10">
+                    <h7><span style="color:green">@_customerFullDataModel.ServiceType</span></h7>
+                </Card>
+            </div>
+            <div class="row container-fluid">
+                <div class="col-md-2">
+                    <h6>
+                        @nameof(_customerFullDataModel.IpRange):
 
-                          </h6>
-                      </div>
-                      <Card class="col-md-10">
-                          <h7><span style="color:green">@_customerFullDataModel.NumberOfSimCard</span></h7>
-                      </Card>
-                  </div>
-                  <div class="row container-fluid">
-                      <div class="col-md-2">
-                          <h6>
-                              @nameof(_customerFullDataModel.AccessList):
+                    </h6>
+                </div>
+                <Card class="col-md-10">
+                    <h7><span style="color:green">@_customerFullDataModel.IpRange</span></h7>
+                </Card>
+            </div>
+            
+            <br />
+            <br />
+            <div class="row container-fluid">
+                <div class="col-md-2"><h6>Comment: </h6></div>
+                <div class="col-md-10" dir="rtl">
+                    <MemoEdit @bind-Text="@_customerFullDataModel.Comment" ReadOnly="true" Float="Float.Right" Size="Size.ExtraLarge" Rows="10" />
+                </div>
+            </div>
+            <br />
+            <br />
+        </div>
 
-                          </h6>
-                      </div>
-                      <Card class="col-md-10">
-                          <h7><span style="color:green">@_customerFullDataModel.AccessList</span></h7>
-                      </Card>
-                  </div>
-                  <br />
-                  <br />
-                  <div class="row container-fluid">
-                      <div class="col-md-2"><h6>Comment: </h6></div>
-                      <div class="col-md-10" dir="rtl">
-                          <MemoEdit @bind-Text="@_customerFullDataModel.Comment" ReadOnly="true" Float="Float.Right" Size="Size.ExtraLarge" Rows="10" />
-                      </div>
-                  </div>
-                  <br />
-                  <br />
-              </div>
-        
     </div>
 }
-
-
-
-
-
-
-
-
-
 
 @code {
 
@@ -162,10 +140,10 @@ else
 
     [Parameter] public int Id { get; set; }
     [Parameter] public int CustomerID { get; set; }
-    ApnCustomers _customerModel;
-    ApnCustomers _customerEntity = new ApnCustomers();
+    IntranetCustomers _customerModel;
+    IntranetCustomers _customerEntity = new IntranetCustomers();
 
-    ApnCustomers _customerFullDataModel = new ApnCustomers();
+    IntranetCustomers _customerFullDataModel = new IntranetCustomers();
 
     //DeviceList device = new DeviceList();
     string errorString;
@@ -218,8 +196,8 @@ else
     {
         try
         {
-            _customerEntity = await CustomerManager.GetById(CustomerID);
-            _customerFullDataModel = await CustomerManager.GetById(CustomerID);
+            _customerEntity = await CustomerManager.Get(CustomerID);
+            _customerFullDataModel = await CustomerManager.Get(CustomerID);
 
             errorString = null;
 
@@ -238,7 +216,7 @@ else
         //parameters.Add(nameof(EditCustomer.CustomerID), Id);
         //parameters.Add(nameof(EditCustomer.CustomerID), CustomerID);
         //Modal.Show<EditCustomer>("Edit Customer", parameters);
-        NavigationManager.NavigateTo("/ApnCustomers/EditCustomer" + "/" + CustomerID, true);
+        NavigationManager.NavigateTo("/IntranetCustomers/EditCustomer" + "/" + CustomerID, true);
     }
 
 
@@ -253,24 +231,25 @@ else
     protected async Task UpdateCustomers(int Id)
     {
 
-        await CustomerManager.Update(_customerEntity);
-        //await BlazoredModal.Close(ModalResult.Ok<ApnCustomers>(_customerEntity));
+        await CustomerManager.Change(_customerEntity, _customerFullDataModel);
+        //await BlazoredModal.Close(ModalResult.Ok<IntranetCustomers>(_customerEntity));
         //RefreshRecords(currentPage);
-        NavigationManager.NavigateTo($"/customer/{CustomerID}", true);
+        NavigationManager.NavigateTo($"IntranetCustomers/customer/{CustomerID}", true);
     }
     protected async Task Deletecustomer(int Id)
     {
         /* var parameters = new ModalParameters();
         parameters.Add(nameof(EditCustomer.CustomerID), Id); */
-        await CustomerManager.Delete(Id);
-        _customerModel = await CustomerManager.GetById(Id);
-        NavigationManager.NavigateTo("/vpncustomerlist", true);
+
+        _customerModel = await CustomerManager.Get(Id);
+        await CustomerManager.Delete(_customerModel);
+        NavigationManager.NavigateTo("/IntranetCustomers", true);
     }
-    protected async Task ShowUpdateCommentPage(int Id)
+    protected void ShowUpdateCommentPage(int Id)
     {
         try
         {
-            NavigationManager.NavigateTo("/ApnCustomers/customer" + "/" + Id + "/" + "CostumerCommentEdit", true);
+            NavigationManager.NavigateTo("/IntranetCustomers/customer" + "/" + Id + "/" + "CostumerCommentEdit", true);
             errorString = null;
 
         }
@@ -282,10 +261,10 @@ else
     }
 
 
-    async Task Cancel()
+    async void Cancel()
     {
         //await BlazoredModal.Cancel();
-        NavigationManager.NavigateTo($"/customer/{CustomerID}", true);
+        NavigationManager.NavigateTo($"/IntranetCustomers/customer/{CustomerID}", true);
     }
     private bool _isSortedAscending;
     private string _activeSortColumn;
@@ -334,12 +313,9 @@ else
 
     public async Task RefreshRecords(int currentPage)
     {
-        _customerModel = await CustomerManager.GetById(Id);
+        _customerModel = await CustomerManager.Get(Id);
         _curPage = currentPage;
         this.StateHasChanged();
     }
-
-
-
 
 }

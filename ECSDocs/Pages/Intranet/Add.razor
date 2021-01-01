@@ -1,8 +1,7 @@
-﻿@page "/Intranet/addCustomer"
-@using EcsDataManager.Contracts
+﻿@page "/IntranetCustomers/addCustomer"
+@using EcsDataManager.EFContracts
 @using EcsDataManager.Entities
-@inject IDeviceManager DeviceManager
-@inject IApnCustomerManager<ApnCustomers> customerManager
+@inject ICRUDManager<IntranetCustomers> CustomerManager
 @inject Microsoft.AspNetCore.Components.NavigationManager navigationManager
 <Alert Color="Color.Success" @ref="Success">
     <AlertMessage>Well done!</AlertMessage>
@@ -59,28 +58,19 @@
                     <label>Wan Ip Range</label>
                 </div>
                 <div class="col-md-7">
-                    <InputText style="width:100%" @bind-Value="@_customer.WanIpRange" />
-                    <ValidationMessage For="@(()=>_customer.WanIpRange)" />
+                    <InputText style="width:100%" @bind-Value="@_customer.ServiceType" />
+                    <ValidationMessage For="@(()=>_customer.ServiceType)" />
                 </div>
 
                 <div class="col-md-5">
                     <label>Access List</label>
                 </div>
                 <div class="col-md-7">
-                    <InputText style="width:100%" @bind-Value="@_customer.AccessList" />
-                    <ValidationMessage For="@(()=>_customer.AccessList)" />
+                    <InputText style="width:100%" @bind-Value="@_customer.IpRange" />
+                    <ValidationMessage For="@(()=>_customer.IpRange)" />
                 </div>
             </div>
-            <div class="row">
-                <div class="col-md-5">
-                    <label>Number Of Sim Card</label>
-                </div>
-                <div class="col-md-7">
-                    <InputNumber style="width:100%" @bind-Value="@_customer.NumberOfSimCard" />
-                    <ValidationMessage For="@(()=>_customer.NumberOfSimCard)" />
-                </div>
-
-            </div>
+             
             <div class="row">
 
                 <div class="col-md-5">
@@ -113,33 +103,33 @@
 @code {
 
     [CascadingParameter] public IModalService Modal { get; set; }
-    List<ApnCustomers> Customers = new List<ApnCustomers>();
-    ApnCustomers _customer = new ApnCustomers();
+    List<IntranetCustomers> Customers = new List<IntranetCustomers>();
+    IntranetCustomers _customer = new IntranetCustomers();
 
     Alert Success;
     Snackbar snackbar;
 
-    int cc;
+    string errorString;
     protected async Task CreateCustomer()
     {
-        cc = await customerManager.Create(_customer);
-
-
-        navigationManager.NavigateTo($@"ApnCustomers/customerlist", true);
-        snackbar.Show();
-
-
+        try
+        {
+            await CustomerManager.Add(_customer);
+            errorString=null;
+            navigationManager.NavigateTo($@"IntranetCustomers", true);
+            snackbar.Show();
+        }
+        catch (Exception ex)
+        {
+            
+            errorString=ex.Message;
+        }
 
     }
-    protected async Task CreatMainDevice()
-    {
 
-
-
-    }
 
     void Cancel()
     {
-        navigationManager.NavigateTo("ApnCustomers/customerlist");
+        navigationManager.NavigateTo("/IntranetCustomers");
     }
 }

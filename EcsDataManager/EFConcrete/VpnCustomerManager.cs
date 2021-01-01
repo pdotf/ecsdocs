@@ -17,13 +17,13 @@ namespace EcsDataManager.EFConcrete
         {
             _appContext = appContext;
         }
-        public void Add(Customers entity)
+        public async Task  Add(Customers entity)
         {
             _appContext.Customers.Add(entity);
-            _appContext.SaveChanges();
+          await  _appContext.SaveChangesAsync();
         }
 
-        public void Change(Customers dbEntity, Customers entity)
+        public async Task  Change(Customers dbEntity, Customers entity)
         {
             dbEntity.CustomerName = entity.CustomerName;
             dbEntity.Tel = entity.Tel;
@@ -42,19 +42,19 @@ namespace EcsDataManager.EFConcrete
             dbEntity.VpnToolsName = entity.VpnToolsName;
             dbEntity.VRF = entity.VRF;
 
-            _appContext.SaveChanges();
+           await _appContext.SaveChangesAsync();
         }
 
-        public void ChangeComment(Customers dbEntity, Customers entity)
+        public async Task  ChangeComment(Customers dbEntity, Customers entity)
         {
             dbEntity.Comment = entity.Comment;
-            _appContext.SaveChanges();
+          await  _appContext.SaveChangesAsync();
         }
 
-        public void Delete(Customers entity)
+        public async Task  Delete(Customers entity)
         {
             _appContext.Customers.Remove(entity);
-            _appContext.SaveChanges();
+          await  _appContext.SaveChangesAsync();
         }
 
         public Customers Get(int id)
@@ -66,6 +66,11 @@ namespace EcsDataManager.EFConcrete
         public IEnumerable<Customers> GetAll()
         {
             return _appContext.Customers.ToList();
+        }
+
+        Task IUpdateComment<Customers>.ChangeComment(Customers dbEntity, Customers entity)
+        {
+            throw new NotImplementedException();
         }
 
         Task<Customers> ICRUDManager<Customers>.Get(int id)

@@ -8,9 +8,9 @@ using System.Text;
 
 namespace EcsDataManager.DataAccess
 {
-    public class AppContextFactory : IDesignTimeDbContextFactory<EcsContext>
+    public class EcsContextFactory : IDesignTimeDbContextFactory<EcsContext>
     {
-        public AppContextFactory()
+        public EcsContextFactory()
         {
 
         }

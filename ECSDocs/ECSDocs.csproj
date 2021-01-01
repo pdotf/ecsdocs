@@ -6,19 +6,18 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Components\**" />
     <Compile Remove="Pages\ApnCustomersx\**" />
     <Compile Remove="Pages\VpnCustomers\**" />
+    <Content Remove="Components\**" />
     <Content Remove="Pages\ApnCustomersx\**" />
     <Content Remove="Pages\VpnCustomers\**" />
+    <EmbeddedResource Remove="Components\**" />
     <EmbeddedResource Remove="Pages\ApnCustomersx\**" />
     <EmbeddedResource Remove="Pages\VpnCustomers\**" />
+    <None Remove="Components\**" />
     <None Remove="Pages\ApnCustomersx\**" />
     <None Remove="Pages\VpnCustomers\**" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Content Remove="Pages\Intranet\AddCustomer.razor" />
-    <Content Remove="Pages\Intranet\FetchCustomerById.razor" />
   </ItemGroup>
 
   <ItemGroup>
@@ -44,7 +43,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Components\" />
     <Folder Include="Pages\VPN\" />
   </ItemGroup>
 
@@ -52,8 +50,6 @@
     <None Include="Pages\ApnCustomers\AddCustomer.razor" />
     <None Include="Pages\ApnCustomers\FetchApnCustomers.razor" />
     <None Include="Pages\ApnCustomers\FetchCustomerById.razor" />
-    <None Include="Pages\Intranet\AddCustomer.razor" />
-    <None Include="Pages\Intranet\FetchCustomerById.razor" />
   </ItemGroup>
 
 </Project>

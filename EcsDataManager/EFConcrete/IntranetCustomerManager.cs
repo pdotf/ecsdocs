@@ -17,13 +17,13 @@ namespace EcsDataManager.EFConcrete
         {
             _ecsContext = ecsContext;
         }
-        public void Add(IntranetCustomers entity)
+        public async Task Add(IntranetCustomers entity)
         {
             _ecsContext.Add(entity);
-            _ecsContext.SaveChanges();
+            await _ecsContext.SaveChangesAsync();
         }
 
-        public void Change(IntranetCustomers dbEntity, IntranetCustomers entity)
+        public async Task Change(IntranetCustomers dbEntity, IntranetCustomers entity)
         {
             dbEntity.CustomerName = entity.CustomerName;
             dbEntity.Tell = entity.Tell;
@@ -31,20 +31,20 @@ namespace EcsDataManager.EFConcrete
             dbEntity.OwnerTeam = entity.OwnerTeam;
             dbEntity.ServiceType = entity.ServiceType;
             dbEntity.IpRange = entity.IpRange;
-            _ecsContext.SaveChanges();
+            await _ecsContext.SaveChangesAsync();
         }
 
-        public void ChangeComment(IntranetCustomers dbEntity, IntranetCustomers entity)
+        public async Task ChangeComment(IntranetCustomers dbEntity, IntranetCustomers entity)
         {
             dbEntity.Comment = entity.Comment;
-            _ecsContext.SaveChanges();
+            await _ecsContext.SaveChangesAsync();
 
         }
 
-        public void Delete(IntranetCustomers entity)
+        public async Task Delete(IntranetCustomers entity)
         {
             _ecsContext.Remove(entity);
-            _ecsContext.SaveChanges();
+            await _ecsContext.SaveChangesAsync();
         }
 
         public Task<IntranetCustomers> Get(int id)
@@ -55,7 +55,7 @@ namespace EcsDataManager.EFConcrete
 
         public Task<List<IntranetCustomers>> GetAll()
         {
-            var res= Task.FromResult(_ecsContext.IntranetCustomers.ToList());
+            var res = Task.FromResult(_ecsContext.IntranetCustomers.ToList());
             return res;
         }
     }
