@@ -256,7 +256,7 @@ else
         await CustomerManager.Update(_customerEntity);
         //await BlazoredModal.Close(ModalResult.Ok<ApnCustomers>(_customerEntity));
         //RefreshRecords(currentPage);
-        NavigationManager.NavigateTo($"/customer/{CustomerID}", true);
+        NavigationManager.NavigateTo($"/ApnCustomers/customer/{CustomerID}", true);
     }
     protected async Task Deletecustomer(int Id)
     {
@@ -264,7 +264,7 @@ else
         parameters.Add(nameof(EditCustomer.CustomerID), Id); */
         await CustomerManager.Delete(Id);
         _customerModel = await CustomerManager.GetById(Id);
-        NavigationManager.NavigateTo("/vpncustomerlist", true);
+        NavigationManager.NavigateTo("/ApnCustomers/customerlist", true);
     }
     protected async Task ShowUpdateCommentPage(int Id)
     {
