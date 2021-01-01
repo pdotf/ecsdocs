@@ -3,7 +3,8 @@
 @using EcsDataManager.Entities
 @inject NavigationManager NavigationManager
 @inject HttpClient Http
-@*<link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">*@
+@using Microsoft.JSInterop
+    @*<link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">*@
 <div class="row">
     <h3 class="container-fluid">
         Intranet Customers
@@ -34,7 +35,7 @@ else
 {
 
     <div class="float-left">
-        <input type="text" id="txtSearch" placeholder="Search Customer name..." class="form-control" @bind="SearchTerm" @bind:event="oninput" />
+        <input type="text" id="txtSearch" placeholder="Search Customer name..." class="form-control" @bind="SearchTerm" @bind:event="oninput"  />
 
     </div>
     <br />
@@ -69,10 +70,10 @@ else
     private string SearchTerm
     {
         get { return searchTerm; }
-        set { searchTerm = value; FilterRecords(); }
+        set { searchTerm = value;     CustomerFilteringList(searchTerm, "CustomerName"); }
     }
 
-   
+
 
     List<EcsDataManager.Entities.IntranetCustomers> _customerModel = new List<EcsDataManager.Entities.IntranetCustomers>();
     EcsDataManager.Entities.IntranetCustomers _customerEntity = new EcsDataManager.Entities.IntranetCustomers();
@@ -126,6 +127,33 @@ else
     {
         endPage = 0;
         this.OnInitializedAsync().Wait();
+    }
+    protected async Task OnCsmNameChanged()
+    {
+        string values = SearchTerm;
+        await CustomerFilteringList(values, "CustomerName");
+    }
+    protected async Task CustomerFilteringList(String Value, string columnName)
+    {
+        _customerModel = await CustomerManager?.GetAll();
+
+        if (Value.Trim().Length > 0)
+        {
+            switch (columnName)
+            {
+                case "CustomerName":
+                    _customerModel = _customerModel.Where(x => x.CustomerName.Contains(Value)).ToList();
+                    break;
+
+                default:
+                    _customerModel = await CustomerManager.GetAll();
+                    break;
+            }
+        }
+        else
+        {
+            _customerModel = await CustomerManager?.GetAll();
+        }
     }
 
 }

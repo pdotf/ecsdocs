@@ -1,7 +1,6 @@
 ﻿@page "/ApnCustomers/customerlist"
-@inject EcsDataManager.Contracts.IApnCustomerManager<ApnCustomers> ApnCustomerManager
-@using EcsDataManager.Contracts
-@using EcsDataManager.Concrete
+@inject ICRUDManager<ApnCustomers> CustomerManager
+@using EcsDataManager.EFContracts
 @using EcsDataManager.Entities
 @inject NavigationManager NavigationManager
 @*<link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">*@
@@ -48,9 +47,11 @@ else
             @*<DataGridColumn TItem="Customers" Field="@nameof(ApnCustomers.RowNumber)" Caption="#" />*@
             <DataGridColumn TItem="ApnCustomers" Field="@nameof(ApnCustomers.CustomerName)" Caption="Customer Name" />
             <DataGridColumn TItem="ApnCustomers" Field="@nameof(ApnCustomers.OwnerTeam)" Caption="Owner Team" />
+
             <DataGridColumn TItem="ApnCustomers" Field="@nameof(ApnCustomers.WanIpRange)" Caption="Wan Ip Range" />
             <DataGridColumn TItem="ApnCustomers" Field="@nameof(ApnCustomers.NumberOfSimCard)" Caption="Number Of SimCard" />
-            
+            <DataGridColumn TItem="ApnCustomers" Field="@nameof(ApnCustomers.AcountManager)" Caption="Account Manager" />
+
             <DataGridColumn TItem="ApnCustomers" Field="@nameof(ApnCustomers.Id)" Caption="Action">
                 <DisplayTemplate>
                     <Button Color="Color.Success" Clicked="async() => ShowCustomerDetail(context.Id).ConfigureAwait(true)">Detail</Button>
@@ -71,7 +72,7 @@ else
     private string SearchTerm
     {
         get { return searchTerm; }
-        set { searchTerm = value; FilterRecords(); }
+        set { searchTerm = value; CustomerFilteringList(searchTerm, "CustomerName"); }
     }
     List<ApnCustomers> _apnCustomerModel = new List<ApnCustomers>();
     ApnCustomers _customerEntity = new ApnCustomers();
@@ -79,7 +80,7 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        _apnCustomerModel = await ApnCustomerManager.ListAllWithoutPaging("", "", "");
+        _apnCustomerModel = await CustomerManager.GetAll();
 
 
     }
@@ -95,7 +96,7 @@ else
     protected async Task ShowCustomerDetail(int id)
     {
 
-        _customerEntity = await ApnCustomerManager?.GetById(id);
+        _customerEntity = await CustomerManager?.Get(id);
         try
         {
             NavigationManager.NavigateTo($"ApnCustomers/Customer/{id}", true);
@@ -115,7 +116,7 @@ else
         // this can be call to anything, in this case we're calling a fictional api
         // var response = await Http.GetJsonAsync<Customers[]>($"some-api/Customerss?page={e.Page}&pageSize={e.PageSize}");
 
-        _apnCustomerModel = await ApnCustomerManager.ListAllWithoutPaging("", "", "");
+        _apnCustomerModel = await CustomerManager.GetAll();
         totalcustomers = _apnCustomerModel.Count();
 
         // always call StateHasChanged!
@@ -125,6 +126,30 @@ else
     {
         endPage = 0;
         this.OnInitializedAsync().Wait();
+    }
+    protected async Task CustomerFilteringList(String Value, string columnName)
+    {
+        //Value=Value.ToLower();
+
+        _apnCustomerModel = await CustomerManager?.GetAll();
+        if (Value.Length > 0)
+        {
+            switch (columnName)
+            {
+
+                case "CustomerName":
+                    _apnCustomerModel = _apnCustomerModel.Where(x => x.CustomerName.Contains(Value)).ToList();
+                    break;
+
+                default:
+                    _apnCustomerModel = await CustomerManager.GetAll();
+                    break;
+            }
+        }
+        else
+        {
+            _apnCustomerModel = await CustomerManager?.GetAll();
+        }
     }
 
 }

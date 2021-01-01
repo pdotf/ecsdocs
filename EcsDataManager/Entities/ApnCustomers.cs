@@ -32,7 +32,11 @@ namespace EcsDataManager.Entities
         [RegularExpression("([1-9][0-9]*)", ErrorMessage = "Please enter valid integer Number")]
         [Required]
         public int NumberOfSimCard { get; set; }
-         
+
+        [Required(AllowEmptyStrings = false, ErrorMessage = nameof(AcountManager) + " is required.")]
+        [MaxLength(50)]
+        public string AcountManager { get; set; }
+
         [MaxLength(4000)]
         public string Comment { get; set; }
 

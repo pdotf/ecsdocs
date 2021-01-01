@@ -1,7 +1,7 @@
 ﻿@page "/ApnCustomers/EditCustomer/{customerID:int}"
-@using EcsDataManager.Contracts
+@using EcsDataManager.EFContracts
 @using EcsDataManager.Entities
-@inject IApnCustomerManager<ApnCustomers> ApnCustomersManager
+@inject ICRUDManager<ApnCustomers> CustomersManager
 @inject NavigationManager NavigationManager
 
 @using System.ComponentModel.DataAnnotations
@@ -57,6 +57,8 @@ else
                             <input class="form-control" @bind-value="@_customerEntity.NumberOfSimCard" id="NumberOfSimCard" />
                             <label for="Tel">Access List</label>
                             <input class="form-control" @bind-value="@_customerEntity.AccessList" id="AccessList" />
+                            <label for="Tel">Acount Manager</label>
+                            <input class="form-control" @bind-value="@_customerEntity.AcountManager" id="AccessList" />
                         </div>
                         <div class="col-md-6">
                             <label for="Mobile">Wan Ip Range</label>
@@ -91,7 +93,7 @@ else
     {
         try
         {
-            _customerEntity = await ApnCustomersManager?.GetById(CustomerID);
+            _customerEntity = await CustomersManager?.Get(CustomerID);
             errorstring = null;
         }
         catch (Exception ex)
@@ -108,7 +110,7 @@ else
     {
         if (_customerEntity != null)
         {
-            await ApnCustomersManager.Update(_customerEntity);
+              CustomersManager.Change(_customerModel,_customerEntity);
             NavigationManager.NavigateTo("/ApnCustomers/Customer" + "/" + CustomerID, true);
         }
 

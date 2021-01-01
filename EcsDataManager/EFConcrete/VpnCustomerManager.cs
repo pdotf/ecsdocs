@@ -68,7 +68,22 @@ namespace EcsDataManager.EFConcrete
             return _appContext.Customers.ToList();
         }
 
-        Task IUpdateComment<Customers>.ChangeComment(Customers dbEntity, Customers entity)
+        void ICRUDManager<Customers>.Add(Customers entity)
+        {
+            throw new NotImplementedException();
+        }
+
+        void ICRUDManager<Customers>.Change(Customers dbEntity, Customers entity)
+        {
+            throw new NotImplementedException();
+        }
+
+        void IUpdateComment<Customers>.ChangeComment(Customers dbEntity, Customers entity)
+        {
+            throw new NotImplementedException();
+        }
+
+        void ICRUDManager<Customers>.Delete(Customers entity)
         {
             throw new NotImplementedException();
         }

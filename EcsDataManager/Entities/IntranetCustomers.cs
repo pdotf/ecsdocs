@@ -29,8 +29,11 @@ namespace EcsDataManager.Entities
         [MaxLength(500)]
         public string IpRange { get; set; }
 
-        [Required(AllowEmptyStrings = false, ErrorMessage = nameof(Comment) + " is required.")]
+        [Required(AllowEmptyStrings = false, ErrorMessage = nameof(AcountManager) + " is required.")]
+        [MaxLength(50)]
+        public string AcountManager { get; set; }
 
+        [Required(AllowEmptyStrings = false, ErrorMessage = nameof(Comment) + " is required.")]
         [MaxLength(4000)]
         public string Comment { get; set; }
     }

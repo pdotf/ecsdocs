@@ -1,8 +1,8 @@
 ﻿@page "/apncustomers/customer"
 @page "/apncustomers/customer/{customerID:int}"
-@using EcsDataManager.Contracts
+@using EcsDataManager.EFContracts
 @using EcsDataManager.Entities
-@inject IApnCustomerManager<ApnCustomers> CustomerManager
+@inject ICRUDManager<ApnCustomers> CustomerManager
 @inject NavigationManager NavigationManager
 @inject IJSRuntime JSRuntime
 
@@ -218,8 +218,8 @@ else
     {
         try
         {
-            _customerEntity = await CustomerManager.GetById(CustomerID);
-            _customerFullDataModel = await CustomerManager.GetById(CustomerID);
+            _customerEntity = await CustomerManager.Get(CustomerID);
+            _customerFullDataModel = await CustomerManager.Get(CustomerID);
 
             errorString = null;
 
@@ -253,7 +253,7 @@ else
     protected async Task UpdateCustomers(int Id)
     {
 
-        await CustomerManager.Update(_customerEntity);
+          CustomerManager.Change(_customerModel,_customerEntity);
         //await BlazoredModal.Close(ModalResult.Ok<ApnCustomers>(_customerEntity));
         //RefreshRecords(currentPage);
         NavigationManager.NavigateTo($"/ApnCustomers/customer/{CustomerID}", true);
@@ -262,8 +262,9 @@ else
     {
         /* var parameters = new ModalParameters();
         parameters.Add(nameof(EditCustomer.CustomerID), Id); */
-        await CustomerManager.Delete(Id);
-        _customerModel = await CustomerManager.GetById(Id);
+        ;
+        _customerModel = await CustomerManager.Get(Id);
+          CustomerManager.Delete(_customerModel);
         NavigationManager.NavigateTo("/ApnCustomers/customerlist", true);
     }
     protected async Task ShowUpdateCommentPage(int Id)
@@ -334,7 +335,7 @@ else
 
     public async Task RefreshRecords(int currentPage)
     {
-        _customerModel = await CustomerManager.GetById(Id);
+        _customerModel = await CustomerManager.Get(Id);
         _curPage = currentPage;
         this.StateHasChanged();
     }

@@ -1,9 +1,9 @@
 ﻿@page "/ApnCustomers/addCustomer"
-@using EcsDataManager.Contracts
+@using EcsDataManager.EFContracts
 @using EcsDataManager.Entities
-@inject IDeviceManager DeviceManager
-@inject IApnCustomerManager<ApnCustomers> customerManager
+@inject ICRUDManager<ApnCustomers> customerManager
 @inject Microsoft.AspNetCore.Components.NavigationManager navigationManager
+
 <Alert Color="Color.Success" @ref="Success">
     <AlertMessage>Well done!</AlertMessage>
     <AlertDescription>You successfully add a customer.</AlertDescription>
@@ -56,6 +56,16 @@
             </div>
             <div class="row">
                 <div class="col-md-5">
+                    <label>Account Manager</label>
+                </div>
+                <div class="col-md-7">
+                    <InputText style="width:100%" @bind-Value="@_customer.AcountManager" />
+                    <ValidationMessage For="@(()=>_customer.AcountManager)" />
+                </div>
+
+            </div>
+            <div class="row">
+                <div class="col-md-5">
                     <label>Wan Ip Range</label>
                 </div>
                 <div class="col-md-7">
@@ -81,6 +91,7 @@
                 </div>
 
             </div>
+
             <div class="row">
 
                 <div class="col-md-5">
@@ -119,19 +130,26 @@
     Alert Success;
     Snackbar snackbar;
 
-    int cc;
+    string error;
     protected async Task CreateCustomer()
     {
-        cc = await customerManager.Create(_customer);
+        try
+        {
+            customerManager.Add(_customer);
+            error = null;
 
+            navigationManager.NavigateTo($@"ApnCustomers/customerlist", true);
+        }
+        catch (Exception ex)
+        {
+            error = ex.Message;
+        }
 
-        navigationManager.NavigateTo($@"ApnCustomers/customerlist", true);
-        snackbar.Show();
 
 
 
     }
-  
+
 
     void Cancel()
     {

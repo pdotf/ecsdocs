@@ -231,7 +231,7 @@ else
     protected async Task UpdateCustomers(int Id)
     {
 
-        await CustomerManager.Change(_customerEntity, _customerFullDataModel);
+          CustomerManager.Change(_customerEntity, _customerFullDataModel);
         //await BlazoredModal.Close(ModalResult.Ok<IntranetCustomers>(_customerEntity));
         //RefreshRecords(currentPage);
         NavigationManager.NavigateTo($"IntranetCustomers/customer/{CustomerID}", true);
@@ -242,7 +242,7 @@ else
         parameters.Add(nameof(EditCustomer.CustomerID), Id); */
 
         _customerModel = await CustomerManager.Get(Id);
-        await CustomerManager.Delete(_customerModel);
+          CustomerManager.Delete(_customerModel);
         NavigationManager.NavigateTo("/IntranetCustomers", true);
     }
     protected void ShowUpdateCommentPage(int Id)

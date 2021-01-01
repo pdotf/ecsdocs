@@ -55,22 +55,28 @@
             </div>
             <div class="row">
                 <div class="col-md-5">
-                    <label>Wan Ip Range</label>
+                    <label>Service Type</label>
                 </div>
                 <div class="col-md-7">
                     <InputText style="width:100%" @bind-Value="@_customer.ServiceType" />
                     <ValidationMessage For="@(()=>_customer.ServiceType)" />
                 </div>
-
                 <div class="col-md-5">
-                    <label>Access List</label>
+                    <label>Acount Manager</label>
+                </div>
+                <div class="col-md-7">
+                    <InputText style="width:100%" @bind-Value="@_customer.AcountManager" />
+                    <ValidationMessage For="@(()=>_customer.AcountManager)" />
+                </div>
+                <div class="col-md-5">
+                    <label>Ip Range</label>
                 </div>
                 <div class="col-md-7">
                     <InputText style="width:100%" @bind-Value="@_customer.IpRange" />
                     <ValidationMessage For="@(()=>_customer.IpRange)" />
                 </div>
             </div>
-             
+
             <div class="row">
 
                 <div class="col-md-5">
@@ -80,6 +86,7 @@
                     <input style="width:100%" @bind-value="@_customer.Comment" />
 
                 </div>
+
             </div>
             <div class="row">
                 <input style="width:100%" type="hidden" @bind-value="@_customer.Id" />
@@ -104,25 +111,30 @@
 
     [CascadingParameter] public IModalService Modal { get; set; }
     List<IntranetCustomers> Customers = new List<IntranetCustomers>();
-    IntranetCustomers _customer = new IntranetCustomers();
+    IntranetCustomers _customer;
 
     Alert Success;
     Snackbar snackbar;
 
-    string errorString;
-    protected async Task CreateCustomer()
+    string errorString = null;
+
+        protected override void OnInitialized()
+        {
+           _customer=new IntranetCustomers();
+        }
+
+        protected void CreateCustomer()
     {
         try
         {
-            await CustomerManager.Add(_customer);
-            errorString=null;
+            CustomerManager.Add(_customer);
+            errorString = null;
             navigationManager.NavigateTo($@"IntranetCustomers", true);
-            snackbar.Show();
         }
         catch (Exception ex)
         {
-            
-            errorString=ex.Message;
+
+            errorString = ex.Message;
         }
 
     }

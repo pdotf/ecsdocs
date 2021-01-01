@@ -47,9 +47,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="Pages\ApnCustomers\AddCustomer.razor" />
-    <None Include="Pages\ApnCustomers\FetchApnCustomers.razor" />
-    <None Include="Pages\ApnCustomers\FetchCustomerById.razor" />
+    <None Include="Pages\ApnCustomers\Add.razor" />
+    <None Include="Pages\ApnCustomers\Customers.razor" />
+    <None Include="Pages\ApnCustomers\GetCustomer.razor" />
   </ItemGroup>
 
 </Project>

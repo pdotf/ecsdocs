@@ -9,8 +9,8 @@ namespace EcsDataManager.EFContracts
     {
         Task<List<TEntity>> GetAll();
         Task<TEntity> Get(int id);
-        Task Add(TEntity entity);
-        Task Change(TEntity dbEntity, TEntity entity);
-        Task Delete(TEntity entity);
+        void Add(TEntity entity);
+        void Change(TEntity dbEntity, TEntity entity);
+        void Delete(TEntity entity);
     }
 }

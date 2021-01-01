@@ -3,10 +3,7 @@
 @using EcsDataManager.Entities
 @inject ICRUDManager<IntranetCustomers> CustomersManager
 @inject NavigationManager NavigationManager
-
-@using System.ComponentModel.DataAnnotations
-@using System.IO
-@using System.Net.Http.Headers
+ 
 
 
 <style type="text/css">
@@ -48,6 +45,8 @@ else
                             <input class="form-control" @bind-value="@_customerEntity.Mobile" id="Mobile" />
                             <label for="Mobile">@nameof(_customerEntity.OwnerTeam)</label>
                             <input class="form-control" @bind-value="@_customerEntity.OwnerTeam" id="OwnerTeam" />
+                            <label>Account Manager</label>
+                            <input class="form-control" @bind-value="@_customerEntity.AcountManager" id="OwnerTeam" />
                         </div>
                     </div>
 
@@ -104,7 +103,7 @@ else
     {
         if (_customerEntity != null)
         {
-            await CustomersManager.Change(_customerModel,_customerEntity);
+              CustomersManager.Change(_customerModel,_customerEntity);
             NavigationManager.NavigateTo("/IntranetCustomers/Customer" + "/" + CustomerID, true);
         }
 
