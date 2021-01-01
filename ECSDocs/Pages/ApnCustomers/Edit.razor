@@ -86,7 +86,7 @@ else
 
     [Parameter] public int CustomerID { get; set; }
 
-    ApnCustomers _customerModel;
+    ApnCustomers _customerModel=new ApnCustomers();
     ApnCustomers _customerEntity = new ApnCustomers();
     string errorstring;
     protected override async Task OnInitializedAsync()

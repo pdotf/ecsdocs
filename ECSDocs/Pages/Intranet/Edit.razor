@@ -79,7 +79,7 @@ else
 
     [Parameter] public int CustomerID { get; set; }
 
-    IntranetCustomers _customerModel;
+    IntranetCustomers _customerModel = new IntranetCustomers();;
     IntranetCustomers _customerEntity = new IntranetCustomers();
     string errorstring;
     protected override async Task OnInitializedAsync()
@@ -103,7 +103,7 @@ else
     {
         if (_customerEntity != null)
         {
-              CustomersManager.Change(_customerModel,_customerEntity);
+            CustomersManager.Change(_customerModel,_customerEntity);
             NavigationManager.NavigateTo("/IntranetCustomers/Customer" + "/" + CustomerID, true);
         }
 
