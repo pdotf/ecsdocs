@@ -2,20 +2,26 @@
 @inject EcsDataManager.EFContracts.ICRUDManager<EcsDataManager.Entities.IntranetCustomers> CustomerManager
 @using EcsDataManager.Entities
 @inject NavigationManager NavigationManager
+@inject HttpClient Http
 @*<link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">*@
-
+<div class="row">
+    <h3 class="container-fluid">
+        Intranet Customers
+    </h3>
+</div>
+<br />
 <div>
     <div class="row">
         @*<button class="btn btn-success" @onclick="@(() => Modal.Show<addVpnCustomer>("Add customer"))">Add Customer</button>*@
         <div class="col-md-2 float-left"><button class="btn btn-success" @onclick="@(()=> GoToAddApnCustomer())">Add Customer</button></div>
         @*<div class="col-md-6 float-right">
-            <div class="dropdown">
-                <button data-toggle="dropdown" class="btn btn-success">Export</button>
-                <div class="dropdown-menu">
-                    Excel
+                <div class="dropdown">
+                    <button data-toggle="dropdown" class="btn btn-success">Export</button>
+                    <div class="dropdown-menu">
+                        Excel
+                    </div>
                 </div>
-            </div>
-        </div>*@
+            </div>*@
     </div>
 </div>
 <br />
@@ -39,7 +45,7 @@ else
                   ReadData="@OnReadData"
                   TotalItems="@totalcustomers" Hoverable="true" SelectedRowStyling="@OnSelectedRowStyling" Editable="true" Sortable="true" Striped="true">
             @*<DataGridColumn TItem="Customers" Field="@nameof(IntranetCustomers.RowNumber)" Caption="#" />*@
-            <DataGridColumn TItem="EcsDataManager.Entities.IntranetCustomers" Field="@nameof(EcsDataManager.Entities.IntranetCustomers.CustomerName)" Caption="Customer Name" />
+            <DataGridColumn TItem="EcsDataManager.Entities.IntranetCustomers" Field="@nameof(EcsDataManager.Entities.IntranetCustomers.CustomerName)" Caption="Customer Name" Sortable="true" />
             <DataGridColumn TItem="EcsDataManager.Entities.IntranetCustomers" Field="@nameof(EcsDataManager.Entities.IntranetCustomers.OwnerTeam)" Caption="Owner Team" />
             <DataGridColumn TItem="EcsDataManager.Entities.IntranetCustomers" Field="@nameof(EcsDataManager.Entities.IntranetCustomers.ServiceType)" Caption="Wan Ip Range" />
 
@@ -65,6 +71,9 @@ else
         get { return searchTerm; }
         set { searchTerm = value; FilterRecords(); }
     }
+
+   
+
     List<EcsDataManager.Entities.IntranetCustomers> _customerModel = new List<EcsDataManager.Entities.IntranetCustomers>();
     EcsDataManager.Entities.IntranetCustomers _customerEntity = new EcsDataManager.Entities.IntranetCustomers();
 

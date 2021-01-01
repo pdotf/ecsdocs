@@ -55,7 +55,7 @@ namespace EcsDataManager.EFConcrete
 
         public Task<List<IntranetCustomers>> GetAll()
         {
-            var res = Task.FromResult(_ecsContext.IntranetCustomers.ToList());
+            var res = Task.FromResult(_ecsContext.IntranetCustomers.OrderByDescending(x=>x.Id).ToList());
             return res;
         }
     }
