@@ -33,9 +33,9 @@ namespace EcsDataManager.Entities
         [Required]
         public int NumberOfSimCard { get; set; }
 
-        [Required(AllowEmptyStrings = false, ErrorMessage = nameof(AcountManager) + " is required.")]
+        [Required(AllowEmptyStrings = false, ErrorMessage = nameof(AccountManager) + " is required.")]
         [MaxLength(50)]
-        public string AcountManager { get; set; }
+        public string AccountManager { get; set; }
 
         [MaxLength(4000)]
         public string Comment { get; set; }
