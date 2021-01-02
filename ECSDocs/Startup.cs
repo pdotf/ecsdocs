@@ -22,6 +22,7 @@ using Blazorise.Icons.FontAwesome;
 using EcsDataManager.Entities;
 using EcsDataManager.EFContracts;
 using EcsDataManager.EFConcrete;
+using EcsDataManager.DataAccess;
 
 namespace ECSDocs
 {
@@ -43,7 +44,7 @@ namespace ECSDocs
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
 
-            services.AddDbContext<EcsDataManager.DataAccess.EcsContext>(options =>
+            services.AddDbContext<EcsContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
 
