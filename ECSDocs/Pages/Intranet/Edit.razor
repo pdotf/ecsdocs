@@ -46,7 +46,7 @@ else
                             <label for="Mobile">@nameof(_customerEntity.OwnerTeam)</label>
                             <input class="form-control" @bind-value="@_customerEntity.OwnerTeam" id="OwnerTeam" />
                             <label>Account Manager</label>
-                            <input class="form-control" @bind-value="@_customerEntity.AcountManager" id="OwnerTeam" />
+                            <input class="form-control" @bind-value="@_customerEntity.AccountManager" id="OwnerTeam" />
                         </div>
                     </div>
 
@@ -79,7 +79,7 @@ else
 
     [Parameter] public int CustomerID { get; set; }
 
-    IntranetCustomers _customerModel = new IntranetCustomers();;
+    IntranetCustomers _customerModel = new IntranetCustomers();
     IntranetCustomers _customerEntity = new IntranetCustomers();
     string errorstring;
     protected override async Task OnInitializedAsync()
