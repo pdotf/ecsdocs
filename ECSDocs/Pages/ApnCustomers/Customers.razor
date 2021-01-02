@@ -50,7 +50,7 @@ else
 
             <DataGridColumn TItem="ApnCustomers" Field="@nameof(ApnCustomers.WanIpRange)" Caption="Wan Ip Range" />
             <DataGridColumn TItem="ApnCustomers" Field="@nameof(ApnCustomers.NumberOfSimCard)" Caption="Number Of SimCard" />
-            <DataGridColumn TItem="ApnCustomers" Field="@nameof(ApnCustomers.AcountManager)" Caption="Account Manager" />
+            <DataGridColumn TItem="ApnCustomers" Field="@nameof(ApnCustomers.AccountManager)" Caption="Account Manager" />
 
             <DataGridColumn TItem="ApnCustomers" Field="@nameof(ApnCustomers.Id)" Caption="Action">
                 <DisplayTemplate>
@@ -138,7 +138,8 @@ else
             {
 
                 case "CustomerName":
-                    _apnCustomerModel = _apnCustomerModel.Where(x => x.CustomerName.Contains(Value)).ToList();
+
+                    _apnCustomerModel = _apnCustomerModel.Where(x => x.CustomerName.IndexOf(Value,StringComparison.OrdinalIgnoreCase)!=-1).ToList();
                     break;
 
                 default:
