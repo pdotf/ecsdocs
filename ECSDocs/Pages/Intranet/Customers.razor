@@ -48,8 +48,8 @@ else
             @*<DataGridColumn TItem="Customers" Field="@nameof(IntranetCustomers.RowNumber)" Caption="#" />*@
             <DataGridColumn TItem="EcsDataManager.Entities.IntranetCustomers" Field="@nameof(EcsDataManager.Entities.IntranetCustomers.CustomerName)" Caption="Customer Name" Sortable="true" />
             <DataGridColumn TItem="EcsDataManager.Entities.IntranetCustomers" Field="@nameof(EcsDataManager.Entities.IntranetCustomers.OwnerTeam)" Caption="Owner Team" />
-            <DataGridColumn TItem="EcsDataManager.Entities.IntranetCustomers" Field="@nameof(EcsDataManager.Entities.IntranetCustomers.ServiceType)" Caption="Wan Ip Range" />
-
+            <DataGridColumn TItem="EcsDataManager.Entities.IntranetCustomers" Field="@nameof(EcsDataManager.Entities.IntranetCustomers.ServiceType)" Caption="Service Type" />
+            <DataGridColumn TItem="EcsDataManager.Entities.IntranetCustomers" Field="@nameof(EcsDataManager.Entities.IntranetCustomers.AccountManager)" Caption="Account Manager" />
             <DataGridColumn TItem="EcsDataManager.Entities.IntranetCustomers" Field="@nameof(EcsDataManager.Entities.IntranetCustomers.Id)" Caption="Action">
                 <DisplayTemplate>
                     <Button Color="Color.Success" Clicked="async() => ShowCustomerDetail(context.Id).ConfigureAwait(true)">Detail</Button>
@@ -142,7 +142,7 @@ else
             switch (columnName)
             {
                 case "CustomerName":
-                    _customerModel = _customerModel.Where(x => x.CustomerName.Contains(Value)).ToList();
+                    _customerModel = _customerModel.Where(x => x.CustomerName.IndexOf(Value, StringComparison.OrdinalIgnoreCase) != -1).ToList();
                     break;
 
                 default:
