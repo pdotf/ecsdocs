@@ -3,7 +3,7 @@
 @using EcsDataManager.Entities
 @inject ICRUDManager<IntranetCustomers> CustomersManager
 @inject NavigationManager NavigationManager
- 
+
 
 
 <style type="text/css">
@@ -45,8 +45,7 @@ else
                             <input class="form-control" @bind-value="@_customerEntity.Mobile" id="Mobile" />
                             <label for="Mobile">@nameof(_customerEntity.OwnerTeam)</label>
                             <input class="form-control" @bind-value="@_customerEntity.OwnerTeam" id="OwnerTeam" />
-                            <label>Account Manager</label>
-                            <input class="form-control" @bind-value="@_customerEntity.AccountManager" id="OwnerTeam" />
+
                         </div>
                     </div>
 
@@ -57,6 +56,12 @@ else
                             <label for="Tel">Ip Range</label>
                             <input class="form-control" @bind-value="@_customerEntity.IpRange" id="AccessList" />
                         </div>
+                        <div class="col-md-6">
+                            <label>Account Manager</label>
+                            <input class="form-control" @bind-value="@_customerEntity.AccountManager" id="OwnerTeam" />
+                        </div>
+                    </div>
+                    <div class="row">
                        
                     </div>
 
@@ -103,16 +108,16 @@ else
     {
         if (_customerEntity != null)
         {
-            CustomersManager.Change(_customerModel,_customerEntity);
+            CustomersManager.Change(_customerModel, _customerEntity);
             NavigationManager.NavigateTo("/IntranetCustomers/Customer" + "/" + CustomerID, true);
         }
 
 
     }
 
-    async Task Cancel()
+    void Cancel()
     {
-        NavigationManager.NavigateTo("/IntranetCustomers/customer" + "/" + CustomerID);
+        NavigationManager.NavigateTo("/IntranetCustomers/Customer" + "/" + CustomerID);
     }
 
     void Reset()

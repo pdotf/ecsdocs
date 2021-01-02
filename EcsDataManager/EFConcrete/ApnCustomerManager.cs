@@ -18,13 +18,15 @@ namespace EcsDataManager.EFConcrete
             _ecsContext = ecsContext;
         }
 
-        public void Add(ApnCustomers entity)
+        public async Task<int> Add(ApnCustomers entity,short ismain=0)
         {
+
             _ecsContext.Add(entity);
-             _ecsContext.SaveChanges();
+            var res = await _ecsContext.SaveChangesAsync();
+            return res;
         }
 
-        public void Change(ApnCustomers dbEntity, ApnCustomers entity)
+        public async Task<int> Change(ApnCustomers dbEntity, ApnCustomers entity)
         {
             dbEntity.CustomerName = entity.CustomerName;
             dbEntity.Tell = entity.Tell;
@@ -34,28 +36,31 @@ namespace EcsDataManager.EFConcrete
             dbEntity.WanIpRange = entity.WanIpRange;
             dbEntity.AccessList = entity.AccessList;
             dbEntity.AccountManager = entity.AccountManager;
-              _ecsContext.SaveChanges();
+            var res = await _ecsContext.SaveChangesAsync();
+            return res;
+
         }
 
-        public void ChangeComment(ApnCustomers dbEntity, ApnCustomers entity)
+        public async Task<int> ChangeComment(ApnCustomers dbEntity, ApnCustomers entity)
         {
             dbEntity.Comment = entity.Comment;
-             _ecsContext.SaveChanges();
+            var res = await _ecsContext.SaveChangesAsync(); return res;
         }
 
-        public void Delete(ApnCustomers entity)
+        public async Task<int> Delete(ApnCustomers entity)
         {
             _ecsContext.Remove(entity);
-             _ecsContext.SaveChanges();
+            var res = await _ecsContext.SaveChangesAsync();
+            return res;
         }
 
-        public Task<ApnCustomers> Get(int id)
+        public Task<ApnCustomers> Get(int id,short ismain=0)
         {
             return Task.FromResult(_ecsContext.ApnCustomers
                       .FirstOrDefault(e => e.Id == id));
         }
 
-        public Task<List<ApnCustomers>> GetAll()
+        public Task<List<ApnCustomers>> GetAll(short ismain=0)
         {
             var res = Task.FromResult(_ecsContext.ApnCustomers.OrderByDescending(x => x.Id).ToList());
             return res;

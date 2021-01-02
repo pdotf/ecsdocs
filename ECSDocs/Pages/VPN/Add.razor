@@ -1,8 +1,8 @@
-﻿@page "/addVpnCustomer"
-@using EcsDataManager.Contracts
+﻿@page "/VpnCustomers/addCustomer"
+@using EcsDataManager.EFContracts
 @using EcsDataManager.Entities
-@inject IDeviceManager DeviceManager
-@inject ICustomersManager<Customers> customerManager
+@inject ICRUDManager<DeviceList> DeviceManager
+@inject ICRUDManager<VpnCustomers> customerManager
 @inject Microsoft.AspNetCore.Components.NavigationManager navigationManager
 <Alert Color="Color.Success" @ref="Success">
     <AlertMessage>Well done!</AlertMessage>
@@ -18,7 +18,7 @@
 </div>
 <div class="container-fluid" style=";position: relative; display: table; overflow-y: auto; overflow-x: auto; width: auto; min-width: 300px; float:left">
     <div class="container">
-        <EditForm Model="@_devices" OnValidSubmit="() => CreateCustomer()">
+        <EditForm Model="@_customer" OnValidSubmit="() => CreateCustomer()">
             <DataAnnotationsValidator />
             <div class="row">
                 <div class="col-md-5">
@@ -165,8 +165,8 @@
             <div class="row">
                 <input style="width:100%" type="hidden" @bind-value="@_customer.id" />
             </div>
-         
-         
+
+
             <div class="row">
                 <div class="col-md-5">
                     <label>Radio  Name</label>
@@ -226,24 +226,23 @@
 @code {
 
     [CascadingParameter] public IModalService Modal { get; set; }
-    List<Customers> Customers = new List<Customers>();
-    Customers _customer = new Customers();
+    List<VpnCustomers> VpnCustomers = new List<VpnCustomers>();
+    VpnCustomers _customer = new VpnCustomers();
     DeviceList _devices = new DeviceList();
 
     Alert Success;
     Snackbar snackbar;
 
-    int cc ;
     protected async Task CreateCustomer()
     {
-        cc = await customerManager.Create(_customer);
+        var cc = await customerManager.Add(_customer);
         if (cc != 0)
         {
             if (_devices != null)
             {
                 _devices.CustomerId = cc;
-                var deviceState = await DeviceManager.AddDevice(_devices, 1);
-                navigationManager.NavigateTo($@"/vpncustomerlist", true);
+                var deviceState = await DeviceManager.Add(_devices, 1);
+                navigationManager.NavigateTo("/VpnCustomers", true);
                 snackbar.Show();
             }
 
@@ -255,10 +254,10 @@
 
 
     }
-   
+
 
     void Cancel()
     {
-        navigationManager.NavigateTo("/vpncustomerlist");
+        navigationManager.NavigateTo("/vpncustomers");
     }
 }

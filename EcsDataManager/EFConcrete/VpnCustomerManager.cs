@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace EcsDataManager.EFConcrete
 {
-    public class VpnCustomerManager : ICRUDManager<Customers>,IUpdateComment<Customers>
+    public class VpnCustomerManager : ICRUDManager<VpnCustomers>, IUpdateComment<VpnCustomers>, ICustomerUrlManager<CustomerUrl>
     {
         readonly EcsContext _appContext;
 
@@ -17,13 +17,35 @@ namespace EcsDataManager.EFConcrete
         {
             _appContext = appContext;
         }
-        public async Task  Add(Customers entity)
+        public async Task<int> Add(VpnCustomers entity, short ismain = 0)
         {
             _appContext.Customers.Add(entity);
-          await  _appContext.SaveChangesAsync();
+            var res = await _appContext.SaveChangesAsync();
+            return res;
         }
 
-        public async Task  Change(Customers dbEntity, Customers entity)
+        public async Task<int> AddUrl(CustomerUrl entity, short ismain = 0)
+        {
+            if (ismain != 0)
+            {
+                entity.isMain = ismain;
+            }
+            _appContext.CustomerUrl.Add(entity);
+            var res = await _appContext.SaveChangesAsync();
+            return res;
+        }
+        public Task<CustomerUrl> GetMainUrlById(int Id,short ismain=0)
+        {
+            return Task.FromResult(_appContext.CustomerUrl
+                       .FirstOrDefault(e => e.customerId == Id && e.isMain==ismain));
+        }
+        public async Task<int> Update(CustomerUrl dbEntity,CustomerUrl entity )
+        {
+            dbEntity.link = entity.link;
+            var res = await _appContext.SaveChangesAsync();
+            return res;
+        }
+        public async Task<int> Change(VpnCustomers dbEntity, VpnCustomers entity)
         {
             dbEntity.CustomerName = entity.CustomerName;
             dbEntity.Tel = entity.Tel;
@@ -42,60 +64,37 @@ namespace EcsDataManager.EFConcrete
             dbEntity.VpnToolsName = entity.VpnToolsName;
             dbEntity.VRF = entity.VRF;
 
-           await _appContext.SaveChangesAsync();
+            var res = await _appContext.SaveChangesAsync();
+            return res;
         }
 
-        public async Task  ChangeComment(Customers dbEntity, Customers entity)
+        public async Task<int> ChangeComment(VpnCustomers dbEntity, VpnCustomers entity)
         {
             dbEntity.Comment = entity.Comment;
-          await  _appContext.SaveChangesAsync();
+            var res = await _appContext.SaveChangesAsync();
+            return res;
         }
 
-        public async Task  Delete(Customers entity)
+        public async Task<int> Delete(VpnCustomers entity)
         {
             _appContext.Customers.Remove(entity);
-          await  _appContext.SaveChangesAsync();
+            var res = await _appContext.SaveChangesAsync();
+            return res;
         }
 
-        public Customers Get(int id)
+        public Task<VpnCustomers> Get(int id, short ismain = 0)
         {
-            return _appContext.Customers
-            .FirstOrDefault(e => e.id == id);
+
+            return Task.FromResult(_appContext.Customers
+                        .FirstOrDefault(e => e.id == id));
         }
 
-        public IEnumerable<Customers> GetAll()
+        public Task<List<VpnCustomers>> GetAll(short ismain = 0)
         {
-            return _appContext.Customers.ToList();
+            var res = Task.FromResult(_appContext.Customers.OrderByDescending(x => x.id).ToList());
+            return res;
         }
 
-        void ICRUDManager<Customers>.Add(Customers entity)
-        {
-            throw new NotImplementedException();
-        }
-
-        void ICRUDManager<Customers>.Change(Customers dbEntity, Customers entity)
-        {
-            throw new NotImplementedException();
-        }
-
-        void IUpdateComment<Customers>.ChangeComment(Customers dbEntity, Customers entity)
-        {
-            throw new NotImplementedException();
-        }
-
-        void ICRUDManager<Customers>.Delete(Customers entity)
-        {
-            throw new NotImplementedException();
-        }
-
-        Task<Customers> ICRUDManager<Customers>.Get(int id)
-        {
-            throw new NotImplementedException();
-        }
-
-        Task<List<Customers>> ICRUDManager<Customers>.GetAll()
-        {
-            throw new NotImplementedException();
-        }
+       
     }
 }

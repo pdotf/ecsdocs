@@ -1,0 +1,99 @@
+﻿@page "/IntranetCustomers/customer/{customerID}/CostumerCommentEdit"
+@using EcsDataManager.Entities
+@using EcsDataManager.EFContracts
+@inject NavigationManager NavigationManager
+@inject IUpdateComment<IntranetCustomers> CommentManager
+@inject ICRUDManager<IntranetCustomers> CustomerManager
+
+<div class="h4">Costumer Comment Edit</div>
+
+@if (string.IsNullOrWhiteSpace(errorString) == false)
+{
+    <div class="h3">
+        Error:
+    </div>
+    <div class="h4">
+        @errorString
+    </div>
+}
+else if (_customerEntity is null)
+{
+    <div class="h4"><em>Loading . . .</em></div>
+}
+else
+{
+
+
+    <div class="simple-form">
+
+        <div class="container-fluid">
+
+            <div class="form-group float-md-right">
+                <button type="button" class="btn btn-primary" @onclick="@(async () => await UpdateComment())">Save</button>
+
+                <button type="button" class="btn btn-danger" @onclick="Cancel">Cancel</button>
+            </div>
+
+            <div class="row float-right">
+                <div class="col-md-8">
+                    <div class="text-wrap">
+
+                        @*<input class="form-control" @bind-value="@_customerEntity.Comment" id="Comment" placeholder="Comment" size="500" />*@
+
+                        <textarea @bind-value="@_customerEntity.Comment" @bind-value:event="oninput" style="width:auto;overflow-y:scroll" cols="100" rows="20" dir="rtl"></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@code {
+    [Parameter] public string CustomerID { get; set; }
+    IntranetCustomers _customerEntity = new IntranetCustomers();
+    IntranetCustomers _customer = new IntranetCustomers();
+    string errorString;
+
+    private string _comment;
+
+    public string Comment
+    {
+        get { return _comment; }
+        set { _comment = value; }
+    }
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            _customerEntity = await CustomerManager.Get(Convert.ToInt32(CustomerID));
+            errorString = null;
+
+        }
+        catch (Exception ex)
+        {
+
+            errorString = ex.Message;
+        }
+    }
+    protected async Task UpdateComment()
+    {
+        try
+        {
+            CommentManager.ChangeComment(_customer, _customerEntity);
+            NavigationManager.NavigateTo("/IntranetCustomers/customer" + "/" + CustomerID, true);
+            errorString = null;
+        }
+        catch (Exception ex)
+        {
+
+            errorString = ex.Message;
+        }
+
+    }
+    async Task Cancel()
+    {
+        NavigationManager.NavigateTo("IntranetCustomers/customer" + "/" + CustomerID);
+    }
+}

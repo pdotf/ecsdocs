@@ -3,14 +3,16 @@ using Microsoft.Extensions.Options;
 
 namespace EcsDataManager.Entities
 {
-    public class Customers
+    public class VpnCustomers
     {
 
         public int id { get; set; }
 
-        [Required(AllowEmptyStrings = false, ErrorMessage = nameof(CustomerName) + " is required.")][MaxLength(50)]
+        [Required(AllowEmptyStrings = false, ErrorMessage = nameof(CustomerName) + " is required.")]
+        [MaxLength(50)]
         public string CustomerName { get; set; }
-        [Required(AllowEmptyStrings = false, ErrorMessage = nameof(Tel) + " is required.")][MaxLength(500)]
+        [Required(AllowEmptyStrings = false, ErrorMessage = nameof(Tel) + " is required.")]
+        [MaxLength(500)]
         public string Tel { get; set; }
         [Required(AllowEmptyStrings = false, ErrorMessage = nameof(Mobile) + " is required.")]
         [MaxLength(4000)]
@@ -48,16 +50,16 @@ namespace EcsDataManager.Entities
         [Required(AllowEmptyStrings = false, ErrorMessage = nameof(VpnToolsName) + " is required.")]
         [MaxLength(100)]
         public string VpnToolsName { get; set; }
-       [Required(AllowEmptyStrings = false, ErrorMessage = nameof(AccessList) + " is required.")]
+        [Required(AllowEmptyStrings = false, ErrorMessage = nameof(AccessList) + " is required.")]
         [MaxLength(100)]
-public string AccessList { get; set; }
+        public string AccessList { get; set; }
         [Required(AllowEmptyStrings = false, ErrorMessage = nameof(APN) + " is required.")]
         [MaxLength(100)]
         public string APN { get; set; }
 
         public string Comment { get; set; }
 
-        
+
 
 
 

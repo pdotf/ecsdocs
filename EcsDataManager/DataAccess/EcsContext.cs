@@ -9,7 +9,7 @@ namespace EcsDataManager.DataAccess
 
         public EcsContext(DbContextOptions<EcsContext> options) : base(options) { }
 
-        public virtual DbSet<Customers> Customers { get; set; }
+        public virtual DbSet<VpnCustomers> Customers { get; set; }
         public virtual DbSet<ApnCustomers> ApnCustomers { get; set; }
         public virtual DbSet<CustomerUrl> CustomerUrl { get; set; }
         public virtual DbSet<DeviceList> DeviceList { get; set; }

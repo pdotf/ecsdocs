@@ -1,7 +1,7 @@
 ﻿@page "/editDevice/{id:int}"
-@using EcsDataManager.Contracts
+@using EcsDataManager.EFContracts
 @using EcsDataManager.Entities
-@inject IDeviceManager deviceManager
+@inject ICRUDManager<DeviceList> deviceManager
 @inject NavigationManager NavigationManager
 @inject IMatDialogService MatDialogService
 
@@ -16,7 +16,7 @@
 </style>
 
 
-@if (string.IsNullOrWhiteSpace(errorStr)==false)
+@if (string.IsNullOrWhiteSpace(errorStr) == false)
 {
     <div class="h4"><dfn>@errorStr</dfn></div>
 }
@@ -76,14 +76,14 @@ else
 
     [Parameter] public int ID { get; set; }
 
-    DeviceList _deviceModel;
+    DeviceList _deviceModel = new DeviceList();
     DeviceList _deviceEntity = new DeviceList();
 
     protected override async Task OnInitializedAsync()
     {
         try
         {
-            _deviceEntity = await deviceManager.GetDeviceById(ID);
+            _deviceEntity = await deviceManager.Get(ID);
             errorStr = null;
         }
         catch (Exception ex)
@@ -97,15 +97,15 @@ else
     protected async Task UpdateDevice(int id)
     {
 
-        await deviceManager.Update(_deviceEntity);
+        await deviceManager.Change(_deviceModel, _deviceEntity);
         await BlazoredModal.Close(ModalResult.Ok<DeviceList>(_deviceEntity));
-        NavigationManager.NavigateTo("/customer" + "/" + _deviceEntity.CustomerId, true);
+        NavigationManager.NavigateTo("/VpnCustomers" + "/" + _deviceEntity.CustomerId, true);
     }
 
     async Task Cancel()
     {
         await BlazoredModal.Cancel();
-        NavigationManager.NavigateTo("/customer" + "/" + _deviceEntity.CustomerId);
+        NavigationManager.NavigateTo("/VpnCustomers" + "/" + _deviceEntity.CustomerId);
     }
 
     void Reset()

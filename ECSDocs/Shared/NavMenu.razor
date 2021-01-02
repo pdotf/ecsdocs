@@ -33,13 +33,13 @@
             <MatNavItem AllowSelection="false"><MatIcon Icon="domain"></MatIcon> VPN</MatNavItem>
         </MatNavSubMenuHeader>
         <MatNavSubMenuList>
-            <MatNavItem Href="/vpncustomerlist"><MatIcon Icon="list"></MatIcon>Customers</MatNavItem>
+            <MatNavItem Href="/VpnCustomers"><MatIcon Icon="list"></MatIcon>Customers</MatNavItem>
 
             <AuthorizeView>
                 <Authorized>
                     @if (@context.User.IsInRole(ADMINISTRATION_ROLE))
                     {
-                        <MatNavItem Href="/addVpnCustomer"><MatIcon Icon="person_add"></MatIcon> Add VPN Customer</MatNavItem>
+                        <MatNavItem Href="/VpnCustomers/addCustomer"><MatIcon Icon="person_add"></MatIcon> Add VPN Customer</MatNavItem>
                     }
                 </Authorized>
             </AuthorizeView>
@@ -50,13 +50,13 @@
             <MatNavItem AllowSelection="false"><MatIcon Icon="sim_card"></MatIcon> APN</MatNavItem>
         </MatNavSubMenuHeader>
         <MatNavSubMenuList>
-            <MatNavItem Href="ApnCustomers/customerlist"><MatIcon Icon="list"></MatIcon>Customers</MatNavItem>
+            <MatNavItem Href="/ApnCustomers"><MatIcon Icon="list"></MatIcon>Customers</MatNavItem>
 
             <AuthorizeView>
                 <Authorized>
                     @if (@context.User.IsInRole(ADMINISTRATION_ROLE))
                     {
-                        <MatNavItem Href="ApnCustomers/addCustomer"><MatIcon Icon="person_add"></MatIcon> Add Customer</MatNavItem>
+                        <MatNavItem Href="/ApnCustomers/addCustomer"><MatIcon Icon="person_add"></MatIcon> Add Customer</MatNavItem>
                     }
                 </Authorized>
             </AuthorizeView>

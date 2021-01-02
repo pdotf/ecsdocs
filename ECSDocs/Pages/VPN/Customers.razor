@@ -1,0 +1,209 @@
+﻿@page "/VpnCustomers"
+@using EcsDataManager.EFContracts
+@using EcsDataManager.Entities
+@inject ICRUDManager<VpnCustomers> customerManager
+@inject IMatDialogService MatDialogService
+@inject NavigationManager NavigationManager
+@*<link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">*@
+<div class="row">
+    <h3 class="container-fluid">
+        VPN Customers
+    </h3>
+</div>
+<br />
+<div>
+    <div class="row">
+        @*<button class="btn btn-success" @onclick="@(() => Modal.Show<addVpnCustomer>("Add customer"))">Add Customer</button>*@
+        <div class="col-md-2 float-left"><button class="btn btn-success" @onclick="@(()=> GoToAddCustomer())">Add Customer</button></div>
+        @*<div class="col-md-6 float-right">
+                <div class="dropdown">
+                    <button data-toggle="dropdown" class="btn btn-success">Export</button>
+                    <div class="dropdown-menu">
+                        Excel
+                    </div>
+                </div>
+            </div>*@
+    </div>
+</div>
+<br />
+
+@if (customerModel == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+
+    <div class="float-left">
+        <input type="text" id="txtSearch" placeholder="Search Customer name..." class="form-control" @bind="SearchTerm" @bind:event="oninput" />
+
+    </div>
+    <br />
+    <br />
+    <div>
+        <DataGrid TItem="VpnCustomers"
+                  Data="@customerModel"
+                  ReadData="@OnReadData"
+                  TotalItems="@totalcustomers" Hoverable="true" SelectedRowStyling="@OnSelectedRowStyling" Editable="true" Sortable="true" Striped="true">
+            @*<DataGridColumn TItem="VpnCustomers" Field="@nameof(VpnCustomers.RowNumber)" Caption="#" />*@
+            <DataGridColumn TItem="VpnCustomers" Field="@nameof(VpnCustomers.CustomerName)" Caption="Customer Name" />
+            <DataGridColumn TItem="VpnCustomers" Field="@nameof(VpnCustomers.OwnerTeam)" Caption="Owner Team" />
+            <DataGridColumn TItem="VpnCustomers" Field="@nameof(VpnCustomers.ServiceType)" Caption="Service Type" />
+            <DataGridColumn TItem="VpnCustomers" Field="@nameof(VpnCustomers.ServiceTopology)" Caption="Service Topology" />
+            <DataGridColumn TItem="VpnCustomers" Field="@nameof(VpnCustomers.AccountManager)" Caption="Account Manager" />
+            <DataGridColumn TItem="VpnCustomers" Field="@nameof(VpnCustomers.id)" Caption="Action">
+                <DisplayTemplate>
+                    <Button Color="Color.Success" Clicked="async() => ShowCustomerDetail(context.id).ConfigureAwait(true)">Detail</Button>
+                </DisplayTemplate>
+            </DataGridColumn>
+
+        </DataGrid>
+    </div>
+
+
+}
+
+
+@code {
+    [CascadingParameter] BlazoredModalInstance BlazoredModal { get; set; }
+    [CascadingParameter] ModalParameters Parameters { get; set; }
+
+    [CascadingParameter] public IModalService Modal { get; set; }
+
+    private string searchTerm;
+    private string SearchTerm
+    {
+        get { return searchTerm; }
+        set { searchTerm = value; CustomerFilteringList(searchTerm, "CustomerName");  }
+    }
+    void OnSelectedRowStyling(VpnCustomers customer, DataGridRowStyling styling)
+    {
+        styling.Background = Background.Transparent;
+    }
+
+    public List<VpnCustomers> customerModel=new List<VpnCustomers>();
+    public VpnCustomers customerEntity = new VpnCustomers();
+    public string url = "/VpnCustomers";
+
+    #region Pagination
+
+    int totalPages;
+    int totalRecords;
+    int curPage;
+    int pagerSize;
+    int pageSize;
+    int startPage;
+    int endPage;
+    string sortColumnName = "ID";
+    string sortDir = "DESC";
+
+    #endregion
+    bool dialogIsOpen = false;
+    string name = "Customer Detail";
+    string animal = null;
+    string dialogAnimal = null;
+
+    void OpenDialog()
+    {
+        dialogAnimal = null;
+        dialogIsOpen = true;
+    }
+
+    void OkClick()
+    {
+        animal = dialogAnimal;
+        dialogIsOpen = false;
+    }
+    protected override async Task OnInitializedAsync()
+    {
+        //display total page buttons
+        pagerSize = 3;
+        pageSize = 5;
+        curPage = 1;
+
+        try
+        {
+            customerModel = await customerManager.GetAll();
+            //totalRecords = await customerManager.Count(searchTerm);
+            totalPages = (int)Math.Ceiling(totalRecords / (decimal)pageSize);
+
+        }
+        catch (Exception ex)
+        {
+
+            throw ex;
+        }
+
+    }
+    protected void GoToAddCustomer()
+    {
+        NavigationManager.NavigateTo("/VpnCustomers/addCustomer", true);
+    }
+
+    int totalcustomers;
+    async Task OnReadData(DataGridReadDataEventArgs<VpnCustomers> e)
+    {
+        // this can be call to anything, in this case we're calling a fictional api
+        // var response = await Http.GetJsonAsync<VpnCustomers[]>($"some-api/Customerss?page={e.Page}&pageSize={e.PageSize}");
+
+        customerModel = await customerManager.GetAll();
+        totalcustomers = customerModel.Count();
+
+        // always call StateHasChanged!
+        StateHasChanged();
+    }
+
+
+    string errorStr;
+    protected async Task ShowCustomerDetail(int id)
+    {
+
+        customerEntity = await customerManager.Get(id);
+        try
+        {
+            NavigationManager.NavigateTo($"{url}/{id}", true);
+            errorStr = null;
+
+        }
+        catch (Exception ex)
+        {
+
+            errorStr = ex.Message;
+        }
+    }
+
+
+    private bool isSortedAscending;
+    private string activeSortColumn;
+
+    private async Task<List<VpnCustomers>> SortRecords(string columnName, string dir)
+    {
+        return await customerManager.GetAll();
+    }
+
+
+    protected async Task CustomerFilteringList(String Value, string columnName)
+    {
+        customerModel = await customerManager?.GetAll();
+
+        if (Value.Trim().Length > 0)
+        {
+            switch (columnName)
+            {
+                case "CustomerName":
+                    customerModel = customerModel.Where(x => x.CustomerName.IndexOf(Value, StringComparison.OrdinalIgnoreCase) != -1).ToList();
+                    break;
+
+                default:
+                    customerModel = await customerManager.GetAll();
+                    break;
+            }
+        }
+        else
+        {
+            customerModel = await customerManager?.GetAll();
+        }
+    }
+
+
+}

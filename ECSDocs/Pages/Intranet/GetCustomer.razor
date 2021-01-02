@@ -234,9 +234,9 @@ else
     protected async Task ShowAddDevice(int Id)
     {
         var parameters = new ModalParameters();
-        parameters.Add(nameof(DeviceAdd.CustomerID), Id);
+        parameters.Add(nameof(VPN.AddDevice.CustomerID), Id);
 
-        Modal.Show<DeviceAdd>($"Add Device", parameters);
+        Modal.Show<VPN.AddDevice>($"Add Device", parameters);
         //NavigationManager.NavigateTo($"/addDevice/{CustomerID}", false);
     }
     protected async Task UpdateCustomers(int Id)

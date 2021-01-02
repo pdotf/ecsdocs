@@ -1,9 +1,10 @@
-﻿@page "/EditCustomer/{customerID:int}"
+﻿@page "/VpnCustomers/EditCustomer/{customerID:int}"
+@using EcsDataManager.EFContracts
 @using EcsDataManager.Contracts
 @using EcsDataManager.Entities
-@inject ICustomersManager<Customers> CustomersManager
-@inject IDeviceManager  DeviceManager
-@inject ICustomerUrlManager CUriManager
+@inject ICRUDManager<VpnCustomers> CustomersManager
+@inject ICRUDManager<DeviceList>  DeviceManager
+@inject ICustomerUrlManager<CustomerUrl>  CUriManager
 @inject NavigationManager NavigationManager
 
 @using System.ComponentModel.DataAnnotations
@@ -106,15 +107,17 @@
 
     [Parameter] public int CustomerID { get; set; }
 
-    Customers _customerModel;
-    Customers _customerEntity = new Customers();
+    VpnCustomers _customerModel = new VpnCustomers();
+    VpnCustomers _customerEntity = new VpnCustomers();
+    DeviceList _deviceListModel = new DeviceList();
     DeviceList _deviceListEntity = new DeviceList();
     CustomerUrl _customerUrl = new CustomerUrl();
+    CustomerUrl _customerUrlModel = new CustomerUrl();
     protected override async Task OnInitializedAsync()
     {
-        _customerEntity = await CustomersManager?.GetById(CustomerID);
-        _deviceListEntity = await DeviceManager?.GetMainDeviceById(CustomerID);
-        _customerUrl = await CUriManager?.GetMainUrlById(CustomerID);
+        _customerEntity = await CustomersManager?.Get(CustomerID);
+        _deviceListEntity = await DeviceManager?.Get(CustomerID);
+        _customerUrl = await CUriManager?.GetMainUrlById(CustomerID,1);
 
     }
 
@@ -123,24 +126,24 @@
     {
         if (_customerEntity != null)
         {
-            await CustomersManager.Update(_customerEntity);
+            await CustomersManager.Change(_customerModel, _customerEntity);
         }
         if (_deviceListEntity != null)
         {
-            await DeviceManager.Update(_deviceListEntity);
+            await DeviceManager.Change(_deviceListModel, _deviceListEntity);
 
         }
         if (_customerUrl != null)
         {
-            await CUriManager.Update(_customerUrl);
+            await CUriManager.Update(_customerUrlModel, _customerUrl);
 
         }
-        NavigationManager.NavigateTo("/customer" + "/" + CustomerID, true);
+        NavigationManager.NavigateTo("/VpnCustomers" + "/" + CustomerID, true);
     }
 
     async Task Cancel()
     {
-        NavigationManager.NavigateTo("/customer" + "/" + CustomerID);
+        NavigationManager.NavigateTo("/VpnCustomers" + "/" + CustomerID);
     }
 
     void Reset()

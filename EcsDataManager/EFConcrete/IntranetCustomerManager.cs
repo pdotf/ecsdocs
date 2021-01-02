@@ -17,13 +17,14 @@ namespace EcsDataManager.EFConcrete
         {
             _ecsContext = ecsContext;
         }
-        public void Add(IntranetCustomers entity)
+        public async Task<int> Add(IntranetCustomers entity,short ismain=0)
         {
             _ecsContext.Add(entity);
-              _ecsContext.SaveChanges();
+            var res =await _ecsContext.SaveChangesAsync();
+            return res;
         }
 
-        public void Change(IntranetCustomers dbEntity, IntranetCustomers entity)
+        public async Task<int> Change(IntranetCustomers dbEntity, IntranetCustomers entity)
         {
             dbEntity.CustomerName = entity.CustomerName;
             dbEntity.Tell = entity.Tell;
@@ -31,32 +32,35 @@ namespace EcsDataManager.EFConcrete
             dbEntity.OwnerTeam = entity.OwnerTeam;
             dbEntity.ServiceType = entity.ServiceType;
             dbEntity.IpRange = entity.IpRange;
-              dbEntity.AccountManager = entity.AccountManager;
-              _ecsContext.SaveChanges();
+            dbEntity.AccountManager = entity.AccountManager;
+            var res = await _ecsContext.SaveChangesAsync();
+            return res;
         }
 
-        public void ChangeComment(IntranetCustomers dbEntity, IntranetCustomers entity)
+        public async Task<int> ChangeComment(IntranetCustomers dbEntity, IntranetCustomers entity)
         {
             dbEntity.Comment = entity.Comment;
-              _ecsContext.SaveChangesAsync();
+            var res = await _ecsContext.SaveChangesAsync();
+            return res;
 
         }
 
-        public void Delete(IntranetCustomers entity)
+        public async Task<int> Delete(IntranetCustomers entity)
         {
             _ecsContext.Remove(entity);
-              _ecsContext.SaveChangesAsync();
+            var res = await _ecsContext.SaveChangesAsync();
+            return res;
         }
 
-        public Task<IntranetCustomers> Get(int id)
+        public Task<IntranetCustomers> Get(int id,short ismain=0)
         {
             return Task.FromResult(_ecsContext.IntranetCustomers
                         .FirstOrDefault(e => e.Id == id));
         }
 
-        public Task<List<IntranetCustomers>> GetAll()
+        public Task<List<IntranetCustomers>> GetAll(short ismain=0)
         {
-            var res = Task.FromResult(_ecsContext.IntranetCustomers.OrderByDescending(x=>x.Id).ToList());
+            var res = Task.FromResult(_ecsContext.IntranetCustomers.OrderByDescending(x => x.Id).ToList());
             return res;
         }
     }

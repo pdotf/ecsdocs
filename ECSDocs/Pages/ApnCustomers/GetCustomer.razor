@@ -256,9 +256,9 @@ else
     protected async Task ShowAddDevice(int Id)
     {
         var parameters = new ModalParameters();
-        parameters.Add(nameof(DeviceAdd.CustomerID), Id);
+        parameters.Add(nameof(VPN.AddDevice.CustomerID), Id);
 
-        Modal.Show<DeviceAdd>($"Add Device", parameters);
+        Modal.Show<VPN.AddDevice>($"Add Device", parameters);
         //NavigationManager.NavigateTo($"/addDevice/{CustomerID}", false);
     }
     protected async Task UpdateCustomers(int Id)
@@ -271,12 +271,10 @@ else
     }
     protected async Task Deletecustomer(int Id)
     {
-        /* var parameters = new ModalParameters();
-        parameters.Add(nameof(EditCustomer.CustomerID), Id); */
-        ;
+        
         _customerModel = await CustomerManager.Get(Id);
-          CustomerManager.Delete(_customerModel);
-        NavigationManager.NavigateTo("/ApnCustomers/customerlist", true);
+        await  CustomerManager.Delete(_customerModel);
+        NavigationManager.NavigateTo("/ApnCustomers", true);
     }
     protected async Task ShowUpdateCommentPage(int Id)
     {

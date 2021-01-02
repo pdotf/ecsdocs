@@ -7,10 +7,10 @@ namespace EcsDataManager.EFContracts
 {
     public interface ICRUDManager<TEntity>
     {
-        Task<List<TEntity>> GetAll();
-        Task<TEntity> Get(int id);
-        void Add(TEntity entity);
-        void Change(TEntity dbEntity, TEntity entity);
-        void Delete(TEntity entity);
+        Task<List<TEntity>> GetAll(short ismain=0);
+        Task<TEntity> Get(int id,short ismain=0);
+        Task<int> Add(TEntity entity,short ismain=0);
+        Task<int> Change(TEntity dbEntity, TEntity entity);
+        Task<int> Delete(TEntity entity);
     }
 }

@@ -7,6 +7,6 @@ namespace EcsDataManager.EFContracts
 {
     public interface IUpdateComment<TEntity>
     {
-        void ChangeComment(TEntity dbEntity, TEntity entity);
+        Task<int> ChangeComment(TEntity dbEntity, TEntity entity);
     }
 }

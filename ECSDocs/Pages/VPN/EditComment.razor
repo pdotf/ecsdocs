@@ -1,9 +1,9 @@
-﻿@page "/customer/{customerID}/CostumerCommentEdit"
+﻿@page "/VpnCustomers/{customerID}/CostumerCommentEdit"
 @using EcsDataManager.Entities
-@using EcsDataManager.Contracts
+@using EcsDataManager.EFContracts
 @inject NavigationManager NavigationManager
-@inject ICustomer<Customers> CustomerCommentManager
-@inject ICustomersManager<Customers> CustomerManager
+@inject ICRUDManager<VpnCustomers> CustomerCommentManager
+@inject ICRUDManager<VpnCustomers> CustomerManager
 
 <div class="h4">Costumer Comment Edit</div>
 
@@ -22,7 +22,7 @@ else if (_customerEntity is null)
 }
 else
 {
-    
+
 
     <div class="simple-form">
 
@@ -50,7 +50,8 @@ else
 
 @code {
     [Parameter] public string CustomerID { get; set; }
-    Customers _customerEntity = new Customers();
+    VpnCustomers _customerEntity = new VpnCustomers();
+    VpnCustomers _customerModel = new VpnCustomers();
     string errorString;
 
     private string _comment;
@@ -66,7 +67,7 @@ else
     {
         try
         {
-            _customerEntity = await CustomerManager.GetById(Convert.ToInt32(CustomerID));
+            _customerEntity = await CustomerManager.Get(Convert.ToInt32(CustomerID));
             errorString = null;
 
         }
@@ -80,8 +81,8 @@ else
     {
         try
         {
-            await CustomerManager.UpdateComment(_customerEntity,1);
-            NavigationManager.NavigateTo("/customer" + "/" + CustomerID, true);
+            await CustomerManager.Change(_customerModel, _customerEntity);
+            NavigationManager.NavigateTo("/VpnCustomers" + "/" + CustomerID, true);
             errorString = null;
         }
         catch (Exception ex)
@@ -93,6 +94,6 @@ else
     }
     async Task Cancel()
     {
-        NavigationManager.NavigateTo("/customer" + "/" + CustomerID);
+        NavigationManager.NavigateTo("/VpnCustomers" + "/" + CustomerID);
     }
 }
