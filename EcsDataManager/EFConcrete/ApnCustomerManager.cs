@@ -33,7 +33,7 @@ namespace EcsDataManager.EFConcrete
             dbEntity.NumberOfSimCard = entity.NumberOfSimCard;
             dbEntity.WanIpRange = entity.WanIpRange;
             dbEntity.AccessList = entity.AccessList;
-            dbEntity.AcountManager = entity.AcountManager;
+            dbEntity.AccountManager = entity.AccountManager;
               _ecsContext.SaveChanges();
         }
 
