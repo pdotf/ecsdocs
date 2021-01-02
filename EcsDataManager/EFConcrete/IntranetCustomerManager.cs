@@ -31,7 +31,7 @@ namespace EcsDataManager.EFConcrete
             dbEntity.OwnerTeam = entity.OwnerTeam;
             dbEntity.ServiceType = entity.ServiceType;
             dbEntity.IpRange = entity.IpRange;
-              dbEntity.AcountManager = entity.AcountManager;
+              dbEntity.AccountManager = entity.AccountManager;
               _ecsContext.SaveChanges();
         }
 
