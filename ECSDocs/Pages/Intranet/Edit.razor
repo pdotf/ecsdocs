@@ -108,7 +108,7 @@ else
     {
         if (_customerEntity != null)
         {
-            CustomersManager.Change(_customerModel, _customerEntity);
+            await CustomersManager.Change(_customerModel, _customerEntity);
             NavigationManager.NavigateTo("/IntranetCustomers/Customer" + "/" + CustomerID, true);
         }
 

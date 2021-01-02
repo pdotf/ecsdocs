@@ -22,7 +22,7 @@ namespace EcsDataManager.Entities
         [MaxLength(50)]
         public string OwnerTeam { get; set; }
         [Required(AllowEmptyStrings = false, ErrorMessage = nameof(ServiceType) + " is required.")]
-        [MaxLength(10)]
+        [MaxLength(30)]
         public string ServiceType { get; set; }
 
         [Required(AllowEmptyStrings = false, ErrorMessage = nameof(IpRange) + " is required.")]
