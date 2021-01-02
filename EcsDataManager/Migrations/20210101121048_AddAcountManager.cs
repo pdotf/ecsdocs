@@ -7,7 +7,7 @@ namespace EcsDataManager.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AddColumn<string>(
-                name: "AcountManager",
+                name: "AccountManager",
                 table: "IntranetCustomers",
                 type: "nvarchar(50)",
                 maxLength: 50,
@@ -15,7 +15,7 @@ namespace EcsDataManager.Migrations
                 defaultValue: "");
 
             migrationBuilder.AddColumn<string>(
-                name: "AcountManager",
+                name: "AccountManager",
                 table: "ApnCustomers",
                 type: "nvarchar(50)",
                 maxLength: 50,
