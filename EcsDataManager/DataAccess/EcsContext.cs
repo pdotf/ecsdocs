@@ -15,6 +15,7 @@ namespace EcsDataManager.DataAccess
         public virtual DbSet<DeviceList> DeviceList { get; set; }
 
         public virtual DbSet<IntranetCustomers> IntranetCustomers { get; set; }
+        public virtual DbSet<Coordinators> Coordinators { get; set; }
 
 
 

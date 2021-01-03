@@ -11,10 +11,14 @@ namespace EcsDataManager.Entities
         public int Id { get; set; }
         [MaxLength(50)]
         public string TaName { get; set; }
-        [MaxLength(500)]
+        [MaxLength(200)]
         public string Tell { get; set; }
+        [MaxLength(200)]
+        public string Mobile { get; set; }
         [MaxLength(50)]
         public string Coordinator { get; set; }
+        [MaxLength(50)]
+        public string AHDTracker { get; set; }
         [MaxLength(4000)]
         public string Comment { get; set; }
 
