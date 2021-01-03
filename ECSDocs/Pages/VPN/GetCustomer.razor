@@ -8,6 +8,7 @@
 @inject ICRUDManager<VpnCustomers> CustomerManager
 @inject ICustomerUrlManager<CustomerUrl> CUrlManager
 @inject ICRUDManager<DeviceList> DeviceManager
+@inject IDeviceManager<DeviceList> deviceManage
 @inject NavigationManager NavigationManager
 @inject IJSRuntime JSRuntime
 
@@ -538,7 +539,7 @@ else
     string errorStr;
     protected async Task AddLink()
     {
-        var check = await CUrlManager.GetMainUrlById(CustomerID,1);
+        var check = await CUrlManager.GetMainUrlById(CustomerID, 1);
         var check2 = _customerUrlEntity.link;
         if (check?.customerId == null)
         {
@@ -560,7 +561,7 @@ else
         try
         {
             _customerEntity = await CustomerManager.Get(CustomerID);
-            _customerUrlEntity = await CUrlManager.GetMainUrlById(CustomerID,1);
+            _customerUrlEntity = await CUrlManager.GetMainUrlById(CustomerID, 1);
             _customerFullDataModel = await CustomerManager.Get(CustomerID);
             _devices = await DeviceManager?.GetAll(0);
             _dev = await DeviceManager?.Get(CustomerID, 1);
@@ -639,7 +640,8 @@ else
     }
     protected async Task DeleteDevice(int id)
     {
-        _dev = await DeviceManager.Get(id);
+
+        _dev = await deviceManage.GetDevice(id);
         await DeviceManager.Delete(_dev);
         NavigationManager.NavigateTo($"/VpnCustomers/{CustomerID}", true);
 

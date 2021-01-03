@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace EcsDataManager.EFConcrete
 {
-    public class VpnDeviceManager:ICRUDManager<DeviceList>
+    public class VpnDeviceManager : ICRUDManager<DeviceList>, IDeviceManager<DeviceList>
     {
         private readonly EcsContext _ecsContext;
 
@@ -18,9 +18,9 @@ namespace EcsDataManager.EFConcrete
             _ecsContext = ecsContext;
         }
 
-        public async Task<int> Add(DeviceList entity,short ismain=0)
+        public async Task<int> Add(DeviceList entity, short ismain = 0)
         {
-            if (ismain!=0)
+            if (ismain != 0)
             {
                 entity.IsMain = 1;
             }
@@ -49,18 +49,25 @@ namespace EcsDataManager.EFConcrete
             return res;
         }
 
-        public Task<DeviceList> Get(int id,short ismain)
+        public Task<DeviceList> Get(int id, short ismain)
         {
-          //  var test = _ecsContext.DeviceList.ToList(); 
-                     //.Where(e => e.Cus == id && e.IsMain==ismain).SingleOrDefault();
-            var res= Task.FromResult(_ecsContext.DeviceList 
-                     .FirstOrDefault(e =>  e.CustomerId == id && e.IsMain == ismain));
+            //  var test = _ecsContext.DeviceList.ToList(); 
+            //.Where(e => e.Cus == id && e.IsMain==ismain).SingleOrDefault();
+            var res = Task.FromResult(_ecsContext.DeviceList
+                     .FirstOrDefault(e => e.CustomerId == id && e.IsMain == ismain));
             return res;
         }
 
-        public Task<List<DeviceList>> GetAll(short ismain=0)
+        public Task<DeviceList> GetDevice(int id, short ismain = 0)  
         {
-            var res = Task.FromResult(_ecsContext.DeviceList.Where(w=>w.IsMain==ismain).OrderByDescending(x => x.Id).ToList());
+            var res = Task.FromResult(_ecsContext.DeviceList
+                   .FirstOrDefault(e => e.Id == id && e.IsMain == ismain));
+            return res;
+        }
+
+        public Task<List<DeviceList>> GetAll(short ismain = 0)
+        {
+            var res = Task.FromResult(_ecsContext.DeviceList.Where(w => w.IsMain == ismain).OrderByDescending(x => x.Id).ToList());
             return res;
         }
     }

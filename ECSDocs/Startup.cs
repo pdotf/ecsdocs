@@ -84,6 +84,7 @@ namespace ECSDocs
             services.AddScoped<ICRUDManager<ApnCustomers>, ApnCustomerManager>();
             services.AddScoped<ICRUDManager<VpnCustomers>, VpnCustomerManager>();
             services.AddScoped<ICRUDManager<DeviceList>, VpnDeviceManager>();
+            services.AddScoped<IDeviceManager<DeviceList>, VpnDeviceManager>();
             services.AddScoped<IUpdateComment<ApnCustomers>, ApnCustomerManager>();
             services.AddScoped<IUpdateComment<IntranetCustomers>, IntranetCustomerManager>();
             services.AddScoped<IUpdateComment<VpnCustomers>, VpnCustomerManager>();
