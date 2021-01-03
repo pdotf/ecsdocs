@@ -2,6 +2,7 @@
 @using EcsDataManager.EFContracts
 @using EcsDataManager.Entities
 @inject ICRUDManager<DeviceList> deviceManager
+@inject IDeviceManager<DeviceList> deviceManage
 @inject NavigationManager NavigationManager
 @inject IMatDialogService MatDialogService
 
@@ -83,7 +84,7 @@ else
     {
         try
         {
-            _deviceEntity = await deviceManager.Get(ID);
+            _deviceEntity = await deviceManage.GetDevice(ID);
             errorStr = null;
         }
         catch (Exception ex)
