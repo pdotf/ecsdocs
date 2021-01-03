@@ -1,8 +1,6 @@
 using Blazored.Modal;
-using EcsDataManager.Concrete;
-using EcsDataManager.Contracts;
 using ECSDocs.Areas.Identity;
-using ECSDocs.Data;
+using EcsDataManager.Data;
 using MatBlazor;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Components;
@@ -22,7 +20,6 @@ using Blazorise.Icons.FontAwesome;
 using EcsDataManager.Entities;
 using EcsDataManager.EFContracts;
 using EcsDataManager.EFConcrete;
-using EcsDataManager.DataAccess;
 
 namespace ECSDocs
 {
@@ -44,9 +41,9 @@ namespace ECSDocs
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
 
-            services.AddDbContext<EcsContext>(options =>
-                options.UseSqlServer(
-                    Configuration.GetConnectionString("DefaultConnection")));
+            //services.AddDbContext<ApplicationDbContext>(options =>
+            //    options.UseSqlServer(
+            //        Configuration.GetConnectionString("DefaultConnection")));
 
 
 
@@ -78,7 +75,7 @@ namespace ECSDocs
 
             services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<IdentityUser>>();
             services.AddDatabaseDeveloperPageExceptionFilter();
-            services.AddSingleton<WeatherForecastService>();
+            //services.AddSingleton<WeatherForecastService>();
             services.AddScoped<ICustomerUrlManager<CustomerUrl>, VpnCustomerManager>();
             services.AddScoped<ICRUDManager<IntranetCustomers>, IntranetCustomerManager>();
             services.AddScoped<ICRUDManager<ApnCustomers>, ApnCustomerManager>();
@@ -90,7 +87,7 @@ namespace ECSDocs
             services.AddScoped<IUpdateComment<VpnCustomers>, VpnCustomerManager>();
 
             //Register dapper in scope  
-            services.AddScoped<IDapperManager, DapperManager>();
+            //services.AddScoped<IDapperManager, DapperManager>();
 
 
             // Server Side Blazor doesn't register HttpClient by default
@@ -112,7 +109,7 @@ namespace ECSDocs
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            InitializeDatabase(app);
+            //InitializeDatabase(app);
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -146,13 +143,13 @@ namespace ECSDocs
                 endpoints.MapFallbackToPage("/_Host");
             });
         }
-        private void InitializeDatabase(IApplicationBuilder app)
-        {
-            using (var scope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope())
-            {
-                scope.ServiceProvider.GetRequiredService<EcsContext>().Database.Migrate();
+        //private void InitializeDatabase(IApplicationBuilder app)
+        //{
+        //    using (var scope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope())
+        //    {
+        //        scope.ServiceProvider.GetRequiredService<ApplicationDbContext>().Database.Migrate();
 
-            }
-        }
+        //    }
+        //}
     }
 }

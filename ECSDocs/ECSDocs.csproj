@@ -7,15 +7,19 @@
 
   <ItemGroup>
     <Compile Remove="Components\**" />
+    <Compile Remove="Data\**" />
     <Compile Remove="Pages\ApnCustomersx\**" />
     <Compile Remove="Pages\VpnCustomers\**" />
     <Content Remove="Components\**" />
+    <Content Remove="Data\**" />
     <Content Remove="Pages\ApnCustomersx\**" />
     <Content Remove="Pages\VpnCustomers\**" />
     <EmbeddedResource Remove="Components\**" />
+    <EmbeddedResource Remove="Data\**" />
     <EmbeddedResource Remove="Pages\ApnCustomersx\**" />
     <EmbeddedResource Remove="Pages\VpnCustomers\**" />
     <None Remove="Components\**" />
+    <None Remove="Data\**" />
     <None Remove="Pages\ApnCustomersx\**" />
     <None Remove="Pages\VpnCustomers\**" />
   </ItemGroup>

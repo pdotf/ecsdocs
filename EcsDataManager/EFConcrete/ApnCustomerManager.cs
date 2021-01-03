@@ -1,19 +1,17 @@
-﻿using EcsDataManager.DataAccess;
+﻿using EcsDataManager.Data;
 using EcsDataManager.EFContracts;
 using EcsDataManager.Entities;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace EcsDataManager.EFConcrete
 {
     public class ApnCustomerManager : ICRUDManager<ApnCustomers>, IUpdateComment<ApnCustomers>
     {
-        private readonly EcsContext _ecsContext;
+        private readonly ApplicationDbContext _ecsContext;
 
-        public ApnCustomerManager(EcsContext ecsContext)
+        public ApnCustomerManager(ApplicationDbContext ecsContext)
         {
             _ecsContext = ecsContext;
         }

@@ -5,7 +5,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Concrete\CustomersManager.cs" />
+    <Compile Remove="Data\EcsContext.cs" />
+    <Compile Remove="Data\EcsContextFactory.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -25,6 +26,11 @@
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
     <PackageReference Include="System.ComponentModel.Annotations" Version="5.0.0" />
     <PackageReference Include="System.Data.SqlClient" Version="4.8.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Data\Identity\" />
+    <Folder Include="Migrations\" />
   </ItemGroup>
 
 </Project>

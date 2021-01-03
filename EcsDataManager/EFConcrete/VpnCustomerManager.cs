@@ -1,9 +1,7 @@
-﻿using EcsDataManager.EFContracts;
+﻿using EcsDataManager.Data;
+using EcsDataManager.EFContracts;
 using EcsDataManager.Entities;
-using System;
 using System.Collections.Generic;
-using System.Text;
-using EcsDataManager.DataAccess;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -11,9 +9,9 @@ namespace EcsDataManager.EFConcrete
 {
     public class VpnCustomerManager : ICRUDManager<VpnCustomers>, IUpdateComment<VpnCustomers>, ICustomerUrlManager<CustomerUrl>
     {
-        readonly EcsContext _appContext;
+        readonly ApplicationDbContext _appContext;
 
-        public VpnCustomerManager(EcsContext appContext)
+        public VpnCustomerManager(ApplicationDbContext appContext)
         {
             _appContext = appContext;
         }

@@ -1,19 +1,17 @@
-﻿using EcsDataManager.DataAccess;
+﻿using EcsDataManager.Data;
 using EcsDataManager.EFContracts;
 using EcsDataManager.Entities;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace EcsDataManager.EFConcrete
 {
     public class IntranetCustomerManager : ICRUDManager<IntranetCustomers>, IUpdateComment<IntranetCustomers>
     {
-        private readonly EcsContext _ecsContext;
+        private readonly ApplicationDbContext _ecsContext;
 
-        public IntranetCustomerManager(EcsContext ecsContext)
+        public IntranetCustomerManager(ApplicationDbContext ecsContext)
         {
             _ecsContext = ecsContext;
         }
