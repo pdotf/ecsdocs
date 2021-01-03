@@ -51,9 +51,11 @@ namespace EcsDataManager.EFConcrete
 
         public Task<DeviceList> Get(int id,short ismain)
         {
-
-            return Task.FromResult(_ecsContext.DeviceList
-                     .FirstOrDefault(e =>  e.Id == id  &&  e.IsMain == ismain ));
+          //  var test = _ecsContext.DeviceList.ToList(); 
+                     //.Where(e => e.Cus == id && e.IsMain==ismain).SingleOrDefault();
+            var res= Task.FromResult(_ecsContext.DeviceList 
+                     .FirstOrDefault(e =>  e.CustomerId == id && e.IsMain == ismain));
+            return res;
         }
 
         public Task<List<DeviceList>> GetAll(short ismain=0)
