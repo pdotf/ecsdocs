@@ -240,7 +240,7 @@
         {
             if (_devices != null)
             {
-                _devices.CustomerId = cc;
+                _devices.CustomerId = _customer.id;
                 var deviceState = await DeviceManager.Add(_devices, 1);
                 navigationManager.NavigateTo("/VpnCustomers", true);
                 snackbar.Show();
