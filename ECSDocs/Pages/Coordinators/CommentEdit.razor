@@ -1,4 +1,4 @@
-﻿@page "/Coordinators/customer/{customerID}/CostumerCommentEdit"
+﻿@page "/Coordinators/TA/{TaID}/TACommentEdit"
 @using EcsDataManager.Entities
 @using EcsDataManager.EFContracts
 @inject NavigationManager NavigationManager
@@ -49,7 +49,7 @@ else
 }
 
 @code {
-    [Parameter] public string CustomerID { get; set; }
+    [Parameter] public string TaID { get; set; }
     Coordinators _coordinatorEntity = new Coordinators();
     Coordinators _coordinator = new Coordinators();
     string errorString;
@@ -67,7 +67,7 @@ else
     {
         try
         {
-            _coordinatorEntity = await TaManager.Get(Convert.ToInt32(CustomerID));
+            _coordinatorEntity = await TaManager.Get(Convert.ToInt32(TaID));
             errorString = null;
 
         }
@@ -82,7 +82,7 @@ else
         try
         {
            await CommentManager.ChangeComment(_coordinator, _coordinatorEntity);
-            NavigationManager.NavigateTo("/Coordinators/customer" + "/" + CustomerID, true);
+            NavigationManager.NavigateTo("/Coordinators/TA" + "/" + TaID, true);
             errorString = null;
         }
         catch (Exception ex)
@@ -94,6 +94,6 @@ else
     }
     async Task Cancel()
     {
-        NavigationManager.NavigateTo("Coordinators/customer" + "/" + CustomerID);
+        NavigationManager.NavigateTo("Coordinators/TA" + "/" + TaID);
     }
 }
