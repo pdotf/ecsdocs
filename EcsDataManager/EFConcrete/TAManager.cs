@@ -1,7 +1,9 @@
-﻿using EcsDataManager.EFContracts;
+﻿using EcsDataManager.Data;
+using EcsDataManager.EFContracts;
 using EcsDataManager.Entities;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -9,29 +11,49 @@ namespace EcsDataManager.EFConcrete
 {
     public class TAManager : ICRUDManager<Coordinators>
     {
-        public Task<int> Add(Coordinators entity, short ismain = 0)
+        private readonly ApplicationDbContext _dbContext;
+
+        public TAManager(ApplicationDbContext dbContext)
         {
-            throw new NotImplementedException();
+            _dbContext = dbContext;
+        }
+        public async Task<int> Add(Coordinators entity, short ismain = 0)
+        {
+            _dbContext.Coordinators.Add(entity);
+            var res = await _dbContext.SaveChangesAsync();
+            return res;
         }
 
-        public Task<int> Change(Coordinators dbEntity, Coordinators entity)
+        public async Task<int> Change(Coordinators dbEntity, Coordinators entity)
         {
-            throw new NotImplementedException();
+            dbEntity.AHDTracker = entity.AHDTracker;
+            dbEntity.Coordinator = entity.Coordinator;
+            dbEntity.Mobile = entity.Mobile;
+            dbEntity.TaName = entity.TaName;
+            dbEntity.Tell = entity.Tell;
+
+            var res = await _dbContext.SaveChangesAsync();
+            return res;
         }
 
-        public Task<int> Delete(Coordinators entity)
+        public async Task<int> Delete(Coordinators entity)
         {
-            throw new NotImplementedException();
+            _dbContext.Coordinators.Remove(entity);
+            var res = await _dbContext.SaveChangesAsync();
+            return res;
         }
 
-        public Task<Coordinators> Get(int id, short ismain = 0)
+        public  Task<Coordinators> Get(int id, short ismain = 0)
         {
-            throw new NotImplementedException();
+            var res = Task.FromResult(_dbContext.Coordinators
+                     .FirstOrDefault(e => e.Id == id));
+            return res;
         }
 
-        public Task<List<Coordinators>> GetAll(short ismain = 0)
+        public  Task<List<Coordinators>> GetAll(short ismain = 0)
         {
-            throw new NotImplementedException();
+            var res = Task.FromResult(_dbContext.Coordinators.OrderByDescending(x => x.Id).ToList());
+            return res;
         }
     }
 }
