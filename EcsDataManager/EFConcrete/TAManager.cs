@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace EcsDataManager.EFConcrete
 {
-    public class TAManager : ICRUDManager<Coordinators>
+    public class TAManager : ICRUDManager<Coordinators>, IUpdateComment<Coordinators>
     {
         private readonly ApplicationDbContext _dbContext;
 
@@ -27,11 +27,17 @@ namespace EcsDataManager.EFConcrete
         public async Task<int> Change(Coordinators dbEntity, Coordinators entity)
         {
             dbEntity.AHDTracker = entity.AHDTracker;
-            dbEntity.Coordinator = entity.Coordinator;
             dbEntity.Mobile = entity.Mobile;
             dbEntity.TaName = entity.TaName;
             dbEntity.Tell = entity.Tell;
 
+            var res = await _dbContext.SaveChangesAsync();
+            return res;
+        }
+
+        public async Task<int> ChangeComment(Coordinators dbEntity, Coordinators entity)
+        {
+            dbEntity.Comment = entity.Comment;
             var res = await _dbContext.SaveChangesAsync();
             return res;
         }
@@ -43,14 +49,14 @@ namespace EcsDataManager.EFConcrete
             return res;
         }
 
-        public  Task<Coordinators> Get(int id, short ismain = 0)
+        public Task<Coordinators> Get(int id, short ismain = 0)
         {
             var res = Task.FromResult(_dbContext.Coordinators
                      .FirstOrDefault(e => e.Id == id));
             return res;
         }
 
-        public  Task<List<Coordinators>> GetAll(short ismain = 0)
+        public Task<List<Coordinators>> GetAll(short ismain = 0)
         {
             var res = Task.FromResult(_dbContext.Coordinators.OrderByDescending(x => x.Id).ToList());
             return res;

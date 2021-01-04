@@ -1,5 +1,162 @@
-﻿<h3>TAs</h3>
+﻿
+@page "/Coordinators"
+@using EcsDataManager.Entities
+@using EcsDataManager.EFContracts
+@inject ICRUDManager<Coordinators> TaManager
+
+@inject NavigationManager NavigationManager
+@inject HttpClient Http
+@using Microsoft.JSInterop
+@*<link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">*@
+<div class="row">
+    <h3 class="container-fluid">
+        Coordinators
+    </h3>
+</div>
+<br />
+<div>
+    <div class="row">
+        @*<button class="btn btn-success" @onclick="@(() => Modal.Show<addVpnCustomer>("Add customer"))">Add TA</button>*@
+        <div class="col-md-2 float-left"><button class="btn btn-success" @onclick="@(()=> GoToAddTA())">Add TA</button></div>
+        @*<div class="col-md-6 float-right">
+                <div class="dropdown">
+                    <button data-toggle="dropdown" class="btn btn-success">Export</button>
+                    <div class="dropdown-menu">
+                        Excel
+                    </div>
+                </div>
+            </div>*@
+    </div>
+</div>
+<br />
+
+@if (_coordinatorModel == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+
+    <div class="float-left">
+        <input type="text" id="txtSearch" placeholder="Search TA name..." class="form-control" @bind="SearchTerm" @bind:event="oninput" />
+
+    </div>
+    <br />
+    <br />
+    <div>
+        <DataGrid TItem="Coordinators"
+                  Data="@_coordinatorModel"
+                  ReadData="@OnReadData"
+                  TotalItems="@totalcustomers" Hoverable="true" SelectedRowStyling="@OnSelectedRowStyling" Editable="true" Sortable="true" Striped="true">
+            @*<DataGridColumn TItem="Customers" Field="@nameof(Coordinators.RowNumber)" Caption="#" />*@
+            <DataGridColumn TItem="Coordinators" Field="@nameof(Coordinators.TaName)" Caption="TA Name" Sortable="true" />
+            <DataGridColumn TItem="Coordinators" Field="@nameof(Coordinators.Tell)" Caption="Tell" />
+            <DataGridColumn TItem="Coordinators" Field="@nameof(Coordinators.Mobile)" Caption="Mobile" />
+            <DataGridColumn TItem="Coordinators" Field="@nameof(Coordinators.AHDTracker)" Caption="AHD Tracker" />
+            <DataGridColumn TItem="Coordinators" Field="@nameof(Coordinators.Id)" Caption="Action">
+                <DisplayTemplate>
+                    <Button Color="Color.Success" Clicked="async() =>await ShowTaDetail(context.Id)">Detail</Button>
+                </DisplayTemplate>
+            </DataGridColumn>
+
+        </DataGrid>
+    </div>
+
+
+}
+
 
 @code {
+
+    int endPage;
+    private string searchTerm;
+    private string SearchTerm
+    {
+        get { return searchTerm; }
+        set { searchTerm = value; CustomerFilteringList(searchTerm, "TaName").ConfigureAwait(true); }
+    }
+
+
+
+    List<Coordinators> _coordinatorModel = new List<Coordinators>();
+    Coordinators _customerEntity = new Coordinators();
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        _coordinatorModel = await TaManager.GetAll();
+
+
+    }
+    protected async Task GoToAddTA()
+    {
+        NavigationManager.NavigateTo("Coordinators/addTA", true);
+    }
+    void OnSelectedRowStyling(Coordinators employee, DataGridRowStyling styling)
+    {
+        styling.Background = Background.Transparent;
+    }
+    string errorStr;
+    protected async Task ShowTaDetail(int id)
+    {
+
+        _customerEntity = await TaManager?.Get(id);
+        try
+        {
+            NavigationManager.NavigateTo($"Coordinators/TA/{id}", true);
+            errorStr = null;
+
+        }
+        catch (Exception ex)
+        {
+
+            errorStr = ex.Message;
+        }
+    }
+
+    int totalcustomers;
+    async Task OnReadData(DataGridReadDataEventArgs<Coordinators> e)
+    {
+        // this can be call to anything, in this case we're calling a fictional api
+        // var response = await Http.GetJsonAsync<Customers[]>($"some-api/Customerss?page={e.Page}&pageSize={e.PageSize}");
+
+        _coordinatorModel = await TaManager?.GetAll();
+        totalcustomers = _coordinatorModel.Count();
+
+        // always call StateHasChanged!
+        StateHasChanged();
+    }
+    public void FilterRecords()
+    {
+        endPage = 0;
+        this.OnInitializedAsync().Wait();
+    }
+    protected async Task OnCsmNameChanged()
+    {
+        string values = SearchTerm;
+        await CustomerFilteringList(values, "TaName");
+    }
+    protected async Task CustomerFilteringList(String Value, string columnName)
+    {
+        _coordinatorModel = await TaManager?.GetAll();
+
+        if (Value.Trim().Length > 0)
+        {
+            switch (columnName)
+            {
+                case "TaName":
+                    _coordinatorModel = _coordinatorModel.Where(x => x.TaName.IndexOf(Value, StringComparison.OrdinalIgnoreCase) != -1).ToList();
+                    break;
+
+                default:
+                    _coordinatorModel = await TaManager.GetAll();
+                    break;
+            }
+        }
+        else
+        {
+            _coordinatorModel = await TaManager?.GetAll();
+        }
+    }
 
 }

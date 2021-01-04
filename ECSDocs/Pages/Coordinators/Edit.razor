@@ -1,5 +1,116 @@
-﻿<h3>Edit</h3>
+﻿@page "/Coordinators/EditTA/{TaID:int}"
+@using EcsDataManager.EFContracts
+@using EcsDataManager.Entities
+@inject ICRUDManager<Coordinators> TaManager
+@inject NavigationManager NavigationManager
 
-@code {
 
+
+<style type="text/css">
+    .simple-form {
+    }
+</style>
+<!--<div>-->
+@if (string.IsNullOrWhiteSpace(errorstring) == false)
+{
+    <Card>
+        <div class="h4">
+            <dfn>@errorstring</dfn>
+        </div>
+    </Card>
+}
+else if (_coordinatorEntity is null)
+{
+    <div class="h4">
+        <dfn>Loading ...</dfn>
+    </div>
+}
+else
+{
+    <Card>
+        <div class="simple-form">
+            <EditForm Model="@_coordinatorEntity" OnValidSubmit="@(async () => await UpdateCustomers(TaID))">
+                <DataAnnotationsValidator />
+                <div class="container-fluid">
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label for="CustomerName">TA Name</label>
+                            <input class="form-control" @bind-value="@_coordinatorEntity.TaName" id="CustomerName" />
+                            <label for="Tel">Tell</label>
+                            <input class="form-control" @bind-value="@_coordinatorEntity.Tell" id="Tel" />
+                        </div>
+                        <div class="col-md-6">
+                            <label >Mobile</label>
+                            <input class="form-control" @bind-value="@_coordinatorEntity.Mobile" id="Mobile" />
+                            <label >@nameof(_coordinatorEntity.AHDTracker)</label>
+                            <input class="form-control" @bind-value="@_coordinatorEntity.AHDTracker" id="OwnerTeam" />
+
+                        </div>
+                    </div>
+
+                    
+                    <div class="row">
+
+                    </div>
+
+                    <input type="hidden" @bind-value="@_coordinatorEntity.Id" />
+                </div>
+                <div>
+
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary">Save</button>
+
+                    <button type="button" class="btn btn-danger" @onclick="Cancel">Cancel</button>
+                </div>
+            </EditForm>
+        </div>
+    </Card>
+}
+
+@code  {
+
+    [Parameter] public int TaID { get; set; }
+
+    Coordinators _customerModel = new Coordinators();
+    Coordinators _coordinatorEntity = new Coordinators();
+    string errorstring;
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            _coordinatorEntity = await TaManager?.Get(TaID);
+            errorstring = null;
+        }
+        catch (Exception ex)
+        {
+
+            errorstring = ex.Message;
+        }
+
+
+    }
+
+
+    protected async Task UpdateCustomers(int id)
+    {
+        if (_coordinatorEntity != null)
+        {
+            await TaManager.Change(_customerModel, _coordinatorEntity);
+            NavigationManager.NavigateTo("/Coordinators/TA" + "/" + TaID, true);
+        }
+
+
+    }
+
+    void Cancel()
+    {
+        NavigationManager.NavigateTo("/Coordinators/TA" + "/" + TaID);
+    }
+
+    void Reset()
+    {
+
+    }
 }

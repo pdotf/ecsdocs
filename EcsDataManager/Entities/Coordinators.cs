@@ -15,8 +15,7 @@ namespace EcsDataManager.Entities
         public string Tell { get; set; }
         [MaxLength(200)]
         public string Mobile { get; set; }
-        [MaxLength(50)]
-        public string Coordinator { get; set; }
+        
         [MaxLength(50)]
         public string AHDTracker { get; set; }
         [MaxLength(4000)]

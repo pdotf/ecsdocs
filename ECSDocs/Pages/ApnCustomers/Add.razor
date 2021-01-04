@@ -138,7 +138,7 @@
             customerManager.Add(_customer);
             error = null;
 
-            navigationManager.NavigateTo($@"ApnCustomers/customerlist", true);
+            navigationManager.NavigateTo($@"/ApnCustomers", true);
         }
         catch (Exception ex)
         {
@@ -153,6 +153,6 @@
 
     void Cancel()
     {
-        navigationManager.NavigateTo("ApnCustomers/customerlist");
+        navigationManager.NavigateTo("ApnCustomers");
     }
 }

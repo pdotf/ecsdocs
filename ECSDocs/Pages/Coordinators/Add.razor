@@ -1,5 +1,125 @@
-﻿<h3>Add</h3>
+﻿@page "/Coordinators/addTA"
+@using EcsDataManager.EFContracts
+@using EcsDataManager.Entities
+@inject ICRUDManager<Coordinators> TaManager
+@inject Microsoft.AspNetCore.Components.NavigationManager navigationManager
+<Alert Color="Color.Success" @ref="Success">
+    <AlertMessage>Well done!</AlertMessage>
+    <AlertDescription>You successfully add a customer.</AlertDescription>
+</Alert>
+<Snackbar @ref="snackbar">
+    <SnackbarBody>
+        Single line of text directly related to the operation performed
+    </SnackbarBody>
+</Snackbar>
+<div style="width:auto;height:80px">
+    <h2>Add Customer Table</h2>
+</div>
+<div class="container-fluid" style=";position: relative; display: table; overflow-y: auto; overflow-x: auto; width: auto; min-width: 300px; float:left">
+    <div class="container">
+        <EditForm Model="@_coordinator" OnValidSubmit="() => CreateCustomer()">
+            <DataAnnotationsValidator />
+            <div class="row">
+                <div class="col-md-5">
+                    <label>TA Name</label>
+                </div>
+                <div class="col-md-7">
+                    <InputText style="width:100%" @bind-Value="@_coordinator.TaName" />
+                    <ValidationMessage For="@(()=>_coordinator.TaName)" />
+                </div>
+
+                <div class="col-md-5">
+                    <label>Tel</label>
+                </div>
+                <div class="col-md-7">
+                    <InputText style="width:100%" @bind-Value="@_coordinator.Tell" />
+                    <ValidationMessage For="@(()=>_coordinator.Tell)" />
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-5">
+                    <label>Mobile</label>
+                </div>
+                <div class="col-md-7">
+                    <InputText style="width:100%" @bind-Value="@_coordinator.Mobile" />
+                    <ValidationMessage For="@(()=>_coordinator.Mobile)" />
+                </div>
+                <div class="col-md-5">
+                    <label>AHD Tracker</label>
+                </div>
+                <div class="col-md-7">
+                    <InputText style="width:100%" @bind-Value="@_coordinator.AHDTracker" />
+                    <ValidationMessage For="@(()=>_coordinator.AHDTracker)" />
+                </div>
+                 
+
+            </div>
+             
+            <div class="row">
+
+                <div class="col-md-5">
+                    <label>Comment</label>
+                </div>
+                <div class="col-md-7">
+                    <input style="width:100%" @bind-value="@_coordinator.Comment" />
+
+                </div>
+
+            </div>
+            <div class="row">
+                <input style="width:100%" type="hidden" @bind-value="@_coordinator.Id" />
+            </div>
+
+            <div class="row">
+                <div class="col-md-1">
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </div>
+                <div class="col-md-1">
+                    <button type="submit" class="btn btn-danger" @onclick="() => Cancel()">Cancel</button>
+                </div>
+            </div>
+        </EditForm>
+    </div>
+
+
+</div>
+
 
 @code {
 
+    [CascadingParameter] public IModalService Modal { get; set; }
+    List<Coordinators> CoordinatorList = new List<Coordinators>();
+    Coordinators _coordinator;
+
+    Alert Success;
+    Snackbar snackbar;
+
+    string errorString = null;
+
+    protected override void OnInitialized()
+    {
+        _coordinator = new Coordinators();
+    }
+
+    protected void CreateCustomer()
+    {
+        try
+        {
+            TaManager.Add(_coordinator);
+            errorString = null;
+            navigationManager.NavigateTo($@"Coordinators", true);
+        }
+        catch (Exception ex)
+        {
+
+            errorString = ex.Message;
+        }
+
+    }
+
+
+    void Cancel()
+    {
+        navigationManager.NavigateTo("/Coordinators");
+    }
 }
