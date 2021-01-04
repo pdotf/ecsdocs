@@ -77,14 +77,18 @@ namespace ECSDocs
             services.AddDatabaseDeveloperPageExceptionFilter();
             //services.AddSingleton<WeatherForecastService>();
             services.AddScoped<ICustomerUrlManager<CustomerUrl>, VpnCustomerManager>();
+            
             services.AddScoped<ICRUDManager<IntranetCustomers>, IntranetCustomerManager>();
             services.AddScoped<ICRUDManager<ApnCustomers>, ApnCustomerManager>();
             services.AddScoped<ICRUDManager<VpnCustomers>, VpnCustomerManager>();
             services.AddScoped<ICRUDManager<DeviceList>, VpnDeviceManager>();
+            services.AddScoped<ICRUDManager<Coordinators>, TAManager>();
+            
             services.AddScoped<IDeviceManager<DeviceList>, VpnDeviceManager>();
             services.AddScoped<IUpdateComment<ApnCustomers>, ApnCustomerManager>();
             services.AddScoped<IUpdateComment<IntranetCustomers>, IntranetCustomerManager>();
             services.AddScoped<IUpdateComment<VpnCustomers>, VpnCustomerManager>();
+            services.AddScoped<IUpdateComment<Coordinators>, TAManager>();
 
             //Register dapper in scope  
             //services.AddScoped<IDapperManager, DapperManager>();

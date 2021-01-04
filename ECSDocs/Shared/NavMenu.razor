@@ -84,13 +84,13 @@
             <MatNavItem AllowSelection="false"><MatIcon Icon="nature_people"></MatIcon> TA</MatNavItem>
         </MatNavSubMenuHeader>
         <MatNavSubMenuList>
-            <MatNavItem Href="/coordinatorlist"><MatIcon Icon="list"></MatIcon>Coordinator</MatNavItem>
+            <MatNavItem Href="/Coordinators"><MatIcon Icon="list"></MatIcon>Coordinator</MatNavItem>
 
             <AuthorizeView>
                 <Authorized>
                     @if (@context.User.IsInRole(ADMINISTRATION_ROLE))
                     {
-                    <MatNavItem Href="/addCoordinator"><MatIcon Icon="person_add"></MatIcon> Add Coordinator</MatNavItem>
+                        <MatNavItem Href="/addTA"><MatIcon Icon="person_add"></MatIcon> Add Coordinator</MatNavItem>
                     }
                 </Authorized>
             </AuthorizeView>
@@ -101,6 +101,9 @@
     </MatNavItem>
     <MatNavItem Href="/administration">
         <MatIcon Icon="settings"></MatIcon> Administration
+    </MatNavItem>
+    <MatNavItem Href="/_login">
+        <MatIcon Icon="login"></MatIcon>New Login demo 
     </MatNavItem>
 </MatNavMenu>
 
