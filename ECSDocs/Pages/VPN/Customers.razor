@@ -1,4 +1,5 @@
-﻿@page "/VpnCustomers"
+﻿@attribute [Authorize]
+@page "/VpnCustomers"
 @using EcsDataManager.EFContracts
 @using EcsDataManager.Entities
 @inject ICRUDManager<VpnCustomers> customerManager
@@ -74,14 +75,14 @@ else
     private string SearchTerm
     {
         get { return searchTerm; }
-        set { searchTerm = value; CustomerFilteringList(searchTerm, "CustomerName");  }
+        set { searchTerm = value; CustomerFilteringList(searchTerm, "CustomerName"); }
     }
     void OnSelectedRowStyling(VpnCustomers customer, DataGridRowStyling styling)
     {
         styling.Background = Background.Transparent;
     }
 
-    public List<VpnCustomers> customerModel=new List<VpnCustomers>();
+    public List<VpnCustomers> customerModel = new List<VpnCustomers>();
     public VpnCustomers customerEntity = new VpnCustomers();
     public string url = "/VpnCustomers";
 

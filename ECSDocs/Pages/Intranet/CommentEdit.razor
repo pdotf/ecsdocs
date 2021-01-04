@@ -1,4 +1,5 @@
-﻿@page "/IntranetCustomers/customer/{customerID}/CostumerCommentEdit"
+﻿@attribute [Authorize]
+@page "/IntranetCustomers/customer/{customerID}/CostumerCommentEdit"
 @using EcsDataManager.Entities
 @using EcsDataManager.EFContracts
 @inject NavigationManager NavigationManager

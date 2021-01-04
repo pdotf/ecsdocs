@@ -1,10 +1,11 @@
-﻿@page "/IntranetCustomers"
+﻿@attribute [Authorize]
+@page "/IntranetCustomers"
 @inject EcsDataManager.EFContracts.ICRUDManager<EcsDataManager.Entities.IntranetCustomers> CustomerManager
 @using EcsDataManager.Entities
 @inject NavigationManager NavigationManager
 @inject HttpClient Http
 @using Microsoft.JSInterop
-    @*<link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">*@
+@*<link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">*@
 <div class="row">
     <h3 class="container-fluid">
         Intranet Customers
@@ -35,7 +36,7 @@ else
 {
 
     <div class="float-left">
-        <input type="text" id="txtSearch" placeholder="Search Customer name..." class="form-control" @bind="SearchTerm" @bind:event="oninput"  />
+        <input type="text" id="txtSearch" placeholder="Search Customer name..." class="form-control" @bind="SearchTerm" @bind:event="oninput" />
 
     </div>
     <br />
@@ -70,7 +71,7 @@ else
     private string SearchTerm
     {
         get { return searchTerm; }
-        set { searchTerm = value;     CustomerFilteringList(searchTerm, "CustomerName"); }
+        set { searchTerm = value; CustomerFilteringList(searchTerm, "CustomerName"); }
     }
 
 

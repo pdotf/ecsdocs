@@ -1,4 +1,5 @@
-﻿@page "/IntranetCustomers/addCustomer"
+﻿@attribute [Authorize]
+@page "/IntranetCustomers/addCustomer"
 @using EcsDataManager.EFContracts
 @using EcsDataManager.Entities
 @inject ICRUDManager<IntranetCustomers> CustomerManager
@@ -118,12 +119,12 @@
 
     string errorString = null;
 
-        protected override void OnInitialized()
-        {
-           _customer=new IntranetCustomers();
-        }
+    protected override void OnInitialized()
+    {
+        _customer = new IntranetCustomers();
+    }
 
-        protected void CreateCustomer()
+    protected void CreateCustomer()
     {
         try
         {

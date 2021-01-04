@@ -1,4 +1,6 @@
-﻿@page "/ApnCustomers"
+﻿@attribute [Authorize]
+@page "/ApnCustomers"
+
 @inject ICRUDManager<ApnCustomers> CustomerManager
 @using EcsDataManager.EFContracts
 @using EcsDataManager.Entities
@@ -10,18 +12,18 @@
     </h3>
 </div>
 <br />
-<div >
+<div>
     <div class="row">
         @*<button class="btn btn-success" @onclick="@(() => Modal.Show<addVpnCustomer>("Add customer"))">Add Customer</button>*@
         <div class="col-md-2 float-left"><button class="btn btn-success" @onclick="@(()=> GoToAddApnCustomer())">Add Customer</button></div>
         @*<div class="col-md-6 float-right">
-            <div class="dropdown">
-                <button data-toggle="dropdown" class="btn btn-success">Export</button>
-                <div class="dropdown-menu">
-                    Excel
+                <div class="dropdown">
+                    <button data-toggle="dropdown" class="btn btn-success">Export</button>
+                    <div class="dropdown-menu">
+                        Excel
+                    </div>
                 </div>
-            </div>
-        </div>*@
+            </div>*@
     </div>
 </div>
 <br />
@@ -139,7 +141,7 @@ else
 
                 case "CustomerName":
 
-                    _apnCustomerModel = _apnCustomerModel.Where(x => x.CustomerName.IndexOf(Value,StringComparison.OrdinalIgnoreCase)!=-1).ToList();
+                    _apnCustomerModel = _apnCustomerModel.Where(x => x.CustomerName.IndexOf(Value, StringComparison.OrdinalIgnoreCase) != -1).ToList();
                     break;
 
                 default:

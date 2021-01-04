@@ -1,4 +1,5 @@
-﻿@page "/IntranetCustomers/customer"
+﻿@attribute [Authorize]
+@page "/IntranetCustomers/customer"
 @page "/IntranetCustomers/customer/{customerID:int}"
 @using EcsDataManager.EFContracts
 @using EcsDataManager.Entities
@@ -49,96 +50,96 @@ else
         </div>
         <br />
         <br /><br />
-              <div>
-                  <div class="row container-fluid">
-                      <div class="col-md-2">
-                          <h6>
-                              @nameof(_customerFullDataModel.CustomerName):
+        <div>
+            <div class="row container-fluid">
+                <div class="col-md-2">
+                    <h6>
+                        @nameof(_customerFullDataModel.CustomerName):
 
-                          </h6>
-                      </div>
-                      <Card class="col-md-10">
-                          <h7><span style="color:green">@_customerFullDataModel.CustomerName</span></h7>
-                      </Card>
-                  </div>
-                  <div class="row container-fluid">
-                      <div class="col-md-2">
-                          <h6>
-                              @nameof(_customerFullDataModel.Tell):
+                    </h6>
+                </div>
+                <Card class="col-md-10">
+                    <h7><span style="color:green">@_customerFullDataModel.CustomerName</span></h7>
+                </Card>
+            </div>
+            <div class="row container-fluid">
+                <div class="col-md-2">
+                    <h6>
+                        @nameof(_customerFullDataModel.Tell):
 
-                          </h6>
-                      </div>
-                      <Card class="col-md-10">
-                          <h7><span style="color:green">@_customerFullDataModel.Tell</span></h7>
-                      </Card>
-                  </div>
-                  <div class="row container-fluid">
-                      <div class="col-md-2">
-                          <h6>
-                              @nameof(_customerFullDataModel.Mobile):
+                    </h6>
+                </div>
+                <Card class="col-md-10">
+                    <h7><span style="color:green">@_customerFullDataModel.Tell</span></h7>
+                </Card>
+            </div>
+            <div class="row container-fluid">
+                <div class="col-md-2">
+                    <h6>
+                        @nameof(_customerFullDataModel.Mobile):
 
-                          </h6>
-                      </div>
-                      <Card class="col-md-10">
-                          <h7><span style="color:green">@_customerFullDataModel.Mobile</span></h7>
-                      </Card>
-                  </div>
-                  <div class="row container-fluid">
-                      <div class="col-md-2">
-                          <h6>
-                              @nameof(_customerFullDataModel.OwnerTeam):
+                    </h6>
+                </div>
+                <Card class="col-md-10">
+                    <h7><span style="color:green">@_customerFullDataModel.Mobile</span></h7>
+                </Card>
+            </div>
+            <div class="row container-fluid">
+                <div class="col-md-2">
+                    <h6>
+                        @nameof(_customerFullDataModel.OwnerTeam):
 
-                          </h6>
-                      </div>
-                      <Card class="col-md-10">
-                          <h7><span style="color:green">@_customerFullDataModel.OwnerTeam</span></h7>
-                      </Card>
-                  </div>
-                  <div class="row container-fluid">
-                      <div class="col-md-2">
-                          <h6>
-                              @nameof(_customerFullDataModel.AccountManager):
+                    </h6>
+                </div>
+                <Card class="col-md-10">
+                    <h7><span style="color:green">@_customerFullDataModel.OwnerTeam</span></h7>
+                </Card>
+            </div>
+            <div class="row container-fluid">
+                <div class="col-md-2">
+                    <h6>
+                        @nameof(_customerFullDataModel.AccountManager):
 
-                          </h6>
-                      </div>
-                      <Card class="col-md-10">
-                          <h7><span style="color:green">@_customerFullDataModel.AccountManager</span></h7>
-                      </Card>
-                  </div>
-                  <div class="row container-fluid">
-                      <div class="col-md-2">
-                          <h6>
-                              @nameof(_customerFullDataModel.ServiceType):
+                    </h6>
+                </div>
+                <Card class="col-md-10">
+                    <h7><span style="color:green">@_customerFullDataModel.AccountManager</span></h7>
+                </Card>
+            </div>
+            <div class="row container-fluid">
+                <div class="col-md-2">
+                    <h6>
+                        @nameof(_customerFullDataModel.ServiceType):
 
-                          </h6>
-                      </div>
-                      <Card class="col-md-10">
-                          <h7><span style="color:green">@_customerFullDataModel.ServiceType</span></h7>
-                      </Card>
-                  </div>
-                  <div class="row container-fluid">
-                      <div class="col-md-2">
-                          <h6>
-                              @nameof(_customerFullDataModel.IpRange):
+                    </h6>
+                </div>
+                <Card class="col-md-10">
+                    <h7><span style="color:green">@_customerFullDataModel.ServiceType</span></h7>
+                </Card>
+            </div>
+            <div class="row container-fluid">
+                <div class="col-md-2">
+                    <h6>
+                        @nameof(_customerFullDataModel.IpRange):
 
-                          </h6>
-                      </div>
-                      <Card class="col-md-10">
-                          <h7><span style="color:green">@_customerFullDataModel.IpRange</span></h7>
-                      </Card>
-                  </div>
+                    </h6>
+                </div>
+                <Card class="col-md-10">
+                    <h7><span style="color:green">@_customerFullDataModel.IpRange</span></h7>
+                </Card>
+            </div>
 
-                  <br />
-                  <br />
-                  <div class="row container-fluid">
-                      <div class="col-md-2"><h6>Comment: </h6></div>
-                      <div class="col-md-10" dir="rtl">
-                          <MemoEdit @bind-Text="@_customerFullDataModel.Comment" ReadOnly="true" Float="Float.Right" Size="Size.ExtraLarge" Rows="10" />
-                      </div>
-                  </div>
-                  <br />
-                  <br />
-              </div>
+            <br />
+            <br />
+            <div class="row container-fluid">
+                <div class="col-md-2"><h6>Comment: </h6></div>
+                <div class="col-md-10" dir="rtl">
+                    <MemoEdit @bind-Text="@_customerFullDataModel.Comment" ReadOnly="true" Float="Float.Right" Size="Size.ExtraLarge" Rows="10" />
+                </div>
+            </div>
+            <br />
+            <br />
+        </div>
 
     </div>
 }
@@ -242,7 +243,7 @@ else
     protected async Task UpdateCustomers(int Id)
     {
 
-          CustomerManager.Change(_customerEntity, _customerFullDataModel);
+        CustomerManager.Change(_customerEntity, _customerFullDataModel);
         //await BlazoredModal.Close(ModalResult.Ok<IntranetCustomers>(_customerEntity));
         //RefreshRecords(currentPage);
         NavigationManager.NavigateTo($"IntranetCustomers/customer/{CustomerID}", true);
@@ -253,7 +254,7 @@ else
         parameters.Add(nameof(EditCustomer.CustomerID), Id); */
 
         _customerModel = await CustomerManager.Get(Id);
-          CustomerManager.Delete(_customerModel);
+        CustomerManager.Delete(_customerModel);
         NavigationManager.NavigateTo("/IntranetCustomers", true);
     }
     protected void ShowUpdateCommentPage(int Id)

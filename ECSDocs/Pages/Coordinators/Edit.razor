@@ -1,4 +1,5 @@
-﻿@page "/Coordinators/EditTA/{TaID:int}"
+﻿@attribute [Authorize]
+@page "/Coordinators/EditTA/{TaID:int}"
 @using EcsDataManager.EFContracts
 @using EcsDataManager.Entities
 @inject ICRUDManager<Coordinators> TaManager
@@ -41,15 +42,15 @@ else
                             <input class="form-control" @bind-value="@_coordinatorEntity.Tell" id="Tel" />
                         </div>
                         <div class="col-md-6">
-                            <label >Mobile</label>
+                            <label>Mobile</label>
                             <input class="form-control" @bind-value="@_coordinatorEntity.Mobile" id="Mobile" />
-                            <label >@nameof(_coordinatorEntity.AHDTracker)</label>
+                            <label>@nameof(_coordinatorEntity.AHDTracker)</label>
                             <input class="form-control" @bind-value="@_coordinatorEntity.AHDTracker" id="OwnerTeam" />
 
                         </div>
                     </div>
 
-                    
+
                     <div class="row">
 
                     </div>

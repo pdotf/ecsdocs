@@ -1,4 +1,5 @@
-﻿@page "/VpnCustomers/{customerID}/CostumerCommentEdit"
+﻿@attribute [Authorize]
+@page "/VpnCustomers/{customerID}/CostumerCommentEdit"
 @using EcsDataManager.Entities
 @using EcsDataManager.EFContracts
 @inject NavigationManager NavigationManager

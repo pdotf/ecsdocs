@@ -1,4 +1,5 @@
-﻿@page "/VpnCustomers/EditCustomer/{customerID:int}"
+﻿@attribute [Authorize]
+@page "/VpnCustomers/EditCustomer/{customerID:int}"
 @using EcsDataManager.EFContracts
 @using EcsDataManager.Entities
 @inject ICRUDManager<VpnCustomers> CustomersManager
@@ -79,16 +80,35 @@
                 <input class="form-control" @bind-value="@_customerEntity.AccessList" id="Mobile" />
 
             </div>
-            @if (_customerUrl is not null)
-            {
+
+
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <label for="CustomerName">Radio Name</label>
+                <input class="form-control" @bind-value="@_deviceListEntity.RadioName" id="NumberOfSimCard" />
+                <label for="Tel">Radio Model</label>
+                <input class="form-control" @bind-value="@_deviceListEntity.RadioModel" id="AccessList" />
+                <label for="Tel">Radio Ip</label>
+                <input class="form-control" @bind-value="@_deviceListEntity.RadioIp" id="AccessList" />
+            </div>
+            <div class="col-md-6">
+                <label for="Mobile">Radio Metro Site</label>
+                <input class="form-control" @bind-value="@_deviceListEntity.RadioMetroSite" id="WanIpRange" />
+
+            </div>
+        </div>
+        @if (_customerUrl is not null)
+        {
+            <div class="row">
                 <div class="col-md-6">
                     <label for="Mobile">Link</label>
                     <input class="form-control" @bind-value="@_customerUrl.link" id="Mobile" />
 
                 </div>
-            }
+            </div>
+        }
 
-        </div>
         <input type="hidden" @bind-value="@_customerEntity.id" />
     </div>
     <div>
@@ -115,28 +135,29 @@
     protected override async Task OnInitializedAsync()
     {
         _customerEntity = await CustomersManager?.Get(CustomerID);
-        _deviceListEntity = await DeviceManager?.Get(CustomerID);
-        _customerUrl = await CUriManager?.GetMainUrlById(CustomerID,1);
+        _deviceListEntity = await DeviceManager?.Get(CustomerID, 1);
+        _customerUrl = await CUriManager?.GetMainUrlById(CustomerID, 1);
 
     }
 
 
     protected async Task UpdateCustomers(int id)
     {
-        if (_customerEntity != null)
+        if (_customerEntity!=null)
         {
-            await CustomersManager.Change(_customerModel, _customerEntity);
+            await CustomersManager?.Change(_customerModel, _customerEntity);
+
         }
         if (_deviceListEntity != null)
         {
-            await DeviceManager.Change(_deviceListModel, _deviceListEntity);
-
+            await DeviceManager?.Change(_deviceListModel, _deviceListEntity);
         }
         if (_customerUrl != null)
         {
-            await CUriManager.Update(_customerUrlModel, _customerUrl);
+            await CUriManager?.Update(_customerUrlModel, _customerUrl);
 
         }
+
         NavigationManager.NavigateTo("/VpnCustomers" + "/" + CustomerID, true);
     }
 

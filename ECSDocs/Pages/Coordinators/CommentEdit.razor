@@ -1,4 +1,5 @@
-﻿@page "/Coordinators/TA/{TaID}/TACommentEdit"
+﻿@attribute [Authorize]
+@page "/Coordinators/TA/{TaID}/TACommentEdit"
 @using EcsDataManager.Entities
 @using EcsDataManager.EFContracts
 @inject NavigationManager NavigationManager
@@ -81,7 +82,7 @@ else
     {
         try
         {
-           await CommentManager.ChangeComment(_coordinator, _coordinatorEntity);
+            await CommentManager.ChangeComment(_coordinator, _coordinatorEntity);
             NavigationManager.NavigateTo("/Coordinators/TA" + "/" + TaID, true);
             errorString = null;
         }

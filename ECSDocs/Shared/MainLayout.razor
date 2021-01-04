@@ -1,5 +1,5 @@
 ﻿@inherits LayoutComponentBase
-
+@attribute [Authorize]
 <div class="page">
     <div style="background-image:none;background-color:whitesmoke;" class="sidebar">
         <NavMenu />
@@ -8,16 +8,16 @@
     <div class="main">
         @*<Breadcrumb>
 
-            <BreadcrumbItem>
-                <BreadcrumbLink To="/customerlist">Customer List</BreadcrumbLink>
-            </BreadcrumbItem>
-            <BreadcrumbItem>
-                <LoginDisplay />
-            </BreadcrumbItem>
-            <BreadcrumbItem>
-                <BreadcrumbLink To="/">About</BreadcrumbLink>
-            </BreadcrumbItem>
-        </Breadcrumb>*@
+                <BreadcrumbItem>
+                    <BreadcrumbLink To="/customerlist">Customer List</BreadcrumbLink>
+                </BreadcrumbItem>
+                <BreadcrumbItem>
+                    <LoginDisplay />
+                </BreadcrumbItem>
+                <BreadcrumbItem>
+                    <BreadcrumbLink To="/">About</BreadcrumbLink>
+                </BreadcrumbItem>
+            </Breadcrumb>*@
         <div class="top-row px-4 auth">
             <a href="/VpnCustomers">VPN</a>
             <a href="/ApnCustomers">APN</a>
