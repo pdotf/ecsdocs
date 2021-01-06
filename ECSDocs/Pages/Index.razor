@@ -1,12 +1,239 @@
 ﻿@attribute [Authorize]
+@using EcsDataManager.Entities
+@using EcsDataManager.EFContracts
+@inject ICRUDManager<VpnCustomers> VpnManager
+@inject ICRUDManager<ApnCustomers> ApnManager
+@inject ICRUDManager<IntranetCustomers> IntraManager
+@inject ICRUDManager<Coordinators> TaManager
+@inject NavigationManager NavigationManager
+
 @page "/"
 <div>
     <h1>Mobinnet ECS Documents</h1>
 
     Welcome to your new portal.
 </div>
+@if (!IndexLoaded)
+{
+    <p>Just building the search index, one moment</p>
+}
+else
+{
+    <input placeholder="Search your customer" type="search" @bind="SearchTerm" /><MatButton type="submit">Search</MatButton>
+}
+@if (showTable)
+{
+    //ReadData = "@OnReadData"
+    @if (_vpnCustomerModel.Count > 0)
+    {
+        <div class="h4">
+            VPN
+        </div>
+        <DataGrid TItem="VpnCustomers"
+                  Data="@_vpnCustomerModel"
+                  TotalItems="@_vpnCustomerModel.Count" Hoverable="true" SelectedRowStyling="@OnSelectedRowStyling" Editable="true" Sortable="true" Striped="true">
+            @*<DataGridColumn TItem="VpnCustomers" Field="@nameof(VpnCustomers.RowNumber)" Caption="#" />*@
+            <DataGridColumn TItem="VpnCustomers" Field="@nameof(VpnCustomers.CustomerName)" Caption="Customer Name" />
+            <DataGridColumn TItem="VpnCustomers" Field="@nameof(VpnCustomers.OwnerTeam)" Caption="Owner Team" />
+            <DataGridColumn TItem="VpnCustomers" Field="@nameof(VpnCustomers.ServiceType)" Caption="Service Type" />
+            <DataGridColumn TItem="VpnCustomers" Field="@nameof(VpnCustomers.ServiceTopology)" Caption="Service Topology" />
+            <DataGridColumn TItem="VpnCustomers" Field="@nameof(VpnCustomers.AccountManager)" Caption="Account Manager" />
+            <DataGridColumn TItem="VpnCustomers" Field="@nameof(VpnCustomers.AccountManager)" Caption="Action">
+                <DisplayTemplate>
+                    <Button Color="Color.Success" Clicked="async() => ShowVpnDetail(context.id).ConfigureAwait(true)">Detail</Button>
+                </DisplayTemplate>
+            </DataGridColumn>
 
-<div class="page-background-class" style="height:396px;width:1000px">
-</div>
+        </DataGrid>
+    }
+    @if (_apnCustomerModel.Count>0)
+    {
+        <div class="h4">
+            APN
+        </div>
+        <DataGrid TItem="ApnCustomers"
+                  Data="@_apnCustomerModel"
+                  TotalItems="@_apnCustomerModel.Count" Hoverable="true" SelectedRowStyling="@OnSelectedRowStylingApn" Editable="true" Sortable="true" Striped="true">
+            @*<DataGridColumn TItem="Customers" Field="@nameof(ApnCustomers.RowNumber)" Caption="#" />*@
+            <DataGridColumn TItem="ApnCustomers" Field="@nameof(ApnCustomers.CustomerName)" Caption="Customer Name" />
+            <DataGridColumn TItem="ApnCustomers" Field="@nameof(ApnCustomers.OwnerTeam)" Caption="Owner Team" />
+
+            <DataGridColumn TItem="ApnCustomers" Field="@nameof(ApnCustomers.WanIpRange)" Caption="Wan Ip Range" />
+            <DataGridColumn TItem="ApnCustomers" Field="@nameof(ApnCustomers.NumberOfSimCard)" Caption="Number Of SimCard" />
+            <DataGridColumn TItem="ApnCustomers" Field="@nameof(ApnCustomers.AccountManager)" Caption="Account Manager" />
+
+            <DataGridColumn TItem="ApnCustomers" Field="@nameof(ApnCustomers.Id)" Caption="Action">
+                <DisplayTemplate>
+                    <Button Color="Color.Success" Clicked="async() => ShowCustomerDetailApn(context.Id).ConfigureAwait(true)">Detail</Button>
+                </DisplayTemplate>
+            </DataGridColumn>
+
+        </DataGrid>
+    }
+    @if (_intranetCustomersModel.Count > 0)
+    {
+        <div class="h4">
+            Intranet
+        </div>
+        <DataGrid TItem="EcsDataManager.Entities.IntranetCustomers"
+                  Data="@_intranetCustomersModel"
+                  TotalItems="@_intranetCustomersModel.Count" Hoverable="true" SelectedRowStyling="@OnSelectedRowStylingIntra" Editable="true" Sortable="true" Striped="true">
+            @*<DataGridColumn TItem="Customers" Field="@nameof(IntranetCustomers.RowNumber)" Caption="#" />*@
+            <DataGridColumn TItem="EcsDataManager.Entities.IntranetCustomers" Field="@nameof(EcsDataManager.Entities.IntranetCustomers.CustomerName)" Caption="Customer Name" Sortable="true" />
+            <DataGridColumn TItem="EcsDataManager.Entities.IntranetCustomers" Field="@nameof(EcsDataManager.Entities.IntranetCustomers.OwnerTeam)" Caption="Owner Team" />
+            <DataGridColumn TItem="EcsDataManager.Entities.IntranetCustomers" Field="@nameof(EcsDataManager.Entities.IntranetCustomers.ServiceType)" Caption="Service Type" />
+            <DataGridColumn TItem="EcsDataManager.Entities.IntranetCustomers" Field="@nameof(EcsDataManager.Entities.IntranetCustomers.AccountManager)" Caption="Account Manager" />
+            <DataGridColumn TItem="EcsDataManager.Entities.IntranetCustomers" Field="@nameof(EcsDataManager.Entities.IntranetCustomers.Id)" Caption="Action">
+                <DisplayTemplate>
+                    <Button Color="Color.Success" Clicked="async() => ShowCustomerDetailIntra(context.Id).ConfigureAwait(true)">Detail</Button>
+                </DisplayTemplate>
+            </DataGridColumn>
+
+        </DataGrid>
+    }
+    
+
+}
+else
+{
+    <div class="page-background-class" style="height:396px;width:1000px" />
+
+}
 @*<SurveyPrompt Title="How is Blazor working for you?" />*@
+
+@code{
+
+    bool IndexLoaded = true;
+    bool showTable = false;
+    private string searchTerm;
+    private string SearchTerm
+    {
+        get { return searchTerm; }
+        set { searchTerm = value; CustomerFilteringList(searchTerm, "CustomerName"); }
+    }
+    List<VpnCustomers> _vpnCustomerModel = new List<VpnCustomers>();
+    VpnCustomers _vpnEntity = new VpnCustomers();
+    List<ApnCustomers> _apnCustomerModel = new List<ApnCustomers>();
+    ApnCustomers _apnEntity = new ApnCustomers();
+    List<IntranetCustomers> _intranetCustomersModel = new List<IntranetCustomers>();
+    IntranetCustomers _intraEntity = new IntranetCustomers();
+    List<Coordinators> _coordinatorsModel = new List<Coordinators>();
+    Coordinators _taEntity = new Coordinators();
+
+    void OnSelectedRowStyling(VpnCustomers customer, DataGridRowStyling styling)
+    {
+        styling.Background = Background.Transparent;
+    }
+    void OnSelectedRowStylingApn(ApnCustomers employee, DataGridRowStyling styling)
+    {
+        styling.Background = Background.Transparent;
+    }
+    void OnSelectedRowStylingTA(Coordinators ta, DataGridRowStyling styling)
+    {
+        styling.Background = Background.Transparent;
+    }
+    protected async Task CustomerFilteringList(String Value, string columnName)
+    {
+        _vpnCustomerModel = await VpnManager?.GetAll();
+        _apnCustomerModel = await ApnManager?.GetAll();
+        _intranetCustomersModel = await IntraManager?.GetAll();
+        _coordinatorsModel = await TaManager?.GetAll();
+
+        if (Value.Trim().Length > 0)
+        {
+            switch (columnName)
+            {
+                case "CustomerName":
+                    _vpnCustomerModel = _vpnCustomerModel.Where(x => x.CustomerName.IndexOf(Value, StringComparison.OrdinalIgnoreCase) != -1).ToList();
+                    _apnCustomerModel = _apnCustomerModel.Where(x => x.CustomerName.IndexOf(Value, StringComparison.OrdinalIgnoreCase) != -1).ToList();
+                    _intranetCustomersModel = _intranetCustomersModel.Where(x => x.CustomerName.IndexOf(Value, StringComparison.OrdinalIgnoreCase) != -1).ToList();
+                    showTable = true;
+                    break;
+                case "TaName":
+                    _coordinatorsModel = _coordinatorsModel.Where(x => x.TaName.IndexOf(Value, StringComparison.OrdinalIgnoreCase) != -1).ToList();
+                    showTable = true;
+                    break;
+
+                default:
+                    showTable = false;
+                    break;
+            }
+        }
+        else
+        {
+            showTable = false;
+        }
+    }
+    void OnSelectedRowStylingIntra(EcsDataManager.Entities.IntranetCustomers employee, DataGridRowStyling styling)
+    {
+        styling.Background = Background.Transparent;
+    }
+    string errorStr;
+    protected async Task ShowTaDetail(int id)
+    {
+
+        _taEntity = await TaManager?.Get(id);
+        try
+        {
+            NavigationManager.NavigateTo($"Coordinators/TA/{id}", true);
+            errorStr = null;
+
+        }
+        catch (Exception ex)
+        {
+
+            errorStr = ex.Message;
+        }
+    }
+    protected async Task ShowCustomerDetailIntra(int id)
+    {
+
+        _intraEntity = await IntraManager?.Get(id);
+        try
+        {
+            NavigationManager.NavigateTo($"IntranetCustomers/Customer/{id}", true);
+            errorStr = null;
+
+        }
+        catch (Exception ex)
+        {
+
+            errorStr = ex.Message;
+        }
+    }
+
+    protected async Task ShowVpnDetail(int id)
+    {
+
+        _vpnEntity = await VpnManager?.Get(id);
+        try
+        {
+            var url = $"VpnCustomers";
+            NavigationManager.NavigateTo($"{url}/{id}", true);
+            errorStr = null;
+
+        }
+        catch (Exception ex)
+        {
+
+            errorStr = ex.Message;
+        }
+    }
+    protected async Task ShowCustomerDetailApn(int id)
+    {
+
+        _apnEntity = await ApnManager?.Get(id);
+        try
+        {
+            NavigationManager.NavigateTo($"ApnCustomers/Customer/{id}", true);
+            errorStr = null;
+
+        }
+        catch (Exception ex)
+        {
+
+            errorStr = ex.Message;
+        }
+    }
+}
 
