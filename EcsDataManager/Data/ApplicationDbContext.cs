@@ -15,10 +15,10 @@ namespace EcsDataManager.Data
 
         }
 
-        public virtual DbSet<VpnCustomers> Customers { get; set; }
+        public virtual DbSet<VpnCustomers> VpnCustomers { get; set; }
         public virtual DbSet<ApnCustomers> ApnCustomers { get; set; }
-        public virtual DbSet<CustomerUrl> CustomerUrl { get; set; }
-        public virtual DbSet<DeviceList> DeviceList { get; set; }
+        public virtual DbSet<CustomerUrl> VpnCustomerUrl { get; set; }
+        public virtual DbSet<DeviceList> VpnDeviceList { get; set; }
 
         public virtual DbSet<IntranetCustomers> IntranetCustomers { get; set; }
         public virtual DbSet<Coordinators> Coordinators { get; set; }

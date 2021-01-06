@@ -5,10 +5,13 @@
     [Parameter]
     public string ReturnUrl { get; set; }
 
-        protected override void OnInitialized()
-        {
-            ReturnUrl = @"~/" + ReturnUrl;
-            NavigationManager.NavigateTo($"Identity/Account/Login?returnUrl={ ReturnUrl}", forceLoad: true);
-        }
+    protected override void OnInitialized()
+    {
+        ReturnUrl = @"~/" + ReturnUrl;
+        
+
+
+        NavigationManager.NavigateTo($"Identity/Account/Login?returnUrl={ ReturnUrl}", forceLoad: true);
+    }
 
 }

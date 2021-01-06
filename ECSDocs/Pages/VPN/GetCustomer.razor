@@ -88,9 +88,9 @@ else
                                         <p>@_customerUrlEntity.id</p>
                                     }
                                     <!-- Only allow edit if a new user -->
-                                    @if (_customerUrlEntity.customerId != 0)
+                                    @if (_customerUrlEntity.VpnCustomerId != 0)
                                     {
-                                        <p>@_customerUrlEntity.customerId</p>
+                                        <p>@_customerUrlEntity.VpnCustomerId</p>
                                     }
                                     else
                                     {
@@ -506,7 +506,7 @@ else
     protected async Task CreateDevice(int id)
     {
         ShowPopup = false;
-        _devlist.CustomerId = id;
+        _devlist.VpnCustomerId = id;
         var state = await DeviceManager.Add(_devlist, 0);
 
         //NavigationManager.NavigateTo(uri: state != 0 ? "/Error" : "/customer" + "/" + id.ToString(), true);
@@ -540,9 +540,9 @@ else
     {
         var check = await CUrlManager.GetMainUrlById(CustomerID, 1);
         var check2 = _customerUrlEntity.link;
-        if (check?.customerId == null)
+        if (check?.VpnCustomerId == null)
         {
-            _customerUrlEntity.customerId = CustomerID;
+            _customerUrlEntity.VpnCustomerId = CustomerID;
 
             var urlState = await CUrlManager.AddUrl(_customerUrlEntity, 1);
             errorStr = null;

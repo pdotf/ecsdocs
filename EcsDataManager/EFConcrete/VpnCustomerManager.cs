@@ -17,7 +17,7 @@ namespace EcsDataManager.EFConcrete
         }
         public async Task<int> Add(VpnCustomers entity, short ismain = 0)
         {
-            _appContext.Customers.Add(entity);
+            _appContext.VpnCustomers.Add(entity);
             var res = await _appContext.SaveChangesAsync();
             return res;
         }
@@ -28,14 +28,14 @@ namespace EcsDataManager.EFConcrete
             {
                 entity.isMain = ismain;
             }
-            _appContext.CustomerUrl.Add(entity);
+            _appContext.VpnCustomerUrl.Add(entity);
             var res = await _appContext.SaveChangesAsync();
             return res;
         }
         public Task<CustomerUrl> GetMainUrlById(int Id,short ismain=0)
         {
-            return Task.FromResult(_appContext.CustomerUrl
-                       .FirstOrDefault(e => e.customerId == Id && e.isMain==ismain));
+            return Task.FromResult(_appContext.VpnCustomerUrl
+                       .FirstOrDefault(e => e.VpnCustomerId == Id && e.isMain==ismain));
         }
         public async Task<int> Update(CustomerUrl dbEntity,CustomerUrl entity )
         {
@@ -75,7 +75,7 @@ namespace EcsDataManager.EFConcrete
 
         public async Task<int> Delete(VpnCustomers entity)
         {
-            _appContext.Customers.Remove(entity);
+            _appContext.VpnCustomers.Remove(entity);
             var res = await _appContext.SaveChangesAsync();
             return res;
         }
@@ -83,13 +83,13 @@ namespace EcsDataManager.EFConcrete
         public Task<VpnCustomers> Get(int id, short ismain = 0)
         {
 
-            return Task.FromResult(_appContext.Customers
+            return Task.FromResult(_appContext.VpnCustomers
                         .FirstOrDefault(e => e.id == id));
         }
 
         public Task<List<VpnCustomers>> GetAll(short ismain = 0)
         {
-            var res = Task.FromResult(_appContext.Customers.OrderByDescending(x => x.id).ToList());
+            var res = Task.FromResult(_appContext.VpnCustomers.OrderByDescending(x => x.id).ToList());
             return res;
         }
 
