@@ -101,13 +101,13 @@ else
 
         await deviceManager.Change(_deviceModel, _deviceEntity);
         await BlazoredModal.Close(ModalResult.Ok<DeviceList>(_deviceEntity));
-        NavigationManager.NavigateTo("/VpnCustomers" + "/" + _deviceEntity.CustomerId, true);
+        NavigationManager.NavigateTo("/VpnCustomers" + "/" + _deviceEntity.VpnCustomerId, true);
     }
 
     async Task Cancel()
     {
         await BlazoredModal.Cancel();
-        NavigationManager.NavigateTo("/VpnCustomers" + "/" + _deviceEntity.CustomerId);
+        NavigationManager.NavigateTo("/VpnCustomers" + "/" + _deviceEntity.VpnCustomerId);
     }
 
     void Reset()

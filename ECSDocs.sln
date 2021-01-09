@@ -7,6 +7,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ECSDocs", "ECSDocs\ECSDocs.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EcsDataManager", "EcsDataManager\EcsDataManager.csproj", "{D6511271-8615-4DAD-982C-BB836BB9C877}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DataLib", "DataLib", "{D1CD5830-2F31-4A24-9B51-BA2488D4B5B1}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "WEB", "WEB", "{F45E95C8-DA3B-444F-B96A-7B06009BCA62}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,6 +28,10 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{E184B545-1E72-49FE-9B09-1DDC8E78371E} = {F45E95C8-DA3B-444F-B96A-7B06009BCA62}
+		{D6511271-8615-4DAD-982C-BB836BB9C877} = {D1CD5830-2F31-4A24-9B51-BA2488D4B5B1}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {08BFE6B8-EF84-406C-8963-1A0D4B969FD2}

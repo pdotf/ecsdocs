@@ -8,7 +8,7 @@ namespace EcsDataManager.Entities
     public class DeviceList
     {
         public int Id { get; set; }
-        public int CustomerId { get; set; }
+        public int VpnCustomerId { get; set; }
 
 
         [Required(AllowEmptyStrings = false, ErrorMessage = nameof(RadioName) + " is required.")]
@@ -37,5 +37,7 @@ namespace EcsDataManager.Entities
 
             }
         }
+
+        public VpnCustomers VpnCustomer { get; set; }
     }
 }

@@ -56,9 +56,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="Pages\ApnCustomers\Add.razor" />
-    <None Include="Pages\ApnCustomers\Customers.razor" />
-    <None Include="Pages\ApnCustomers\GetCustomer.razor" />
+    <None Include="Pages\APN\Add.razor" />
+    <None Include="Pages\APN\Customers.razor" />
+    <None Include="Pages\APN\GetCustomer.razor" />
   </ItemGroup>
 
 </Project>

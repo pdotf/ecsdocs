@@ -94,7 +94,7 @@
     protected async Task CreateDevice(int id)
     {
         //ShowPopup = false;
-        _device.CustomerId = id;
+        _device.VpnCustomerId = id;
         var state = await deviceManager.Add(_device);
 
         NavigationManager.NavigateTo(uri: state != 0 ? "/VpnCustomers" + "/" + id.ToString() : "/Error", true);

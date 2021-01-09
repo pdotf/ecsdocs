@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using Microsoft.Extensions.Options;
 
 namespace EcsDataManager.Entities
@@ -60,8 +61,8 @@ namespace EcsDataManager.Entities
         public string Comment { get; set; }
 
 
-
-
+        public List<DeviceList> VpnDevices { get; set; }
+        public List<CustomerUrl> CustomerUrls  { get; set; }
 
 
 

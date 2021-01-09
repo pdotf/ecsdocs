@@ -42,7 +42,7 @@ namespace EcsDataManager.EFConcrete
 
         public async Task<int> Delete(DeviceList entity)
         {
-            _ecsContext.DeviceList.Remove(entity);
+            _ecsContext.VpnDeviceList.Remove(entity);
             var res = await _ecsContext.SaveChangesAsync();
             return res;
         }
@@ -51,21 +51,21 @@ namespace EcsDataManager.EFConcrete
         {
             //  var test = _ecsContext.DeviceList.ToList(); 
             //.Where(e => e.Cus == id && e.IsMain==ismain).SingleOrDefault();
-            var res = Task.FromResult(_ecsContext.DeviceList
-                     .FirstOrDefault(e => e.CustomerId == id && e.IsMain == ismain));
+            var res = Task.FromResult(_ecsContext.VpnDeviceList
+                     .FirstOrDefault(e => e.VpnCustomerId == id && e.IsMain == ismain));
             return res;
         }
 
         public Task<DeviceList> GetDevice(int id, short ismain = 0)  
         {
-            var res = Task.FromResult(_ecsContext.DeviceList
+            var res = Task.FromResult(_ecsContext.VpnDeviceList
                    .FirstOrDefault(e => e.Id == id && e.IsMain == ismain));
             return res;
         }
 
         public Task<List<DeviceList>> GetAll(short ismain = 0)
         {
-            var res = Task.FromResult(_ecsContext.DeviceList.Where(w => w.IsMain == ismain).OrderByDescending(x => x.Id).ToList());
+            var res = Task.FromResult(_ecsContext.VpnDeviceList.Where(w => w.IsMain == ismain).OrderByDescending(x => x.Id).ToList());
             return res;
         }
     }

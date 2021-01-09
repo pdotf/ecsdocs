@@ -20,6 +20,7 @@ using Blazorise.Icons.FontAwesome;
 using EcsDataManager.Entities;
 using EcsDataManager.EFContracts;
 using EcsDataManager.EFConcrete;
+using Microsoft.AspNetCore.Authentication;
 
 namespace ECSDocs
 {
@@ -41,19 +42,15 @@ namespace ECSDocs
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
 
-            //services.AddDbContext<ApplicationDbContext>(options =>
-            //    options.UseSqlServer(
-            //        Configuration.GetConnectionString("DefaultConnection")));
-
-
-
-
-            //services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
-            //    .AddEntityFrameworkStores<ApplicationDbContext>();
+           
 
             services.AddDefaultIdentity<IdentityUser>()
                 .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
+
+
+
+
 
             services
                   .AddBlazorise(options =>
@@ -90,8 +87,28 @@ namespace ECSDocs
             services.AddScoped<IUpdateComment<VpnCustomers>, VpnCustomerManager>();
             services.AddScoped<IUpdateComment<Coordinators>, TAManager>();
 
-            //Register dapper in scope  
-            //services.AddScoped<IDapperManager, DapperManager>();
+            services.Configure<IdentityOptions>(options =>
+            {
+                // Password settings.
+                options.Password.RequireDigit = false;
+                options.Password.RequireLowercase = false;
+                options.Password.RequireNonAlphanumeric = false;
+                options.Password.RequireUppercase = false;
+                options.Password.RequiredLength = 6;
+                //options.Password.RequiredUniqueChars = 1;
+
+                // Lockout settings.
+                options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(1);
+                options.Lockout.MaxFailedAccessAttempts = 30;
+                options.Lockout.AllowedForNewUsers = true;
+
+                // User settings.
+                options.User.AllowedUserNameCharacters =
+                "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
+                options.User.RequireUniqueEmail = true;
+
+            });
+           
 
 
             // Server Side Blazor doesn't register HttpClient by default
@@ -108,12 +125,42 @@ namespace ECSDocs
                     };
                 });
             }
+
+            //if settion is idle redirect to login
+            services.AddSession(options =>
+            {
+                options.IdleTimeout = TimeSpan.FromSeconds(60);
+                options.Cookie.HttpOnly = true;
+            });
+
+
+            services.ConfigureApplicationCookie(options =>
+            {
+                // Cookie settings
+                options.Cookie.HttpOnly = true;
+                options.ExpireTimeSpan = TimeSpan.FromMinutes(1);
+                options.SlidingExpiration = true;
+            });
+            var authProperties = new AuthenticationProperties
+            {
+                IsPersistent = true,
+                RedirectUri = "Identity/Account/Login",
+                //Set Your Expire Cookie
+                ExpiresUtc = DateTime.UtcNow.AddSeconds(20)
+            };
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             //InitializeDatabase(app);
+
+            app.UseSession();
+            app.UseCookiePolicy(new CookiePolicyOptions()
+            {
+
+            });
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
