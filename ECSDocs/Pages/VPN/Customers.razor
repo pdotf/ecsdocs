@@ -2,9 +2,11 @@
 @page "/VpnCustomers"
 @using EcsDataManager.EFContracts
 @using EcsDataManager.Entities
+@using EcsDataManager.Hepers
 @inject ICRUDManager<VpnCustomers> customerManager
 @inject IMatDialogService MatDialogService
 @inject NavigationManager NavigationManager
+@inject IExport ExportManager 
 @*<link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">*@
 <div class="row">
     <h3 class="container-fluid">
@@ -14,16 +16,10 @@
 <br />
 <div>
     <div class="row">
-        @*<button class="btn btn-success" @onclick="@(() => Modal.Show<addVpnCustomer>("Add customer"))">Add Customer</button>*@
+
         <div class="col-md-2 float-left"><button class="btn btn-success" @onclick="@(()=> GoToAddCustomer())">Add Customer</button></div>
-        @*<div class="col-md-6 float-right">
-                <div class="dropdown">
-                    <button data-toggle="dropdown" class="btn btn-success">Export</button>
-                    <div class="dropdown-menu">
-                        Excel
-                    </div>
-                </div>
-            </div>*@
+        <div class="col-md-2 float-left"><button class="btn btn-success" @onclick="@(()=> ExportManager.CsvExport<VpnCustomers>(customerModel))">Export</button></div>
+
     </div>
 </div>
 <br />

@@ -19,7 +19,13 @@
 }
 else
 {
-    <input placeholder="Search your customer" type="search" @bind="SearchTerm" /><MatButton type="submit">Search</MatButton>
+    <div class="float-left">
+        <input type="text" id="txtSearch" placeholder="Search Customer name..." class="form-control" @bind="SearchTerm" />
+        <button class="btn btn-success" type="submit">Search</button>
+    </div>
+    <br />
+    <br />
+
 }
 @if (showTable)
 {
@@ -46,8 +52,10 @@ else
 
         </DataGrid>
     }
-    @if (_apnCustomerModel.Count>0)
+    @if (_apnCustomerModel.Count > 0)
     {
+        <Divider />
+        <br />
         <div class="h4">
             APN
         </div>
@@ -72,6 +80,8 @@ else
     }
     @if (_intranetCustomersModel.Count > 0)
     {
+        <Divider />
+        <br />
         <div class="h4">
             Intranet
         </div>
@@ -91,7 +101,7 @@ else
 
         </DataGrid>
     }
-    
+
 
 }
 else

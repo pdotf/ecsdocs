@@ -21,6 +21,7 @@ using EcsDataManager.Entities;
 using EcsDataManager.EFContracts;
 using EcsDataManager.EFConcrete;
 using Microsoft.AspNetCore.Authentication;
+using EcsDataManager.Hepers;
 
 namespace ECSDocs
 {
@@ -42,7 +43,7 @@ namespace ECSDocs
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
 
-           
+
 
             services.AddDefaultIdentity<IdentityUser>()
                 .AddRoles<IdentityRole>()
@@ -74,18 +75,20 @@ namespace ECSDocs
             services.AddDatabaseDeveloperPageExceptionFilter();
             //services.AddSingleton<WeatherForecastService>();
             services.AddScoped<ICustomerUrlManager<CustomerUrl>, VpnCustomerManager>();
-            
+
             services.AddScoped<ICRUDManager<IntranetCustomers>, IntranetCustomerManager>();
             services.AddScoped<ICRUDManager<ApnCustomers>, ApnCustomerManager>();
             services.AddScoped<ICRUDManager<VpnCustomers>, VpnCustomerManager>();
             services.AddScoped<ICRUDManager<DeviceList>, VpnDeviceManager>();
             services.AddScoped<ICRUDManager<Coordinators>, TAManager>();
-            
+
             services.AddScoped<IDeviceManager<DeviceList>, VpnDeviceManager>();
             services.AddScoped<IUpdateComment<ApnCustomers>, ApnCustomerManager>();
             services.AddScoped<IUpdateComment<IntranetCustomers>, IntranetCustomerManager>();
             services.AddScoped<IUpdateComment<VpnCustomers>, VpnCustomerManager>();
             services.AddScoped<IUpdateComment<Coordinators>, TAManager>();
+
+            services.AddScoped<IExport, Export>();
 
             services.Configure<IdentityOptions>(options =>
             {
@@ -108,7 +111,7 @@ namespace ECSDocs
                 options.User.RequireUniqueEmail = true;
 
             });
-           
+
 
 
             // Server Side Blazor doesn't register HttpClient by default
